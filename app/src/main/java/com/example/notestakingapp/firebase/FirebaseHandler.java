@@ -8,4 +8,5 @@ public class FirebaseHandler {
     //upload app.db
     public void getDatabaseFileOnFirebase() {}
     public void syncDatabase() {}
+	// some changes
 }
