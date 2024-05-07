@@ -6,5 +6,4 @@ public class FirebaseAuthHandler {
     public void signOut() {}
     public void getUserId() {} //todo: localId = -1
     public void getUserEmail() {}
-
 }
