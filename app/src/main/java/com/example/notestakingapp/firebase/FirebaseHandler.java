@@ -6,11 +6,6 @@ public class FirebaseHandler {
     //khi thoat nick thi ghi chu van con, khong dang nhap tiep tuc tao ghi chu-> lan tiep theo dang nhap lai-> id cua note o local
 
     //upload app.db
-    public void getDatabaseFileOnFirebase() {
-		//connect to firebase storage
-    }
+    public void getDatabaseFileOnFirebase() {}
     public void syncDatabase() {}
-
-	// some more changes
-	// some changes
 }
