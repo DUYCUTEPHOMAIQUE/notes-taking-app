@@ -84,7 +84,7 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY ("+COLUMN_TAG_ID+") REFERENCES TAG("+COLUMN_TAG_ID +"));"
                     );
 
-            db.execSQL("CREATE TABLE ");
+//            db.execSQL("CREATE TABLE ");
 
 
             //TEXTSEGMENT
