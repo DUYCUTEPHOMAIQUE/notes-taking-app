@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">NotesTakingApp</string>
+    <string name="to_do">To do</string>
+    <string name="notes">Notes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="scribble">Scribble</string>
+    <string name="image">Image</string>
+    <string name="voice">Voice</string>
+    <string name="note_title">Note Title</string>
+    <string name="my_notes">My Notes</string>
+    <string name="search_notes">Search notes</string>
+    <string name="back">Back</string>
+    <string name="type_note_here">Type note here..</string>
 </resources>
