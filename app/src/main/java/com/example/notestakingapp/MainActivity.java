@@ -1,9 +1,12 @@
 package com.example.notestakingapp;
 
+import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
+
 import com.example.notestakingapp.R.id;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -23,6 +26,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.notestakingapp.adapter.ViewPagerAdapter;
+import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mBottomNavigationView;
     private ViewPager2 mViewPager2;
 
+    private SQLiteDatabase db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(this);
+        NoteTakingDatabaseHelper.
         //khoi chay ui
         initUi();
         //anim popup hehehe T_T
