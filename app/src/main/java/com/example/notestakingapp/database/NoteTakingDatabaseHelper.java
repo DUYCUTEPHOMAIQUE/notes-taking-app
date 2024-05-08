@@ -122,6 +122,6 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
             );
         }
 
-
+//
     }
 }
