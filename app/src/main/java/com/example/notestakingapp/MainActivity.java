@@ -26,6 +26,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.notestakingapp.adapter.ViewPagerAdapter;
+import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -51,8 +52,10 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(this);
-        NoteTakingDatabaseHelper.
+        NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
+        db = noteTakingDatabaseHelper.getReadableDatabase();
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
         //khoi chay ui
         initUi();
         //anim popup hehehe T_T
