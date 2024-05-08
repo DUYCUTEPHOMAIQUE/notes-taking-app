@@ -58,12 +58,12 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-    
+        updateOrCreateDatabase(db, 0, DB_VERSION);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        updateOrCreateDatabase(db, 0, DB_VERSION);
     }
 
     public static void updateOrCreateDatabase(SQLiteDatabase db, int oldVersion, int newVersion){
