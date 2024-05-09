@@ -339,9 +339,16 @@ public class DatabaseHandler {
         else return null;
     }
 
-//    public byte[] getImageById() {
-//
-//    }
+    public byte[] getImageById(Context context, int imageId) {
+	    SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+	    SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+	    String query = "SELECT * FROM "+ IMAGE_TABLE+" WHERE " + COLUMN_IMAGE_ID  +" = ?";
+	    Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(imageId)});
+		if (cursor.moveToFirst()) {
+			return cursor.getBlob(1);
+		}
+		return null;
+	}
 
     //todo: defaultTag="All"
     //to_do
