@@ -1,13 +1,6 @@
 package com.example.notestakingapp;
 
-import static com.google.android.material.internal.ViewUtils.dpToPx;
-import static com.google.android.material.internal.ViewUtils.hideKeyboard;
-
 import android.Manifest;
-import android.accessibilityservice.AccessibilityService;
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,23 +9,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+
 import android.os.Handler;
 import android.provider.MediaStore;
+
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -41,10 +31,8 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -61,7 +49,6 @@ import com.example.notestakingapp.ui.BottomDialog;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.ImageUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
 import java.io.InputStream;

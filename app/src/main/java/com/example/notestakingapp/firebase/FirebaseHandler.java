@@ -15,21 +15,48 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 public class FirebaseHandler {
-    //userId-> app.db -> upload
-    //ghi chu-> thoat app -> app.db ->upload
-    //khi thoat nick thi ghi chu van con, khong dang nhap tiep tuc tao ghi chu-> lan tiep theo dang nhap lai-> id cua note o local
+	//userId-> app.db -> upload
+	//ghi chu-> thoat app -> app.db ->upload
+	//khi thoat nick thi ghi chu van con, khong dang nhap tiep tuc tao ghi chu-> lan tiep theo dang nhap lai-> id cua note o local
 
-    //upload app.db
-    public void syncFromFirebase() {
+	//upload note.db
+	/**
+	 Get the database file "note.db" from Firebase and write in into local's "test"
+	 */
+	public static void syncFromFirebase(Context context) {
 		String userId = FirebaseAuthHandler.getUserId();
+		FirebaseStorage storage = FirebaseStorage.getInstance("gs://androidtest-c883b.appspot.com");
+		StorageReference storageRef = storage.getReference();
+		StorageReference dbRef = storageRef.child(userId).child("note.db");
+		File dbFile = context.getDatabasePath("test");
+		String dbPath = dbFile.getPath();
+		final long ONE_MEGABYTE = 1024 * 1024;
+		dbRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+			@Override
+			public void onSuccess(byte[] retrievedBytes) {
+				Log.d("byte size", Integer.toString(retrievedBytes.length));
+				try {
+					FileOutputStream output = new FileOutputStream(dbPath);
+					output.write(retrievedBytes);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			}
+		}).addOnFailureListener(new OnFailureListener() {
+			@Override
+			public void onFailure(@NonNull Exception exception) {
+				// Handle any errors
+			}
+		});
+	}
 
-    }
 	public static void syncToFirebase(Context context) {
 		String userId = FirebaseAuthHandler.getUserId();
-		//todo: sửa tên database theo Dương
-		File dbFile = context.getDatabasePath("test");
+
+		File dbFile = context.getDatabasePath("note.db");
 		String dbPath = dbFile.getPath();
 		Log.d("DB PATH", dbPath);
 
@@ -37,7 +64,7 @@ public class FirebaseHandler {
 		StorageReference storageRef = storage.getReference();
 
 		Uri upload = Uri.fromFile(dbFile);
-		UploadTask uploadTask = storageRef.child(userId).child("test.db").putFile(upload);
+		UploadTask uploadTask = storageRef.child(userId).child("note.db").putFile(upload);
 		uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
 			@Override
 			public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
