@@ -19,7 +19,7 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
 
 
     //TEXT SEGMENT
-    public static final String COLUMN_TEXT_ID = "IMAGE_ID";
+    public static final String COLUMN_TEXT_ID = "TEXT_ID";
     public static final String COLUMN_TEXT = "TEXT";
 
 

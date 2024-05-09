@@ -9,6 +9,7 @@ public class Item {
     public static final int TYPE_EDIT_TEXT = 0;
     public static final int TYPE_IMAGE_VIEW = 1;
     public static final int TYPE_VOICE_VIEW = 2;
+    public static final int TYPE_EDIT_TEXT_TITLE = 3;
 
     private int type;
     private String text;
