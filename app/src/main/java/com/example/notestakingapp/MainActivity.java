@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(this);
-        NoteTakingDatabaseHelper.
+//        NoteTakingDatabaseHelper.
         //khoi chay ui
         initUi();
         //anim popup hehehe T_T
