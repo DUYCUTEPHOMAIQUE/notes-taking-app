@@ -1,5 +1,6 @@
 package com.example.notestakingapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -9,6 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 public class DrawingActivity extends AppCompatActivity {
+	private int imageId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -20,5 +22,8 @@ public class DrawingActivity extends AppCompatActivity {
 			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 			return insets;
 		});
+		Intent intent = getIntent();
+		imageId = intent.getIntExtra("imageId", 0);
+		
 	}
 }
