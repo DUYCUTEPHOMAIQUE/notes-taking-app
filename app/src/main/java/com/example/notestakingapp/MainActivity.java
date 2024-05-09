@@ -56,10 +56,15 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+<<<<<<< HEAD
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
         db = noteTakingDatabaseHelper.getReadableDatabase();
         DatabaseHandler databaseHandler = new DatabaseHandler();
 //        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
+=======
+        NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(this);
+//        NoteTakingDatabaseHelper.
+>>>>>>> 5f18225 (my commit)
         //khoi chay ui
         initUi();
         //anim popup hehehe T_T

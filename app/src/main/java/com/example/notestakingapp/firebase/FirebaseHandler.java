@@ -17,18 +17,23 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 
 public class FirebaseHandler {
-    //userId-> app.db -> upload
-    //ghi chu-> thoat app -> app.db ->upload
-    //khi thoat nick thi ghi chu van con, khong dang nhap tiep tuc tao ghi chu-> lan tiep theo dang nhap lai-> id cua note o local
+	//userId-> app.db -> upload
+	//ghi chu-> thoat app -> app.db ->upload
+	//khi thoat nick thi ghi chu van con, khong dang nhap tiep tuc tao ghi chu-> lan tiep theo dang nhap lai-> id cua note o local
 
-    //upload app.db
-    public void syncFromFirebase() {
+	//upload app.db
+	public void syncFromFirebase() {
 		String userId = FirebaseAuthHandler.getUserId();
 
-    }
+	}
+
+	/**
+	 Sync to firebase
+	 @context the parameters used by the method
+	 */
 	public static void syncToFirebase(Context context) {
 		String userId = FirebaseAuthHandler.getUserId();
-		//todo: sửa tên database theo Dương
+		//todo: change database path name to note.db â
 		File dbFile = context.getDatabasePath("test");
 		String dbPath = dbFile.getPath();
 		Log.d("DB PATH", dbPath);
