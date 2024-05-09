@@ -1,19 +1,27 @@
 package com.example.notestakingapp.adapter;
 
+
+
+import android.content.Context;
+import android.content.res.Resources;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notestakingapp.Item;
 import com.example.notestakingapp.R;
+import com.example.notestakingapp.utils.CurrentTime;
 
 import java.util.List;
 
@@ -21,7 +29,7 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getNoteId() {
         return noteId;
     }
-
+    private Context mContext;
     private int noteId;
 
     public void setNoteId(int noteId) {
@@ -39,13 +47,16 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView;
+        EditText layout;
         switch (viewType) {
+            case Item.TYPE_EDIT_TEXT_TITLE:
+                itemView = inflater.inflate(R.layout.item_edit_text_title, parent, false);
+                TextView textViewCurrentTime = itemView.findViewById(R.id.textview_current_time);
+                String timeText = CurrentTime.getCurrentTimeText();
+                textViewCurrentTime.setText(timeText);
+                return new EditTextTitleViewHolder(itemView);
             case Item.TYPE_EDIT_TEXT:
                 itemView = inflater.inflate(R.layout.item_edit_text, parent, false);
-                EditText layout = itemView.findViewById(R.id.edit_text_details);
-                ViewGroup.LayoutParams layoutParams = layout.getLayoutParams();
-                layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                layout.setLayoutParams(layoutParams);
                 return new EditTextViewHolder(itemView);
             case Item.TYPE_IMAGE_VIEW:
                 itemView = inflater.inflate(R.layout.item_image_view, parent, false);
@@ -55,18 +66,27 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    private int getString(int noteTitle) {
+        return 0;
+    }
+
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Item item = itemList.get(position);
         switch (item.getType()) {
             case Item.TYPE_EDIT_TEXT:
                 EditTextViewHolder editTextViewHolder = (EditTextViewHolder) holder;
-
                 editTextViewHolder.editText.setText(item.getText());
                 break;
             case Item.TYPE_IMAGE_VIEW:
                 ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
                 imageViewHolder.imageView.setImageURI(item.getImageUri());
+                break;
+
+            case Item.TYPE_EDIT_TEXT_TITLE:
+                EditTextTitleViewHolder editTextTitleViewHolder = (EditTextTitleViewHolder) holder;
+                editTextTitleViewHolder.editText.setText(item.getText());
                 break;
         }
     }
@@ -108,6 +128,17 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //                    editText.setText(s);
                 }
             });
+        }
+    }
+
+    static class EditTextTitleViewHolder extends RecyclerView.ViewHolder {
+        EditText editText;
+
+        public EditTextTitleViewHolder(@NonNull View itemView) {
+            super(itemView);
+            editText = itemView.findViewById(R.id.edit_text_title);
+            // lang nghe su kien nhap van ban trong edittext
+
         }
     }
 

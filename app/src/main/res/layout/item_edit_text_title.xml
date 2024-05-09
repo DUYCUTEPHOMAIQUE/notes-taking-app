@@ -4,20 +4,24 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_12sdp"
     android:layout_marginEnd="@dimen/_12sdp"
-    android:layout_marginTop="@dimen/_4sdp"
-    android:layout_marginBottom="@dimen/_4sdp"
     android:orientation="vertical">
     <EditText
-        android:id="@+id/edit_text_details"
+        android:id="@+id/edit_text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="start|top"
         android:background="@null"
-        android:hint="@string/type_note_here"
-        android:fontFamily="@font/regular"
-        android:textSize="@dimen/_13ssp"
+        android:hint="@string/note_title"
+        android:fontFamily="@font/bold"
+        android:textSize="@dimen/_16ssp"
         android:textColorHint="@color/colorTextHint"
         android:importantForAutofill="no"
         android:layout_marginBottom="@dimen/_4sdp"
         android:layout_marginTop="@dimen/_4sdp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorTextDateTime"
+        android:id="@+id/textview_current_time"
+        android:text="ngay thang nam"/>
 </LinearLayout>
