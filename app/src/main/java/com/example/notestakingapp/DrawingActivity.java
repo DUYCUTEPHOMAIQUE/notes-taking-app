@@ -24,6 +24,6 @@ public class DrawingActivity extends AppCompatActivity {
 		});
 		Intent intent = getIntent();
 		imageId = intent.getIntExtra("imageId", 0);
-		
+
 	}
 }

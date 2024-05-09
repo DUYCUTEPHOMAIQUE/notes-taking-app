@@ -321,7 +321,7 @@ public class DatabaseHandler {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
-        String query = "SELECT * FROM "+ NOTE_TABLE +" ORDER BY "+COLUMN_NOTE_CREATEAT + " "+order;
+        String query = "SELECT * FROM " + NOTE_TABLE + " ORDER BY " + COLUMN_NOTE_CREATEAT + " " + order;
 
         Cursor cursor = db.rawQuery(query, null);
 

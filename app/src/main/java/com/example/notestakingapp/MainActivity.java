@@ -1,5 +1,5 @@
 package com.example.notestakingapp;
-
+import com.example.notestakingapp.firebase.FirebaseHandler;
 import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
 
 import com.example.notestakingapp.R.id;
@@ -133,6 +133,9 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+	    //Huy's database sync test code
+	    FirebaseHandler.syncFromFirebase(this);
     }
 
     private void routeToTodoEdit() {
