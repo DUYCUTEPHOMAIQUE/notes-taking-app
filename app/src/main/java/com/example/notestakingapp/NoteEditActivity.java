@@ -213,6 +213,7 @@ public class NoteEditActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                showToolDialog();
+                HideKeyBoard.hideKeyboard(NoteEditActivity.this);
                 BottomDialog.showToolDialog(NoteEditActivity.this);
             }
         });
