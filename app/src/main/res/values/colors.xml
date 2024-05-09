@@ -19,6 +19,7 @@
     <color name="colorSuccess">#60D889</color>
     <color name="colorSearchBackground">#EFEEF0</color>
     <color name="colorTextHint">#C8C5CB</color>
+    <color name="colorTextDateTime">#575758</color>
 
 
 </resources>

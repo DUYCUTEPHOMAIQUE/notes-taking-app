@@ -1,9 +1,12 @@
 package com.example.notestakingapp;
 
+import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
+
 import com.example.notestakingapp.R.id;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -23,16 +27,23 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.example.notestakingapp.adapter.ViewPagerAdapter;
+import com.example.notestakingapp.database.DatabaseHandler;
+import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView imageViewAdd;
     private BottomNavigationView bottomNavigationView;
+    private EditText inputSearch;
 
     private ViewPagerAdapter mViewPagerAdapter;
     private BottomNavigationView mBottomNavigationView;
     private ViewPager2 mViewPager2;
+    int currentPage;
+
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +55,16 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
+        db = noteTakingDatabaseHelper.getReadableDatabase();
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+//        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
         //khoi chay ui
         initUi();
         //anim popup hehehe T_T
         animButton(imageViewAdd);
+
         //xu li click button
         imageViewAdd.setOnClickListener(new View.OnClickListener() {
 
@@ -56,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.scale_animation);
                 imageViewAdd.startAnimation(animation);
-                int currentPage = mViewPager2.getCurrentItem();
+                currentPage = mViewPager2.getCurrentItem();
                 if (currentPage == 0) {
                     routeToNoteEdit();
                 } else if (currentPage == 1) {
@@ -82,9 +99,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         mBottomNavigationView.getMenu().findItem(R.id.home_main).setChecked(true);
+                        inputSearch.setHint("Search Notes..");
                         break;
                     case 1:
                         mBottomNavigationView.getMenu().findItem(R.id.todo_main).setChecked(true);
+                        inputSearch.setHint("Search To do..");
                         break;
 
                 }
@@ -128,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
         imageViewAdd = findViewById(R.id.imageAddNoteMain);
         mViewPager2 = findViewById(R.id.view_pager2);
         mBottomNavigationView = findViewById(R.id.layout_nav);
+        inputSearch = findViewById(R.id.inputSearch);
     }
 
     private void animButton(ImageView imageView) {
@@ -150,6 +170,11 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setVisibility(View.VISIBLE);
             }
         }, 600);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
 }

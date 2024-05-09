@@ -11,4 +11,8 @@
     </style>
 
     <style name="Theme.NotesTakingApp" parent="Base.Theme.NotesTakingApp" />
+    <style name="DiaLogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
 </resources>

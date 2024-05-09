@@ -62,43 +62,27 @@
         android:layout_alignParentEnd="true"
         app:tint="@color/colorBlack" />
 
-    <EditText
-        android:id="@+id/input_note_title"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_36sdp"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:background="@null"
-        android:fontFamily="@font/bold"
-        android:hint="@string/note_title"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:includeFontPadding="false"
-        android:inputType="text"
-        android:textColor="@color/colorTextHint"
-        android:textColorHint="@color/colorTextHint"
-        android:textSize="@dimen/_16ssp"
-        android:layout_below="@id/layout_back"/>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="20sp"
+        android:overScrollMode="always"
         android:padding="0dp"
-        android:layout_below="@+id/input_note_title" />
+        android:layout_below="@+id/layout_back" />
 
     <LinearLayout
 
         android:id="@+id/tool_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorError"
+        android:background="@color/colorPrimaryBackground"
+        android:elevation="@dimen/_4sdp"
         android:paddingTop="@dimen/_10sdp"
         android:paddingBottom="@dimen/_10sdp"
         android:translationZ="@dimen/_100sdp"
         android:fitsSystemWindows="true"
+        android:visibility="visible"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true">
 
@@ -116,6 +100,13 @@
             android:layout_height="@dimen/_20sdp"
             android:layout_weight="1"
             android:src="@drawable/image_icon"
+            app:tint="@color/colorBlack" />
+        <ImageView
+            android:id="@+id/image_camera"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_weight="1"
+            android:src="@drawable/camera_icon"
             app:tint="@color/colorBlack" />
 
         <ImageView
