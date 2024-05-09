@@ -97,7 +97,6 @@ public class DrawingView extends View {
 		float dy = Math.abs(y - mY);
 		if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
 			mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
-//			mPath.lineTo((x + mX)/2, (y + mY)/2);
 			mX = x;
 			mY = y;
 
@@ -136,12 +135,8 @@ public class DrawingView extends View {
 	}
 
 	public void clearCanvas() {
-//		setDrawingCacheEnabled(false);
-		// don't forget that one and the match below,
-		// or you just keep getting a duplicate when you save.
 		onSizeChanged(width, height, width, height);
 		invalidate();
-//		setDrawingCacheEnabled(true);
 	}
 	public Bitmap getBitmap() {
 		Bitmap newBitmap = mBitmap.copy(mBitmap.getConfig(), true);
