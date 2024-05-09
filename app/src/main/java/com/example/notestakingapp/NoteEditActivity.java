@@ -22,6 +22,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -214,6 +215,7 @@ public class NoteEditActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                showToolDialog();
                 HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+
                 BottomDialog.showToolDialog(NoteEditActivity.this);
             }
         });

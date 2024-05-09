@@ -20,4 +20,6 @@
     <string name="confirm_delete_note">Confirm Delete Note</string>
     <string name="change_note_type">Change Note Type</string>
     <string name="mark_as_finished">Mark as Finished</string>
+    <string name="press_quot_enter_quot_to_create_new_task">Press \"Enter\" to create new task</string>
+    <string name="done">Done</string>
 </resources>
