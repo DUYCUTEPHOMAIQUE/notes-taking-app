@@ -339,9 +339,9 @@ public class DatabaseHandler {
         else return null;
     }
 
-    public byte[] getImageById() {
-
-    }
+//    public byte[] getImageById() {
+//
+//    }
 
     //todo: defaultTag="All"
     //to_do
