@@ -1,12 +1,12 @@
 package com.example.notestakingapp.adapter;
 
 
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,14 +29,22 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getNoteId() {
         return noteId;
     }
+
     private Context mContext;
+    public static String title;
     private int noteId;
 
     public void setNoteId(int noteId) {
         this.noteId = noteId;
     }
+
     private List<Item> itemList;
     public static OnEditTextChangedListener editTextChangedListener;
+    public static EditTextTitleListener editTextTitleListener;
+
+    public void setOnEditTextTitleListener(EditTextTitleListener listener) {
+        this.editTextTitleListener = listener;
+    }
 
     public void setOnEditTextChangedListener(OnEditTextChangedListener listener) {
         this.editTextChangedListener = listener;
@@ -54,6 +62,8 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 TextView textViewCurrentTime = itemView.findViewById(R.id.textview_current_time);
                 String timeText = CurrentTime.getCurrentTimeText();
                 textViewCurrentTime.setText(timeText);
+                EditText titleEditText = itemView.findViewById(R.id.edit_text_title);
+
                 return new EditTextTitleViewHolder(itemView);
             case Item.TYPE_EDIT_TEXT:
                 itemView = inflater.inflate(R.layout.item_edit_text, parent, false);
@@ -90,6 +100,7 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
         }
     }
+
     public void setData(List<Item> list) {
         this.itemList = list;
         notifyDataSetChanged();
@@ -104,6 +115,7 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getItemViewType(int position) {
         return itemList.get(position).getType();
     }
+
     static class EditTextViewHolder extends RecyclerView.ViewHolder {
         EditText editText;
 
@@ -113,7 +125,8 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             // lang nghe su kien nhap van ban trong edittext
             editText.addTextChangedListener(new TextWatcher() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -133,10 +146,30 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     static class EditTextTitleViewHolder extends RecyclerView.ViewHolder {
         EditText editText;
+        EditTextTitleListener listener;
 
         public EditTextTitleViewHolder(@NonNull View itemView) {
             super(itemView);
             editText = itemView.findViewById(R.id.edit_text_title);
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    title = s.toString();
+                    if (editTextTitleListener != null) {
+                        editTextTitleListener.onTitleTextChanged(s.toString().trim());
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
             // lang nghe su kien nhap van ban trong edittext
 
         }
@@ -150,8 +183,13 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             imageView = itemView.findViewById(R.id.image_view_details);
         }
     }
+
     public interface OnEditTextChangedListener {
         void onTextChanged(int position, String text);
+    }
+
+    public interface EditTextTitleListener {
+        void onTitleTextChanged(String text) ;
     }
 
 }

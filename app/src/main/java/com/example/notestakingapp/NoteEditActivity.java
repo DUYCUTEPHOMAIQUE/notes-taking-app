@@ -1,12 +1,14 @@
 package com.example.notestakingapp;
 
 import static com.google.android.material.internal.ViewUtils.dpToPx;
+import static com.google.android.material.internal.ViewUtils.hideKeyboard;
 
 import android.Manifest;
 import android.accessibilityservice.AccessibilityService;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,8 +17,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
@@ -26,6 +31,7 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -37,6 +43,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -50,38 +57,42 @@ import com.example.notestakingapp.adapter.NoteDetailsAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.ui.BottomDialog;
+import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.ImageUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteEditActivity extends AppCompatActivity {
+    public static final int REQ_CODE_MICRO = 99;
     private ImageView backImage, voiceImage, imageImage, scribbleImage, cameraImage, shirtImage;
     private LinearLayout layoutBack;
     private TextView textBack;
     private RecyclerView recyclerViewDetails;
     private NoteDetailsAdapter noteDetailsAdapter;
     private List<Item> mItemList;
-    private static final int REQUEST_CODE_STORAGE_PERMISSION = 1;
-    private static final int REQUEST_CODE_SELECT_IMAGE = 2;
-    private static final int REQUEST_CODE_CAMERA = 3;
     private static final String IMAGE_PROP = "image";
     private static final String VOICE_PROP = "voice";
 
     View activityRootView;
+    MediaRecorder mediaRecorder;
 
 
     private int textSegmentId = -1;
-    private boolean isTheFirst = true;
     private int noteId = -1;
     private int voiceId = -1;
     private int imageId = -1;
     private LinearLayout toolNavigation;
     private SQLiteDatabase db;
     DatabaseHandler databaseHandler;
+
+    //    private EditText titleEditText;
+    String titleText = null;
+    boolean isTheFirst = true;
 
 
     @Override
@@ -134,15 +145,18 @@ public class NoteEditActivity extends AppCompatActivity {
         noteDetailsAdapter = new NoteDetailsAdapter();
         mItemList = new ArrayList<>();
         //tao Item ui
-        mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE, 123));
+        noteId = (int) databaseHandler.insertNote(this, null, null, null, null);
+        textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, null);
+        Log.d("duyIns", String.valueOf(noteId));
+        Log.d("duyIns", "tao textSegment id = " + textSegmentId + "noteId = " + noteId);
+
+        mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE, noteId));
         mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
         noteDetailsAdapter.setData(mItemList);
         recyclerViewDetails.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewDetails.setAdapter(noteDetailsAdapter);
 
         //todo: gan noteId please Duy oi, tao note moi
-        noteId = (int) databaseHandler.insertNote(this, null, null, null, null);
-        Log.d("testInsert", String.valueOf(noteId));
         //        noteId = (int) AppDatabase.getInstance(AddNoteActivity.this).noteDao().insert(new Note(""));
 
         noteDetailsAdapter.setNoteId(noteId);
@@ -151,14 +165,11 @@ public class NoteEditActivity extends AppCompatActivity {
             public void onTextChanged(int position, String text) {
                 mItemList.get(position).setText(text);
                 if (isTheFirst) {
-                    //todo: insert 1 text segment vao db theo noteId pls -> xong
-                    textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, text);
                     isTheFirst = false;
-                    Log.d("testInsert", "tao textSegment id = " + textSegmentId + "noteId = " + noteId);
                 } else if (!isTheFirst) {
                     databaseHandler.updateTextSegment(NoteEditActivity.this, textSegmentId, text);
-                }
 
+                }
                 //todo: Update textSegment trong db -> xong
 
             }
@@ -212,15 +223,49 @@ public class NoteEditActivity extends AppCompatActivity {
                 onOpenGallery();
             }
         });
+        voiceImage.setOnClickListener(new View.OnClickListener() {
+
+            //            https://www.youtube.com/watch?v=3ffs2VbJ9JY
+//            https://github.com/MoamenHassaballah/PlayPauseAnimationTutorial
+            @Override
+            public void onClick(View v) {
+                if (!getMicroPermission()) {
+                    //hide keyboard
+                    HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+//                    btnRecordPressed();
+                    BottomDialog.showVoiceDialog(NoteEditActivity.this);
+
+                } else {
+                    getMicroPermission();
+                }
+            }
+        });
 
         //xu li su kien khi back quay ve activity truoc cua dien thoai
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                deleteNoteIsEmpty(noteId);
+
+                if (!deleteNoteIsEmpty(noteId)) {
+                    titleText = NoteDetailsAdapter.title;
+                    databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, null, null);
+                    Log.d("testInsert", "update" + noteId + " title " + titleText);
+                }
                 finish();
             }
         });
+    }
+
+    private void btnRecordPressed() {
+        mediaRecorder = new MediaRecorder();
+
+    }
+
+    public String createFileMp3Path(int audioId) {
+        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
+        File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+        File file = new File(musicDirectory, String.valueOf(audioId) + ".mp3");
+        return file.getPath();
     }
 
 
@@ -240,12 +285,15 @@ public class NoteEditActivity extends AppCompatActivity {
     }
 
 
-    private void deleteNoteIsEmpty(int noteId) {
-        if (mItemList.size() == 2 && mItemList.get(0).getText().isEmpty() && mItemList.get(1).getText().isEmpty()) {
+    private boolean deleteNoteIsEmpty(int noteId) {
+        titleText = NoteDetailsAdapter.title;
+        if (mItemList.size() == 2 && mItemList.get(0).getText().isEmpty() && mItemList.get(1).getText().isEmpty() && titleText == null) {
             //todo: xoa note neu note do la empty cho nay xu li hoi ngu
             databaseHandler.deleteNote(this, noteId);
             Log.d("testInsert", "deletedNote" + noteId);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -256,26 +304,28 @@ public class NoteEditActivity extends AppCompatActivity {
             if (selectedImageUri != null) {
                 try {
                     InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
+
                     Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
                     //todo: luu anh vao db nho them try catch
                     try {
-                        imageId = (int) databaseHandler.insertImage(NoteEditActivity.this, noteId, ImageUtils.uriToBytes(selectedImageUri, null));
-                        Log.d("testInsert", "tao Image id = "+imageId+" noteId = "+noteId);
+                        imageId = (int) databaseHandler.insertImage(NoteEditActivity.this, noteId, ImageUtils.uriToBytes(selectedImageUri, NoteEditActivity.this));
+                        Toast.makeText(this, "Image add into db success", Toast.LENGTH_SHORT).show();
+
                     } catch (Exception e) {
-                        Toast.makeText(this, "insert image into db error!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Image add into db error", Toast.LENGTH_SHORT).show();
                     }
-                    //ex: AppDatabase.getInstance(AddNoteActivity.this).imageDao().insert(new Image(noteId, ImageUtils.uriToBytes(imageUri, AddNoteActivity.this)));
-//                        imageSelected.setImageBitmap(bitmap);
-//                        imageSelected.setVisibility(View.VISIBLE);
+
+                    Log.d("testInsert", "tao Image id = " + imageId + " noteId = " + noteId);
 
                     //hien thi hinh anh ra noteEdit
                     mItemList.add(new Item(Item.TYPE_IMAGE_VIEW, selectedImageUri, imageId, IMAGE_PROP));
                     //xu li inputtext is empty se bi xoa di neu anh dc them vao
                     int size = mItemList.size();
                     if (mItemList.get(size - 2).getType() == Item.TYPE_EDIT_TEXT && mItemList.get(size - 2).getText().isEmpty()) {
-                       //xoa trong db
-                        databaseHandler.deleteNote(NoteEditActivity.this, textSegmentId);
-                        Log.d("testInsert", "da xoa textSegment id = "+textSegmentId+" noteId = "+noteId);
+                        //xoa trong db
+                        Log.d("duong", String.valueOf(size));
+                        databaseHandler.deleteTextSegment(NoteEditActivity.this, textSegmentId);
+                        Log.d("testInsert", "da xoa textSegment id = " + textSegmentId + " noteId = " + noteId);
                         //xoa o giao dien
                         mItemList.remove(size - 2);
                         Toast.makeText(NoteEditActivity.this, "Remove editText sucess!", Toast.LENGTH_SHORT).show();
@@ -283,7 +333,7 @@ public class NoteEditActivity extends AppCompatActivity {
                     noteDetailsAdapter.setData(mItemList);
                     //todo: cap nhat lai textSegmentId va them textsegment vao db
                     textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
-                    Log.d("testInsert", "tao textSegment id = "+textSegmentId+" noteId = "+noteId);
+                    Log.d("duytest", "tao textSegment id = " + textSegmentId + " noteId = " + noteId);
 
                     //textSegmentId = appdb.insert();
                     mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
@@ -303,9 +353,36 @@ public class NoteEditActivity extends AppCompatActivity {
         ImagePicker.with(this).galleryOnly().crop().compress(1024).maxResultSize(1080, 1080).start();
     }
 
+    private boolean getMicroPermission() {
+        if (ContextCompat.checkSelfPermission(NoteEditActivity.this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, REQ_CODE_MICRO);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isMicroPresent() {
+        if (this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_MICROPHONE)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Override
     protected void onDestroy() {
+        titleText = NoteDetailsAdapter.title;
         super.onDestroy();
     }
 
+    public void setColorBackgroundNoteEdit(String color) {
+        //todo: add color vao db
+
+        GradientDrawable gradientDrawable = new GradientDrawable();
+        RelativeLayout relativeLayout = findViewById(R.id.main);
+        Log.d("duyColor", String.valueOf(relativeLayout));
+        gradientDrawable.setColor(Color.parseColor(color));
+        relativeLayout.setBackground(gradientDrawable);
+    }
 }

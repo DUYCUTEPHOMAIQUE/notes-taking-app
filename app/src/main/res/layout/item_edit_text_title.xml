@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_12sdp"
     android:layout_marginEnd="@dimen/_12sdp"
+    android:id="@+id/layout_only_title"
     android:orientation="vertical">
     <EditText
         android:id="@+id/edit_text_title"

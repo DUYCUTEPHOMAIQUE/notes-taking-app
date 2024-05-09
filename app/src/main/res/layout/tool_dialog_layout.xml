@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_tool_dialog"
     android:clipToPadding="false"
     android:orientation="vertical">
@@ -11,11 +11,12 @@
         android:id="@+id/layout_x_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginTop="@dimen/_16sdp"
         android:layout_marginBottom="@dimen/_8sdp"
-        android:clipToPadding="false"
         android:background="@drawable/bg_x_dialog"
-        android:layout_gravity="end">
+        android:clipToPadding="false">
+
         <ImageView
             android:layout_width="@dimen/_12sdp"
             android:layout_height="@dimen/_12sdp"
@@ -41,90 +42,126 @@
             android:layout_marginBottom="@dimen/_8sdp"
             android:orientation="horizontal">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
+
+                <View
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="@drawable/bg_color_default"
+                    android:id="@+id/view_default"
+                    />
+
                 <ImageView
                     android:id="@+id/color_note_default"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
-                    android:layout_margin="@dimen/_4sdp"
-                    android:src="@drawable/round_done_24"
-                    app:tint="@color/colorGrayDark"
-                    android:background="@drawable/bg_color_default"
-                    android:importantForAccessibility="no" />
-            </LinearLayout>
+                    android:importantForAccessibility="no"
+                    app:tint="@color/colorGrayDark" />
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
+
+                <View
+                    android:id="@+id/view_1"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="@drawable/bg_color_1" />
 
                 <ImageView
                     android:id="@+id/color_note_1"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
-                    android:layout_margin="@dimen/_4sdp"
-                    android:background="@drawable/bg_color_1"
-                    android:contentDescription="@string/app_name" />
-            </LinearLayout>
+                    android:contentDescription="@string/app_name"
+                    app:tint="@color/colorGrayDark" />
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
+
+                <View
+                    android:id="@+id/view_2"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="@drawable/bg_color_2" />
 
                 <ImageView
                     android:id="@+id/color_note_2"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
-                    android:layout_margin="@dimen/_4sdp"
-                    android:background="@drawable/bg_color_2"
-                    android:contentDescription="@string/app_name" />
-            </LinearLayout>
+                    android:contentDescription="@string/app_name"
+                    app:tint="@color/colorGrayDark" />
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
+
+                <View
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:id="@+id/view_3"
+                    android:background="@drawable/bg_color_3" />
 
                 <ImageView
                     android:id="@+id/color_note_3"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
-                    android:layout_margin="@dimen/_4sdp"
-                    android:background="@drawable/bg_color_3"
-                    android:contentDescription="@string/app_name" />
-            </LinearLayout>
+                    android:contentDescription="@string/app_name"
+                    app:tint="@color/colorGrayDark" />
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
+
+                <View
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:id="@+id/view_4"
+                    android:background="@drawable/bg_color_4" />
 
                 <ImageView
                     android:id="@+id/color_note_4"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
-                    android:layout_margin="@dimen/_4sdp"
-                    android:background="@drawable/bg_color_4"
-                    android:contentDescription="@string/app_name" />
-            </LinearLayout>
+                    android:contentDescription="@string/app_name"
+                    app:tint="@color/colorGrayDark" />
+            </FrameLayout>
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
+
+                <View
+                    android:id="@+id/view_5"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:background="@drawable/bg_color_5" />
 
                 <ImageView
                     android:id="@+id/color_note_5"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
-                    android:layout_margin="@dimen/_4sdp"
-                    android:background="@drawable/bg_color_5"
-                    android:contentDescription="@string/app_name" />
-            </LinearLayout>
+                    android:contentDescription="@string/app_name"
+                    app:tint="@color/colorGrayDark" />
+            </FrameLayout>
         </LinearLayout>
 
         <View
@@ -208,9 +245,9 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/layout_mask_as_finished"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/layout_mask_as_finished"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginBottom="@dimen/_16sdp">
 
