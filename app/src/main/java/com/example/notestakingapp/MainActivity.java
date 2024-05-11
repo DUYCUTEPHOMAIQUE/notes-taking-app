@@ -1,5 +1,5 @@
 package com.example.notestakingapp;
-
+import com.example.notestakingapp.firebase.FirebaseHandler;
 import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
 
 import com.example.notestakingapp.R.id;
@@ -29,6 +29,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.notestakingapp.adapter.ViewPagerAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.ui.BottomDialog;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         db = noteTakingDatabaseHelper.getReadableDatabase();
         DatabaseHandler databaseHandler = new DatabaseHandler();
 //        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
+
         //khoi chay ui
         initUi();
         //anim popup hehehe T_T
@@ -132,9 +134,13 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+	    //Huy's database sync test code
+	    FirebaseHandler.syncFromFirebase(this);
     }
 
     private void routeToTodoEdit() {
+        BottomDialog.showToDoDiaLog(MainActivity.this);
         Toast.makeText(MainActivity.this, "clicked, going to todo page", Toast.LENGTH_SHORT).show();
     }
 
