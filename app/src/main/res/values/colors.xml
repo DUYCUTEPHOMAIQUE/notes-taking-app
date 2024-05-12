@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorText">#FF000000</color>
     <color name="colorBlack">#FF000000</color>
     <color name="colorWhite">#FFFFFFFF</color>
     <color name="colorPrimaryBackground">#FAF8FC</color>
@@ -20,6 +21,7 @@
     <color name="colorSearchBackground">#EFEEF0</color>
     <color name="colorTextHint">#C8C5CB</color>
     <color name="colorTextDateTime">#575758</color>
+    <color name="colorTextSegment">#232323</color>
 
 
 </resources>

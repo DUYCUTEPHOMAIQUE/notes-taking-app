@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -130,7 +131,7 @@ public class NoteEditActivity extends AppCompatActivity {
         //todo: phai gan lai gia tri cho textSegmentId va noteId
 
         //xu li recycler view
-        noteDetailsAdapter = new NoteDetailsAdapter();
+        noteDetailsAdapter = new NoteDetailsAdapter(NoteEditActivity.this);
         mItemList = new ArrayList<>();
         //tao Item ui
         noteId = (int) databaseHandler.insertNote(this, null, null, null, null);
@@ -149,16 +150,19 @@ public class NoteEditActivity extends AppCompatActivity {
 
         noteDetailsAdapter.setNoteId(noteId);
         noteDetailsAdapter.setOnEditTextChangedListener(new NoteDetailsAdapter.OnEditTextChangedListener() {
+
             @Override
             public void onTextChanged(int position, String text) {
+                Log.d("duyText", "textSegment  changed noteedit");
                 mItemList.get(position).setText(text);
                 if (isTheFirst) {
                     isTheFirst = false;
+                    return;
                 } else if (!isTheFirst) {
+
                     databaseHandler.updateTextSegment(NoteEditActivity.this, textSegmentId, text);
 
                 }
-                //todo: Update textSegment trong db -> xong
 
             }
         });
@@ -367,12 +371,19 @@ public class NoteEditActivity extends AppCompatActivity {
     }
 
     public void setColorBackgroundNoteEdit(String color) {
-        //todo: add color vao db
-
-        GradientDrawable gradientDrawable = new GradientDrawable();
         RelativeLayout relativeLayout = findViewById(R.id.main);
+        if(color == "#FFFFFF" ) {
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.meo);
+        relativeLayout.setBackground(drawable);
+        }
+        else {
+
+        //todo: add color vao db
+        GradientDrawable gradientDrawable = new GradientDrawable();
         Log.d("duyColor", String.valueOf(relativeLayout));
         gradientDrawable.setColor(Color.parseColor(color));
+//        gradientDrawable.set
         relativeLayout.setBackground(gradientDrawable);
+        }
     }
 }

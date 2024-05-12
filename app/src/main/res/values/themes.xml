@@ -17,9 +17,9 @@
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 
-    <style name="TodoAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_in_bottom_todo</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_bottom_todo</item>
+    <style name="TimePickerAnimation">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
     <style name="ThemeOverlay.App.MaterialCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">

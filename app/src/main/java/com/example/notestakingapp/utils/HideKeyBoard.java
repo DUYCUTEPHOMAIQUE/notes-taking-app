@@ -1,6 +1,8 @@
 package com.example.notestakingapp.utils;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -14,5 +16,16 @@ public class HideKeyBoard {
             view = new View(activity);
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        Log.d("duyKeyBoard", "hidekeyboard");
+        Handler handler = new Handler();
+
+        // Dùng handler để gửi một Runnable vào hàng đợi của looper
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Hành động sau khi đợi 1000ms (1 giây)
+                // Đây là nơi để đặt code của bạn
+            }
+        }, 100);
     }
 }

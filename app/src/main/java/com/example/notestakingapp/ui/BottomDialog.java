@@ -2,6 +2,7 @@ package com.example.notestakingapp.ui;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
@@ -10,8 +11,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
+import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.UnderlineSpan;
+import android.transition.Fade;
+import android.transition.Visibility;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -27,18 +36,24 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.notestakingapp.MainActivity;
 import com.example.notestakingapp.NoteEditActivity;
 import com.example.notestakingapp.R;
+import com.example.notestakingapp.TodoFragment;
+import com.example.notestakingapp.utils.HideKeyBoard;
+import com.example.notestakingapp.utils.TextUtils;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class BottomDialog {
     public static String selectedNoteColor = "#FFFFFF";
@@ -73,7 +88,88 @@ public class BottomDialog {
         final ImageView colorNoteVariant3 = dialog.findViewById(R.id.color_note_3);
         final ImageView colorNoteVariant4 = dialog.findViewById(R.id.color_note_4);
         final ImageView colorNoteVariant5 = dialog.findViewById(R.id.color_note_5);
+        LinearLayout linearLayoutSetRemind = dialog.findViewById(R.id.tool_set_remind);
 
+        linearLayoutSetRemind.setOnClickListener(new View.OnClickListener() {
+            final int[] yearPicker = {-1};
+            final int[] monthPicker = {-1};
+            final int[] dayPicker = {-1};
+            final int[] hourPicker = {-1};
+            final int[] minutePicker = {-1};
+
+            Calendar calendar = Calendar.getInstance();
+            int currentYear = calendar.get(Calendar.YEAR);
+            int currentMonth = calendar.get(Calendar.MONTH);
+            int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+            int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+            int currentMinutes = calendar.get(Calendar.MINUTE);
+            @Override
+            public void onClick(View v) {
+                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder
+                        .datePicker()
+                        .setTheme(R.style.ThemeOverlay_App_MaterialCalendar)
+                        .setTitleText("Select date bae")
+                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                        .build();
+
+                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Date");
+                datePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        datePicker.dismiss();
+                    }
+                });
+                datePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        datePicker.dismiss();
+                    }
+                });
+                datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                    @Override
+                    public void onPositiveButtonClick(Long aLong) {
+                        calendar.setTimeInMillis(aLong);
+                        MaterialTimePicker.Builder builder = new MaterialTimePicker.Builder();
+                        builder.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
+                                .setTimeFormat(TimeFormat.CLOCK_24H)
+                                .setHour(currentHour)
+                                .setMinute(currentMinutes)
+                                .setTitleText("Select Time Bae");
+                        MaterialTimePicker timePicker = builder.build();
+
+//                        https://github.com/material-components/material-components-android/blob/master/catalog/java/io/material/catalog/timepicker/TimePickerMainDemoFragment.java
+                        timePicker.addOnPositiveButtonClickListener(dialog -> {
+
+                            //todo: add setTime date todo task
+                            int selectedHour = timePicker.getHour();
+                            int selectedMinute = timePicker.getMinute();
+                            Toast.makeText(context, "Date: " +
+                                    calendar.get(Calendar.YEAR) + "-"
+                                    + (calendar.get(Calendar.MONTH) + 1) + "-" +
+                                    calendar.get(Calendar.DAY_OF_MONTH) +
+                                    " Time: " + selectedHour + ":" +
+                                    selectedMinute, Toast.LENGTH_SHORT).show();
+                        });
+
+                        timePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                timePicker.dismiss();
+                                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Time2");
+                            }
+                        });
+                        timePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogInterface dialog) {
+                                timePicker.dismiss();
+                                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Time2");
+                            }
+                        });
+                        timePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Time");
+                    }
+                });
+            }
+        });
         dialog.findViewById(R.id.view_default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -251,7 +347,7 @@ public class BottomDialog {
         int currentYear = calendar.get(Calendar.YEAR);
         int currentMonth = calendar.get(Calendar.MONTH);
         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-        int currentHour = calendar.get(Calendar.HOUR);
+        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
         int currentMinutes = calendar.get(Calendar.MINUTE);
 
         final Dialog dialog = new Dialog(context);
@@ -269,6 +365,36 @@ public class BottomDialog {
             }
         }, 400);
 
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    Log.d("duyText", "no focus");
+                    // EditText không còn focus, thực hiện xử lý ở đây
+                    String text = editText.getText().toString();
+                    List<String> urls = new ArrayList<>();
+                    urls = TextUtils.linkDetectFromText(text);
+                    SpannableString spannableString = new SpannableString(text);
+                    int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
+
+                    for (String url : urls) {
+                        int startIndex = text.indexOf(url);
+                        while (startIndex != -1) {
+                            int endIndex = startIndex + url.length();
+                            spannableString.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            spannableString.setSpan(new ForegroundColorSpan(colorAccent), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                            Log.d("duyTextLink", spannableString.toString());
+
+                            startIndex = text.indexOf(url, endIndex);
+                        }
+                    }
+
+                    editText.setText(spannableString); // Đặt văn bản đã định dạng trở lại EditText
+                }
+            }
+        });
+
+
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -285,10 +411,12 @@ public class BottomDialog {
                 else {
                     int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
                     textViewDone.setTextColor(colorAccent);
-                    editText.setOnClickListener(new View.OnClickListener() {
+                    textViewDone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             //todo: add toDo
+                            dialog.dismiss();
+                            Toast.makeText(context, "add task test", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -296,7 +424,20 @@ public class BottomDialog {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+//                String text = s.toString();
+//                List<String> urls = new ArrayList<>();
+//                urls = TextUtils.linkDetectFromText(text);
+//                SpannableString spannableString = new SpannableString(text);
+//
+//                if(!urls.isEmpty()) {
+//                    for (String url: urls) {
+//                        int startIndex = text.indexOf(url);
+//                        int endIndex = startIndex + url.length();
+//                        spannableString.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                        spannableString.setSpan(new ForegroundColorSpan(Color.BLUE), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    }
+//                }
+//                editText.setText(spannableString);
             }
         });
 
@@ -313,6 +454,8 @@ public class BottomDialog {
         linearLayoutSetRemind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editText.clearFocus();
+                HideKeyBoard.hideKeyboard((Activity) context);
                 MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder
                         .datePicker()
                         .setTheme(R.style.ThemeOverlay_App_MaterialCalendar)

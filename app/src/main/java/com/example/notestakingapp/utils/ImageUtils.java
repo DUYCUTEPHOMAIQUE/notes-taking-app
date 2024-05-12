@@ -25,7 +25,7 @@ public class ImageUtils {
     }
 
     //uri to byte[]
-    public static byte[] uriToBytes(Uri uri, Context context) throws IOException, IOException {
+    public static byte[] uriToBytes(Uri uri, Context context) throws IOException {
         InputStream inputStream = null;
         try {
             inputStream = context.getContentResolver().openInputStream(uri);
@@ -40,5 +40,11 @@ public class ImageUtils {
             byteBuffer.write(buffer, 0, len);
         }
         return byteBuffer.toByteArray();
+    }
+
+    //byte[] to bitmap
+    public static Bitmap byteToBitmap(byte[] imageData) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+        return bitmap;
     }
 }
