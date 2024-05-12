@@ -1,5 +1,6 @@
 package com.example.notestakingapp.database;
 import com.example.notestakingapp.database.DatabaseHandler;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -39,4 +40,5 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 		Cursor cursor = db.rawQuery(query, new String[] {CreateAt});
 		return cursor.getCount() >= 1;
 	}
+
 }
