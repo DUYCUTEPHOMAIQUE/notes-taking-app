@@ -133,6 +133,7 @@ public class NoteEditActivity extends AppCompatActivity {
         mItemList = new ArrayList<>();
         //tao Item ui
         noteId = (int) databaseHandler.insertNote(this, null, null, null, null);
+        Toast.makeText(this, "noteId new = " + noteId, Toast.LENGTH_SHORT).show();
         textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, null);
         Log.d("duyIns", String.valueOf(noteId));
         Log.d("duyIns", "tao textSegment id = " + textSegmentId + "noteId = " + noteId);
