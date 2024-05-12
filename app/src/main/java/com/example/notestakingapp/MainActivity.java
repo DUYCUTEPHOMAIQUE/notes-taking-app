@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -56,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
+
         db = noteTakingDatabaseHelper.getReadableDatabase();
+
         DatabaseHandler databaseHandler = new DatabaseHandler();
+
 //        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
 
         //khoi chay ui
@@ -134,8 +137,8 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-	    //Huy's database sync test code
+//todo: em huy nào làm check lại cmt này
+//	    //Huy's database sync test code
 	    FirebaseHandler.syncFromFirebase(this);
     }
 
