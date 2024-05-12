@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">NotesTakingApp</string>
+    <string name="to_do">To do</string>
+    <string name="notes">Notes</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="scribble">Scribble</string>
+    <string name="image">Image</string>
+    <string name="voice">Voice</string>
+    <string name="note_title">Note Title</string>
+    <string name="my_notes">My Notes</string>
+    <string name="search_notes">Search notes</string>
+    <string name="back">Back</string>
+    <string name="type_note_here">Type note here..</string>
+    <string name="change_background">CHANGE BACKGROUND</string>
+    <string name="extras">EXTRAS</string>
+    <string name="set_reminder">Set Reminder</string>
+    <string name="give_tag">Give Tag</string>
+    <string name="delete_note">Delete Note</string>
+    <string name="confirm_delete_note">Confirm Delete Note</string>
+    <string name="change_note_type">Change Note Type</string>
+    <string name="mark_as_finished">Mark as Finished</string>
+    <string name="press_quot_enter_quot_to_create_new_task">Press \"Enter\" to create new task</string>
+    <string name="done">Done</string>
 </resources>
