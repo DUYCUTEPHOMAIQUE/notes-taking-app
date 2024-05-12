@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 
 public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "note.db";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
 
     //NOTE
     public static final String  COLUMN_NOTE_TITLE = "NOTE_TITLE";
@@ -21,25 +21,34 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
     //TEXT SEGMENT
     public static final String COLUMN_TEXT_ID = "TEXT_ID";
     public static final String COLUMN_TEXT = "TEXT";
+    public static final String COLUMN_TEXT_CREATEAT = "CREATE_AT";
 
 
     //IMAGE
     public static final String COLUMN_IMAGE_ID = "IMAGE_ID";
     public static final String COLUMN_IMAGE_DATA = "IMAGE_DATA";
+    public static final String COLUMN_IMAGE_CREATEAT = "CREATE_AT";
 
     //AUDIO
     public static final String COLUMN_AUDIO_ID = "AUDIO_ID";
     public static final String COLUMN_AUDIO_DATA = "AUDIO_DATA";
+    public static final String COLUMN_AUDIO_CREATEAT = "CREATE_AT";
 
     //TAG
     public static final String COLUMN_TAG_ID = "TAG_ID";
     public static final String COLUMN_TAG_NAME = "TAG_NAME";
 
-    //TODO
+    //TO-DO
     public static final String COLUMN_TODO_CONTENT = "TODO_CONTENT";
     public static final String COLUMN_TODO_ID = "TODO_ID";
     public static final String COLUMN_TODO_CREATEAT = "CREATE_AT";
     public static final String COLUMN_TODO_DURATION = "DURATION";
+
+
+    //COMPONENT
+    public static final String COLUMN_COMPONENT_ID = "COMPONENT_ID";
+    public static final String COLUMN_COMPONENT_TYPE = "TYPE";
+    public static final String COLUMN_COMPONENT_CREATEAT = "CREATE_AT";
 
     //TABLE NAME
     public static final String TAG_TABLE = "TAG";
@@ -49,6 +58,7 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
     public static final String AUDIO_TABLE = "AUDIO";
     public static final String TODO_TABLE= "TODO";
     public static final String  NOTE_TAG_TABLE = "NOTE_TAG";
+    public static final String COMPONENT = "COMPONEN";
 
 
 
@@ -78,13 +88,15 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE NOTE ( "+
                     COLUMN_NOTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     COLUMN_NOTE_TITLE + " TEXT," +
-                    COLUMN_NOTE_CREATEAT + " TEXT," +
-                    COLUMN_NOTE_COLOR + " TEXT,"+
-                    COLUMN_TAG_ID + " INTEGER," +
-                    "FOREIGN KEY ("+COLUMN_TAG_ID+") REFERENCES TAG("+COLUMN_TAG_ID +"));"
+                    COLUMN_NOTE_CREATEAT + " INTEGER," +
+                    COLUMN_NOTE_COLOR + " TEXT);"
                     );
 
-//            db.execSQL("CREATE TABLE ");
+//            db.execSQL("CREATE TABLE NOTE_TAG ( " +
+//                    COLUMN_NOTE_ID + " INTEGER" +
+//
+//
+//                    );
 
 
             //TEXTSEGMENT
@@ -122,6 +134,41 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
             );
         }
 
+        if (oldVersion < 2){
+            //tao bang note_tag
+            db.execSQL(     "CREATE TABLE NOTE_TAG(" +
+                            COLUMN_NOTE_ID + " INTEGER, " +
+                            COLUMN_TAG_ID + " INTEGER, " +
+                            "FOREIGN KEY ("+COLUMN_NOTE_ID+") REFERENCES NOTE("+COLUMN_NOTE_ID+")," +
+                            "FOREIGN KEY ("+COLUMN_TAG_ID+") REFERENCES TAG("+COLUMN_TAG_ID +"));"
+                    );
 
-    }
+            //tao bang componen, chứa noteid, componentId( là textid, audioid, hoặc imageid), createat, type( text, audio, image)
+            db.execSQL(     "CREATE TABLE COMPONENT(" +
+                            COLUMN_NOTE_ID + " INTEGER, " +
+                            COLUMN_COMPONENT_ID + " INTEGER, " +
+                            COLUMN_COMPONENT_CREATEAT + "INTEGER, " +
+                            COLUMN_COMPONENT_TYPE + "INTEGER, " +
+                            "FOREIGN KEY ("+COLUMN_NOTE_ID+") REFERENCES NOTE("+COLUMN_NOTE_ID+"));"
+                    );
+
+            //thêm cột createat cho bảng text
+            db.execSQL(     "ALTER TABLE " + TEXTSEGMENT_TABLE +
+                            " ADD COLUMN " + COLUMN_TEXT_CREATEAT + " INTEGER"
+                    );
+
+            //thêm cột createat cho bảng image
+            db.execSQL(     "ALTER TABLE " + IMAGE_TABLE +
+                            " ADD COLUMN " + COLUMN_TEXT_CREATEAT + " INTEGER"
+            );
+
+            //thêm cột createat cho bảng audio
+            db.execSQL(     "ALTER TABLE " + AUDIO_TABLE +
+                            " ADD COLUMN " + COLUMN_TEXT_CREATEAT + " INTEGER"
+            );
+
+
+        }
+
+    }////
 }

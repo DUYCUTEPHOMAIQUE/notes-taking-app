@@ -123,7 +123,6 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
 
-
         // khoi chay ui
         initUi();
 

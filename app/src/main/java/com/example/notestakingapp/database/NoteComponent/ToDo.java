@@ -6,10 +6,10 @@ import androidx.annotation.Nullable;
 public class ToDo {
     private int todoId;
     private String content;
-    private String createAt;
-    private String duration;
+    private long createAt;
+    private long duration;
 
-    public ToDo(int todoId, @Nullable String content, @NonNull String createAt, @Nullable  String duration) {
+    public ToDo(int todoId, @Nullable String content, @NonNull long createAt, @Nullable  long duration) {
         this.todoId = todoId;
         this.content = content;
         this.createAt = createAt;
@@ -32,19 +32,19 @@ public class ToDo {
         this.content = content;
     }
 
-    public String getCreateAt() {
+    public long getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(String createAt) {
+    public void setCreateAt(long createAt) {
         this.createAt = createAt;
     }
 
-    public String getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(String duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 }
