@@ -5,15 +5,115 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryBackground"
     tools:context=".MainActivity">
-
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/text_my_notes"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:fontFamily="@font/bold"
+        android:includeFontPadding="false"
+        android:text="@string/my_notes"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/_20ssp"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:src="@drawable/cog_outline"
+        app:tint="@color/colorBlack"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_20sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <LinearLayout
+        android:id="@+id/layout_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:background="@drawable/background_search"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/_10sdp"
+        android:paddingEnd="@dimen/_10sdp"
+        app:layout_constraintTop_toBottomOf="@+id/text_my_notes">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/search_outline"
+            app:tint="@color/colorGrayDark" />
+
+        <EditText
+            android:id="@+id/inputSearch"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:background="@null"
+            android:fontFamily="@font/regular"
+            android:hint="@string/search_notes"
+            android:imeOptions="actionDone"
+            android:importantForAutofill="no"
+            android:includeFontPadding="false"
+            android:inputType="text"
+            android:textColor="@color/colorBlack"
+            android:textColorHint="@color/colorTextHint"
+            android:textSize="@dimen/_13ssp" />
+    </LinearLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager2"
+        android:clipToPadding="false"
+        android:paddingStart="0dp"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:elevation="0dp"
+        android:background="@color/colorPrimaryBackground"
+        app:layout_constraintBottom_toTopOf="@+id/layout_nav"
+        app:layout_constraintTop_toBottomOf="@+id/layout_search"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp" />
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/layout_nav"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryBackground"
+        android:clipToPadding="false"
+        app:itemIconSize="@dimen/_24sdp"
+        app:itemIconTint="@drawable/item_selected_navigation"
+        app:itemTextColor="@drawable/item_selected_navigation"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:menu="@menu/navigation" />
+
+    <ImageView
+        android:id="@+id/imageAddNoteMain"
+        android:layout_width="@dimen/_64sdp"
+        android:layout_height="@dimen/_64sdp"
+        android:background="@drawable/background_add_button"
+        android:contentDescription="@string/app_name"
+        android:elevation="8dp"
+        android:padding="@dimen/_8sdp"
+        android:src="@drawable/round_add_24"
+        app:layout_constraintBottom_toTopOf="@+id/layout_nav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/layout_nav"
+        app:tint="@color/colorBlack"
+        android:visibility="invisible"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

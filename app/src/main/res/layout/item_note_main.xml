@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_note_main"
+    android:background="@drawable/bg_note_main"
+    android:orientation="vertical"
+    android:layout_marginStart="@dimen/_12sdp"
+    android:layout_marginEnd="@dimen/_12sdp"
+    android:layout_height="wrap_content">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/image_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="@dimen/_160sdp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:adjustViewBounds="true"
+        app:riv_corner_radius_top_left="@dimen/_16sdp"
+        app:riv_corner_radius_top_right="@dimen/_16sdp" />
+
+    <TextView
+        android:id="@+id/text_title_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:fontFamily="@font/bold"
+        android:includeFontPadding="false"
+        android:textColor="@color/colorText"
+        android:textSize="@dimen/_13ssp"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/text_segment_main"
+        android:maxLines="4"
+        android:fontFamily="@font/regular"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:includeFontPadding="false"
+        android:textSize="@dimen/_12ssp"
+        android:textColor="@color/colorTextSegment"
+        />
+    <TextView
+        android:id="@+id/text_date_time_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:textSize="@dimen/_8ssp"
+        android:fontFamily="@font/regular"
+        android:textColor="@color/colorTextDateTime"
+        />
+    <TextView
+        android:id="@+id/text_tag_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:textSize="@dimen/_8ssp"
+        android:fontFamily="@font/regular"
+        android:textColor="@color/colorTextDateTime"
+        />
+
+
+
+</LinearLayout>

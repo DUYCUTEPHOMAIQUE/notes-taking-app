@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="colorText">#FF000000</color>
+    <color name="colorBlack">#FF000000</color>
+    <color name="colorWhite">#FFFFFFFF</color>
+    <color name="colorPrimaryBackground">#FAF8FC</color>
+    <color name="colorGrayDark">#827D89</color>
+    <color name="colorPrimaryBase">#6A3EA1</color>
+    <color name="colorPrimaryBaseDark">#3A2258</color>
+    <color  name="colorAccent">#F8C715</color>
+<!--    color note-->
+    <color name="colorNoteDefault">#FFFFFF</color>
+    <color name="colorNoteVariant1">#F7F6D4</color>
+    <color name="colorNoteVariant2">#FDEBAB</color>
+    <color name="colorNoteVariant3">#DAF6E4</color>
+    <color name="colorNoteVariant4">#EFE9F7</color>
+    <color name="colorNoteVariant5">#F7DEE3</color>
+
+    <color name="colorError">#CE3A54</color>
+    <color name="colorSuccess">#60D889</color>
+    <color name="colorSearchBackground">#EFEEF0</color>
+    <color name="colorTextHint">#C8C5CB</color>
+    <color name="colorTextDateTime">#575758</color>
+    <color name="colorTextSegment">#232323</color>
+
+
 </resources>
