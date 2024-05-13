@@ -8,9 +8,8 @@ import com.example.notestakingapp.database.DatabaseHandler;
 public class Note {
     private int noteId;
     private String title;
-    private String createAt;
+    private long createAt;
     private String color;
-    private int tagId;
 
     public int getNoteId() {
         return noteId;
@@ -28,11 +27,11 @@ public class Note {
         this.title = title;
     }
 
-    public String getCreateAt() {
+    public long getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(String createAt) {
+    public void setCreateAt(long createAt) {
         this.createAt = createAt;
     }
 
@@ -45,20 +44,10 @@ public class Note {
     }
 
 
-    public int getTagId() {
-        return tagId;
-    }
-
-    public void setTagId(int tagId) {
-        this.tagId = tagId;
-    }
-
-    public Note(int noteId, @Nullable String title, @NonNull String createAt, @Nullable String color, @Nullable Integer tagId) {
+    public Note(int noteId, String title, long createAt, String color) {
         this.noteId = noteId;
         this.title = title;
         this.createAt = createAt;
         this.color = color;
-        if (tagId != null) this.tagId = tagId;
     }
-
 }
