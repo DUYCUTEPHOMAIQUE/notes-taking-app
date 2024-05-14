@@ -72,7 +72,7 @@ public class DatabaseHandler {
     public static final String AUDIO_TABLE = "AUDIO";
     public static final String TODO_TABLE= "TODO";
     public static final String  NOTE_TAG_TABLE = "NOTE_TAG";
-    public static final String COMPONENT_TABLE = "COMPONEN";
+    public static final String COMPONENT_TABLE = "COMPONENT";
 
 
     //todo------------------------------------------------------ NOTE-----------------------------------

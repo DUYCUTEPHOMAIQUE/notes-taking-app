@@ -59,7 +59,7 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
     public static final String AUDIO_TABLE = "AUDIO";
     public static final String TODO_TABLE = "TODO";
     public static final String NOTE_TAG_TABLE = "NOTE_TAG";
-    public static final String COMPONENT = "COMPONEN";
+    public static final String COMPONENT = "COMPONENT";
 
 
     public NoteTakingDatabaseHelper(@Nullable Context context) {
@@ -147,8 +147,8 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE COMPONENT(" +
                     COLUMN_NOTE_ID + " INTEGER, " +
                     COLUMN_COMPONENT_ID + " INTEGER, " +
-                    COLUMN_COMPONENT_CREATEAT + "INTEGER, " +
-                    COLUMN_COMPONENT_TYPE + "INTEGER, " +
+                    COLUMN_COMPONENT_CREATEAT + " INTEGER, " +
+                    COLUMN_COMPONENT_TYPE + " INTEGER, " +
                     "FOREIGN KEY (" + COLUMN_NOTE_ID + ") REFERENCES NOTE(" + COLUMN_NOTE_ID + "));"
             );
 
