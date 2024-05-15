@@ -4,11 +4,19 @@ public class Image {
     private int imageId;
     private int noteId;
     private byte[] imageData;
+    private long createAt;
 
     public Image(int imageId, int noteId, byte[] imageData) {
         this.imageId = imageId;
         this.noteId = noteId;
         this.imageData = imageData;
+    }
+
+    public Image(int imageId, int noteId, byte[] imageData, long createAt) {
+        this.imageId = imageId;
+        this.noteId = noteId;
+        this.imageData = imageData;
+        this.createAt = createAt;
     }
 
     public int getImageId() {
@@ -33,5 +41,13 @@ public class Image {
 
     public void setImageData(byte[] imageData) {
         this.imageData = imageData;
+    }
+
+    public long getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(long createAt) {
+        this.createAt = createAt;
     }
 }

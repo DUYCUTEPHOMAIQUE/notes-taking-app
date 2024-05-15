@@ -4,11 +4,19 @@ public class Audio {
     private int audioId;
     private int noteId;
     private byte[] audioData;
+    private long createAt;
 
     public Audio(int audioId, int noteId, byte[] audioData) {
         this.audioId = audioId;
         this.noteId = noteId;
         this.audioData = audioData;
+    }
+
+    public Audio(int audioId, int noteId, byte[] audioData, long createAt) {
+        this.audioId = audioId;
+        this.noteId = noteId;
+        this.audioData = audioData;
+        this.createAt = createAt;
     }
 
     public int getAudioId() {
@@ -33,5 +41,13 @@ public class Audio {
 
     public void setAudioData(byte[] audioData) {
         this.audioData = audioData;
+    }
+
+    public long getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(long createAt) {
+        this.createAt = createAt;
     }
 }
