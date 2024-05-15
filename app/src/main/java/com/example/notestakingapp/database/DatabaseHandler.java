@@ -390,7 +390,7 @@ public class DatabaseHandler {
         //xóa text segment trong bảng text segment
         return db.delete(TEXTSEGMENT_TABLE, COLUMN_TEXT_ID + " = ?", new String[]{Integer.toString(textId)});
     }
-	
+
 	//delete all text segment (Huy test)
 	public static void deleteAllTextSegment(Context context) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -444,14 +444,12 @@ public class DatabaseHandler {
         }
     }
 
-
-
     //ToDo------------------------------------------------------ IMAGE------------------------------------------
 
     //ToDo insertImage(Context context, int noteId,byte[] imageData)
 
     // thêm 1 bản ghi image vào bảng Image
-    public long insertImage(Context context, int noteId,byte[] imageData) {
+    public static long insertImage(Context context, int noteId, byte[] imageData) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -556,7 +554,7 @@ public class DatabaseHandler {
     //ToDo----------------------------------------------------- AUDIO-------------------------------------------
 
     //ToDo public long insertAudio(Context context, int noteId,byte[] audioData)
-    public long insertAudio(Context context, int noteId,byte[] audioData) {
+    public static long insertAudio(Context context, int noteId, byte[] audioData) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 

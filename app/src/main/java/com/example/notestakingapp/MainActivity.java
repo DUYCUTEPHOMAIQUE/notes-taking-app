@@ -146,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
 		//1715798015609
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
 //	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
-	    DatabaseHandler.deleteAllNote(this);
+//	    DatabaseHandler.deleteAllNote(this);
+//		DatabaseHandler.deleteAllTextSegment(this);
 //	    FirebaseHandler.syncToFirebase(this);
 //	    FirebaseHandler.syncFromFirebase(this);
 //	    TempDatabaseHelper.mergeNoteTable(this);

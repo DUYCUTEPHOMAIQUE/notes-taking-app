@@ -3,6 +3,7 @@ import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -59,11 +60,26 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 			DatabaseHandler.insertTextSegment(context, (int) newInsertedNoteId, cursor.getString(2));
 		}
 	}
+	@SuppressLint("Range")
 	public static void mergeAudioTable(Context context, long firebaseNoteId, long newInsertedNoteId) {
+		SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
+		SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
 
+		String query = "SELECT * FROM " + DatabaseHandler.AUDIO_TABLE + " WHERE " + DatabaseHandler.COLUMN_NOTE_ID + " = ?";
+		Cursor cursor = tempDb.rawQuery(query, new String[] {Long.toString(firebaseNoteId)});
+		while (cursor.moveToNext()) {
+			DatabaseHandler.insertAudio(context, (int) newInsertedNoteId, cursor.getBlob(cursor.getColumnIndex(DatabaseHandler.COLUMN_AUDIO_DATA)));
+		}
 	}
 	public static void mergeImageTable(Context context, long firebaseNoteId, long newInsertedNoteId) {
+		SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
+		SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
 
+		String query = "SELECT * FROM " + DatabaseHandler.IMAGE_TABLE + " WHERE " + DatabaseHandler.COLUMN_NOTE_ID + " = ?";
+		Cursor cursor = tempDb.rawQuery(query, new String[] {Long.toString(firebaseNoteId)});
+		while (cursor.moveToNext()) {
+			DatabaseHandler.insertImage(context, (int) newInsertedNoteId, cursor.getBlob(1));
+		}
 	}
 
 
