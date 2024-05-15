@@ -1,6 +1,7 @@
 package com.example.notestakingapp.database;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.NoteComponent.TextSegment;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -31,7 +32,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 		SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
 		SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
 
-		//get all records from test's db table
+		//get all records from test's db note table
 		String query = "SELECT * FROM " + DatabaseHandler.NOTE_TABLE;
 		Cursor cursor = tempDb.rawQuery(query, null);
 		while (cursor.moveToNext()) {
@@ -39,6 +40,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 					cursor.getString(1),       //title
 					cursor.getLong(2),          //createAt
 					cursor.getString(3) );       //color
+			long firebaseNoteId = cursor.getInt(0);
 			//Note với created at này chưa tồn tại
 			if (!checkExistByCreateAt(context, DatabaseHandler.NOTE_TABLE, Long.toString(note.getCreateAt()))) {
 				long newInsertedNoteId = DatabaseHandler.insertNote(context, note.getTitle(), note.getColor());
@@ -47,13 +49,27 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	public static void mergeTextSegmentTable() {
+	public static void mergeTextSegmentTable(Context context, long firebaseNoteId, long newInsertedNoteId) {
+		SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
+		SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
+
+		String query = "SELECT * FROM " + DatabaseHandler.TEXTSEGMENT_TABLE + " WHERE " + DatabaseHandler.COLUMN_NOTE_ID + " = ?";
+		Cursor cursor = tempDb.rawQuery(query, new String[] {Long.toString(firebaseNoteId)});
+		while (cursor.moveToNext()) {
+			TextSegment textSegment = new TextSegment(
+				cursor.getInt(0), //textID
+				cursor.getInt(1), //noteID
+				cursor.getString(2), //text
+				Long.parseLong(cursor.getString(3)) //created at
+			);
+			textSegment.setNoteId((int) newInsertedNoteId);
+			DatabaseHandler.insertTextSegment(context, (int) newInsertedNoteId, textSegment.getText());
+		}
+	}
+	public static void mergeAudioTable(Context context, long firebaseNoteId, long newInsertedNoteId) {
 
 	}
-	public static void mergeAudioTable() {
-
-	}
-	public static void mergeImageTable() {
+	public static void mergeImageTable(Context context, long firebaseNoteId, long newInsertedNoteId) {
 
 	}
 

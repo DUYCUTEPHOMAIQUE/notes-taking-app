@@ -344,7 +344,7 @@ public class DatabaseHandler {
     //ToDo public long insertTextSegment(Context context, int noteId, String text)
 
     // Thêm  1 text Segment
-    public long insertTextSegment(Context context, int noteId, String text) {
+    public static long insertTextSegment(Context context, int noteId, String text) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -780,7 +780,7 @@ public class DatabaseHandler {
     //ToDo----------------------------------------------------- COMPONENT------------------------------------
 
     //ToDo Thêm 1 bản ghi vào bảng component (Dùng phụ trợ cho hàm khác)
-    public long insertComponent(Context context, int noteId, int componentId, int type){
+    public static long insertComponent(Context context, int noteId, int componentId, int type){
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
@@ -826,7 +826,7 @@ public class DatabaseHandler {
 
     //Todo Lấy createAt của text
     @SuppressLint("Range")
-    public long getCreateAtText(Context context, int textId){
+    public static long getCreateAtText(Context context, int textId){
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -843,7 +843,7 @@ public class DatabaseHandler {
 
     //Todo: Lấy createAt của image
     @SuppressLint("Range")
-    public long getCreateAtImage(Context context, int imageId){
+    public static long getCreateAtImage(Context context, int imageId){
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -860,7 +860,7 @@ public class DatabaseHandler {
 
     //Todo Lấy createAt của audio
     @SuppressLint("Range")
-    public long getCreateAtAudio(Context context, int audioId){
+    public static long getCreateAtAudio(Context context, int audioId){
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
