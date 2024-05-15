@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 public class TempDatabaseHelper extends SQLiteOpenHelper {
@@ -49,7 +50,6 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				mergeAudioTable(context, firebaseNoteId, newInsertedNoteId);
 				mergeImageTable(context, firebaseNoteId, newInsertedNoteId);
 
-				//tag problem?
 				long tagId = cursor.getInt(4);
 				//Log.d("TAG ID", Integer.toString((int) tagId));
 				if (tagId != 0) {
@@ -58,7 +58,11 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 					int dbTagId = checkTagExistByName(context, tagName);
 					if (dbTagId == -1) {
 						//Tag name not exist in local database
-						
+						//Insert new tag with firebase's name and get the inserted id
+						long newInsertedTadId = DatabaseHandler.createNewTag(context, tagName);
+						DatabaseHandler.setTagForNote(context, (int) newInsertedNoteId, (int) newInsertedTadId);
+					}else {
+						DatabaseHandler.setTagForNote(context, (int) newInsertedNoteId, dbTagId);
 					}
 				}
 			}

@@ -140,8 +140,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-	    //Huy's database sync test code
-	    //insert a test note
+		huyTestingFunction();
+    }
+
+	public static void huyTestingFunction() {
+		//Huy's database sync test code
+		//insert a test note
 //	    DatabaseHandler.insertNote(this, "Local Note", "#FFFFFD");
 		//1715798015609
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
@@ -149,14 +153,16 @@ public class MainActivity extends AppCompatActivity {
 //	    DatabaseHandler.deleteAllNote(this);
 //		DatabaseHandler.deleteAllTextSegment(this);
 //	    FirebaseHandler.syncToFirebase(this);
-	    FirebaseHandler.syncFromFirebase(this);
-	    TempDatabaseHelper.mergeNoteTable(this);
+//	    FirebaseHandler.syncFromFirebase(this);
+//	    TempDatabaseHelper.mergeNoteTable(this);
 //	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
 //			    DatabaseHandler.NOTE_TABLE,
 //			    "1715798015609")));
 //	    DatabaseHandler.insertTextSegment(this, 11, "Local Text Segment");
 //	    DatabaseHandler.resetAllAutoincrement(this);
-    }
+
+		DatabaseHandler.createNewTag()
+	}
 
     private void routeToTodoEdit() {
         BottomDialog.showToDoDiaLog(MainActivity.this);

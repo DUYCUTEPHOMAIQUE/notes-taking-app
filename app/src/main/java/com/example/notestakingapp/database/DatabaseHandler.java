@@ -646,7 +646,7 @@ public class DatabaseHandler {
 
 
     //ToDo public long createNewTag(Context context, String tagName)
-    public long createNewTag(Context context, String tagName) {
+    public static long createNewTag(Context context, String tagName) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -754,7 +754,7 @@ public class DatabaseHandler {
     //ToDo public void setTagForNote(Context context, int noteId, int tagId)
 
     // thêm 1 bản ghi gồm noteId và tagId vào bảng Note_Tag.
-    public void setTagForNote(Context context, int noteId, int tagId){
+    public static void setTagForNote(Context context, int noteId, int tagId){
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
