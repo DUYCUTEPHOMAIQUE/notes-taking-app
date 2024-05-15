@@ -49,7 +49,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				mergeTextSegmentTable(context, firebaseNoteId, newInsertedNoteId);
 				mergeAudioTable(context, firebaseNoteId, newInsertedNoteId);
 				mergeImageTable(context, firebaseNoteId, newInsertedNoteId);
-
+				//TODO: IMPLEMENT TAG NOTE SYNC
 				long tagId = cursor.getInt(4);
 				//Log.d("TAG ID", Integer.toString((int) tagId));
 				if (tagId != 0) {

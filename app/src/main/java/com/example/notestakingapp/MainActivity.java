@@ -139,29 +139,35 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
+//		db.execSQL("UPDATE NOTE SET TAG_ID = 3 WHERE NOTE_ID = 8");
 		huyTestingFunction();
     }
 
-	public static void huyTestingFunction() {
+	public void huyTestingFunction() {
 		//Huy's database sync test code
 		//insert a test note
 //	    DatabaseHandler.insertNote(this, "Local Note", "#FFFFFD");
 		//1715798015609
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
 //	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
+
 //	    DatabaseHandler.deleteAllNote(this);
 //		DatabaseHandler.deleteAllTextSegment(this);
+//		DatabaseHandler.deleteAllTag(this);
+//		DatabaseHandler.deleteAllNoteTag(this);
+
 //	    FirebaseHandler.syncToFirebase(this);
-//	    FirebaseHandler.syncFromFirebase(this);
-//	    TempDatabaseHelper.mergeNoteTable(this);
+	    FirebaseHandler.syncFromFirebase(this);
+	    TempDatabaseHelper.mergeNoteTable(this);
 //	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
 //			    DatabaseHandler.NOTE_TABLE,
 //			    "1715798015609")));
 //	    DatabaseHandler.insertTextSegment(this, 11, "Local Text Segment");
 //	    DatabaseHandler.resetAllAutoincrement(this);
 
-		DatabaseHandler.createNewTag()
+//		DatabaseHandler.createNewTag(this, "DAU QUOC DUY");
+//		DatabaseHandler.createNewTag(this, "VU ANH HUY");
+//		DatabaseHandler.setTagForNote(this, 8, 3);
 	}
 
     private void routeToTodoEdit() {
