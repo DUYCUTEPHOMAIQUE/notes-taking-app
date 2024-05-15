@@ -1,5 +1,6 @@
 package com.example.notestakingapp;
 import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.TempDatabaseHelper;
 import com.example.notestakingapp.firebase.FirebaseHandler;
 import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
 
@@ -138,14 +139,20 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
 	    //Huy's database sync test code
 	    //insert a test note
-//	    DatabaseHandler.insertNote(this, "Test Note", "#FFFFFF");
+	    DatabaseHandler.insertNote(this, "Test Note 2024", "#FFFFFD");
+		//1715798015609
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
 //	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
 //	    DatabaseHandler.deleteAllNote(this);
 //	    FirebaseHandler.syncToFirebase(this);
-	    FirebaseHandler.syncFromFirebase(this);
+//	    FirebaseHandler.syncFromFirebase(this);
+//	    TempDatabaseHelper.mergeNoteTable(this, db);
+//	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
+//			    DatabaseHandler.NOTE_TABLE,
+//			    "1715798015609")));
     }
 
     private void routeToTodoEdit() {
