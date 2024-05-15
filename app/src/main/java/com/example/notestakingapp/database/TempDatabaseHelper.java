@@ -46,6 +46,8 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 			if (!checkExistByCreateAt(context, DatabaseHandler.NOTE_TABLE, Long.toString(note.getCreateAt()))) {
 				long newInsertedNoteId = DatabaseHandler.insertNote(context, note.getTitle(), note.getColor());
 				mergeTextSegmentTable(context, firebaseNoteId, newInsertedNoteId);
+				mergeAudioTable(context, firebaseNoteId, newInsertedNoteId);
+				mergeImageTable(context, firebaseNoteId, newInsertedNoteId);
 			}
 		}
 	}
