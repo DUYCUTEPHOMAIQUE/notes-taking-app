@@ -149,8 +149,8 @@ public class MainActivity extends AppCompatActivity {
 //	    DatabaseHandler.deleteAllNote(this);
 //		DatabaseHandler.deleteAllTextSegment(this);
 //	    FirebaseHandler.syncToFirebase(this);
-//	    FirebaseHandler.syncFromFirebase(this);
-//	    TempDatabaseHelper.mergeNoteTable(this);
+	    FirebaseHandler.syncFromFirebase(this);
+	    TempDatabaseHelper.mergeNoteTable(this);
 //	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
 //			    DatabaseHandler.NOTE_TABLE,
 //			    "1715798015609")));
