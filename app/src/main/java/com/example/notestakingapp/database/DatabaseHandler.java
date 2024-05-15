@@ -10,8 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.notestakingapp.Item;
+import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Component;
+import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 
 import java.util.ArrayList;
@@ -407,6 +410,35 @@ public class DatabaseHandler {
     }
 
 
+    //ToDo public TextSegment getTextSegment (Context context, Component component )
+    @SuppressLint("Range")
+    public TextSegment getTextSegment (Context context, Component component ){
+        if (component.getType() != Item.TYPE_EDIT_TEXT){
+            return null;
+        }
+        else {
+            SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+            SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+
+            String query = "SELECT * FROM " + TEXTSEGMENT_TABLE + " WHERE " + COLUMN_TEXT_ID + " = ?";
+            Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(component.getComponentId())});
+
+            if (cursor.moveToFirst()){
+                return new TextSegment(
+                        component.getComponentId(),
+                        component.getNoteId(),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_TEXT)),
+                        component.getCreateAt()
+                        );
+            }
+            else {
+                return null;
+            }
+        }
+    }
+
+
+
     //ToDo------------------------------------------------------ IMAGE------------------------------------------
 
     //ToDo insertImage(Context context, int noteId,byte[] imageData)
@@ -485,6 +517,32 @@ public class DatabaseHandler {
     }
 
 
+    //ToDo public Image getImage (Context context, Component component)
+    @SuppressLint("Range")
+    public Image getImage (Context context, Component component){
+        if (component.getType() != Item.TYPE_IMAGE_VIEW){
+            return null;
+        }
+        else {
+            SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+            SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+
+            String query = "SELECT * FROM " + IMAGE_TABLE + " WHERE " + COLUMN_IMAGE_ID + " = ?";
+            Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(component.getComponentId())});
+
+            if (cursor.moveToFirst()){
+                return new Image(
+                        component.getComponentId(),
+                        component.getNoteId(),
+                        cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE_DATA)),
+                        component.getCreateAt()
+                );
+            }
+            else {
+                return null;
+            }
+        }
+    }
 
 
 
@@ -547,6 +605,33 @@ public class DatabaseHandler {
         }
         else {
             return -1;
+        }
+    }
+
+    //ToDo public Audio getAudio (Context context, Component component)
+    @SuppressLint("Range")
+    public Audio getAudio (Context context, Component component){
+        if (component.getType() != Item.TYPE_VOICE_VIEW){
+            return null;
+        }
+        else {
+            SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+            SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+
+            String query = "SELECT * FROM " + AUDIO_TABLE + " WHERE " + COLUMN_AUDIO_ID + " = ?";
+            Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(component.getComponentId())});
+
+            if (cursor.moveToFirst()){
+                return new Audio(
+                        component.getComponentId(),
+                        component.getNoteId(),
+                        cursor.getBlob(cursor.getColumnIndex(COLUMN_AUDIO_DATA)),
+                        component.getCreateAt()
+                );
+            }
+            else {
+                return null;
+            }
         }
     }
 
