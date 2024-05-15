@@ -142,17 +142,19 @@ public class MainActivity extends AppCompatActivity {
 
 	    //Huy's database sync test code
 	    //insert a test note
-	    DatabaseHandler.insertNote(this, "Test Note 2024", "#FFFFFD");
+//	    DatabaseHandler.insertNote(this, "Local Note", "#FFFFFD");
 		//1715798015609
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
 //	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
-//	    DatabaseHandler.deleteAllNote(this);
+	    DatabaseHandler.deleteAllNote(this);
 //	    FirebaseHandler.syncToFirebase(this);
 //	    FirebaseHandler.syncFromFirebase(this);
-//	    TempDatabaseHelper.mergeNoteTable(this, db);
+//	    TempDatabaseHelper.mergeNoteTable(this);
 //	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
 //			    DatabaseHandler.NOTE_TABLE,
 //			    "1715798015609")));
+//	    DatabaseHandler.insertTextSegment(this, 11, "Local Text Segment");
+//	    DatabaseHandler.resetAllAutoincrement(this);
     }
 
     private void routeToTodoEdit() {

@@ -390,7 +390,13 @@ public class DatabaseHandler {
         //xóa text segment trong bảng text segment
         return db.delete(TEXTSEGMENT_TABLE, COLUMN_TEXT_ID + " = ?", new String[]{Integer.toString(textId)});
     }
-
+	
+	//delete all text segment (Huy test)
+	public static void deleteAllTextSegment(Context context) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+		db.execSQL("DELETE FROM " + TEXTSEGMENT_TABLE);
+	}
 
     //ToDo public int getNoteIdByTextId(Context context, int textId)
     //lấy noteid bằng textId
@@ -932,4 +938,10 @@ public class DatabaseHandler {
         }
         return -1;
     }
+
+	public static void resetAllAutoincrement(Context context) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+		db.execSQL("DELETE FROM SQLITE_SEQUENCE");
+	}
 }
