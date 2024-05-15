@@ -100,7 +100,7 @@ public class DatabaseHandler {
     //todo public long insertNote(Context context,@Nullable String title,@Nullable String color)
 
     // thêm note vào database
-    public long insertNote(Context context,@Nullable String title,@Nullable String color) {
+    public static long insertNote(Context context,@Nullable String title,@Nullable String color) {
 
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
@@ -166,9 +166,6 @@ public class DatabaseHandler {
         return db.update(NOTE_TABLE, ct, COLUMN_NOTE_ID+" = ?", new String[]{Integer.toString(noteId)});
     }
 
-
-    //ToDo public void deleteNote(Context context, int noteId)
-
     // Xóa 1 Note. Những gì liên quan đến note này (audio, text, image) cũng bị xóa theo
     public void deleteNote(Context context, int noteId) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -192,8 +189,12 @@ public class DatabaseHandler {
         db.delete(NOTE_TABLE, COLUMN_NOTE_ID + " = ?", new String[]{Integer.toString(noteId)});
     }
 
-
-    //Todo Note getNoteById(Context context, int noteId)
+	//Xoá tất cả các Note trong database (Huy test)
+	public static void deleteAllNote(Context context) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+		db.execSQL("DELETE FROM " + NOTE_TABLE);
+	}
 
     // Trả về 1 đối tượng Note thông qua noteId
     public Note getNoteById(Context context, int noteId) {
@@ -840,7 +841,7 @@ public class DatabaseHandler {
         else return -1;
     }
 
-    //Todo Lấy createAt của image
+    //Todo: Lấy createAt của image
     @SuppressLint("Range")
     public long getCreateAtImage(Context context, int imageId){
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);

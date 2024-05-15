@@ -1,4 +1,5 @@
 package com.example.notestakingapp;
+import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.firebase.FirebaseHandler;
 import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
 
@@ -137,8 +138,13 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-//todo: em huy nào làm check lại cmt này
-//	    //Huy's database sync test code
+	    //Huy's database sync test code
+	    //insert a test note
+//	    DatabaseHandler.insertNote(this, "Test Note", "#FFFFFF");
+//	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
+//	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
+//	    DatabaseHandler.deleteAllNote(this);
+//	    FirebaseHandler.syncToFirebase(this);
 	    FirebaseHandler.syncFromFirebase(this);
     }
 
