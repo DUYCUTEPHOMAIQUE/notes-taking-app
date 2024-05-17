@@ -2,6 +2,7 @@ package com.example.notestakingapp.database;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
+import com.example.notestakingapp.database.NoteComponent.ToDo;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -29,6 +30,24 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
+	}
+	//Merge Todo Table
+	public static void mergeTodoTable(Context context) {
+		SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
+		SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
+
+		//get all records from test's db todo table
+		String query = "SELECT * FROM " + DatabaseHandler.TODO_TABLE;
+		Cursor cursor = tempDb.rawQuery(query, null);
+		while (cursor.moveToNext()) {
+			String todoContent = cursor.getString(1);
+			String todoCreateAt = cursor.getString(2);
+			String todoDuration = cursor.getString(3);
+			if (!checkExistByCreateAt(context, DatabaseHandler.TODO_TABLE, todoCreateAt)) {
+				//todoid = 0?
+				DatabaseHandler.insertTodo(context, 0, todoContent, todoCreateAt, todoDuration);
+			}
+		}
 	}
 	//Merge Note Table
 	public static void mergeNoteTable(Context context) {

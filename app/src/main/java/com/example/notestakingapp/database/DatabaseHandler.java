@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.notestakingapp.Item;
+import com.example.notestakingapp.TodoFragment;
 import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Component;
 import com.example.notestakingapp.database.NoteComponent.Image;
@@ -608,14 +609,20 @@ public class DatabaseHandler {
 //    }
 
 	//--------------------------------------------------------TODO---------------------------------------
+	public static void deleteAllTodo(Context context) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+		db.execSQL("DELETE FROM " + TODO_TABLE);
+	}
+
 	//todo: public long insertTodo(Context context, int todoId, @Nullable String content,@NonNull String createAt,@Nullable String duration )
-	public long insertTodo(Context context, int todoId, @Nullable String content,@NonNull String createAt,@Nullable String duration) {
+	public static long insertTodo(Context context, int todoId, @Nullable String content,@NonNull String createAt,@Nullable String duration) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
 		ContentValues ct = new ContentValues();
-
-		ct.put(COLUMN_TODO_ID , todoId);
+		//todo's id is auto increment?
+//		ct.put(COLUMN_TODO_ID , todoId);
 		ct.put(COLUMN_TODO_CONTENT, content);
 		ct.put(COLUMN_TODO_CREATEAT , createAt);
 		ct.put(COLUMN_TODO_DURATION, duration);

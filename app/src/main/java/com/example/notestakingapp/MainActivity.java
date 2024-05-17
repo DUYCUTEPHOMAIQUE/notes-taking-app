@@ -153,8 +153,11 @@ public class MainActivity extends AppCompatActivity {
 //		DatabaseHandler.deleteAllNoteTag(this);
 //		DatabaseHandler.deleteNote(this, 7);
 //	    FirebaseHandler.syncToFirebase(this);
-	    FirebaseHandler.syncFromFirebase(this);
-	    TempDatabaseHelper.mergeNoteTable(this);
+//	    FirebaseHandler.syncFromFirebase(this);
+//		DatabaseHandler.deleteAllTodo(this);
+//		TempDatabaseHelper.mergeTodoTable(this);
+//	    TempDatabaseHelper.mergeNoteTable(this);
+
 
 //	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
 //			    DatabaseHandler.NOTE_TABLE,
@@ -164,6 +167,8 @@ public class MainActivity extends AppCompatActivity {
 //	    long noteid = DatabaseHandler.insertNote(this, "Local Note", "#FFFFFD");
 //		long tagid = DatabaseHandler.createNewTag(this, "VU ANH HUY");
 //		DatabaseHandler.setTagForNote(this, (int)noteid, (int)tagid);
+
+//		DatabaseHandler.insertTodo(this, 0, "Buy Milk", Long.toString(System.currentTimeMillis()), "0");
 	}
 
     private void routeToTodoEdit() {
