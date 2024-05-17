@@ -139,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-//		db.execSQL("UPDATE NOTE SET TAG_ID = 3 WHERE NOTE_ID = 8");
 		huyTestingFunction();
     }
 
@@ -147,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
 		//Huy's database sync test code
 		//insert a test note
 //	    DatabaseHandler.insertNote(this, "Local Note", "#FFFFFD");
-		//1715798015609
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
 //	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
 

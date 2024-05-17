@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.widget.Toast;
 
 public class TempDatabaseHelper extends SQLiteOpenHelper {
 	public static final String DB_NAME = "test";
@@ -49,11 +50,11 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				mergeTextSegmentTable(context, firebaseNoteId, newInsertedNoteId);
 				mergeAudioTable(context, firebaseNoteId, newInsertedNoteId);
 				mergeImageTable(context, firebaseNoteId, newInsertedNoteId);
-				//TODO: IMPLEMENT TAG NOTE SYNC
+				//TODO: IMPLEMENT TAG FOR NEW DATABASE (NO MORE TAG_ID IN NOTE TABLE)
 				long tagId = cursor.getInt(4);
-				//Log.d("TAG ID", Integer.toString((int) tagId));
+				Log.d("TAG ID", Integer.toString((int) tagId));
 				if (tagId != 0) {
-					//get firebase tag name
+//					//get firebase tag name
 					String tagName = getTempTagById(context, tagId);
 					int dbTagId = checkTagExistByName(context, tagName);
 					if (dbTagId == -1) {
@@ -111,21 +112,24 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 		return cursor.getCount() >= 1;
 	}
 
+	@SuppressLint("Range")
 	public static String getTempTagById(Context context, long tagId) {
+
 		SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
 		SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
 
 		String query = "SELECT TAG_NAME FROM " + DatabaseHandler.TAG_TABLE + " WHERE " + DatabaseHandler.COLUMN_TAG_ID + " = ?";
 		Cursor cursor = tempDb.rawQuery(query, new String[] {Long.toString(tagId)});
 		if (cursor.getCount() > 0) {
-			return cursor.getString(0);
+			cursor.moveToFirst();
+			return cursor.getString(cursor.getColumnIndex(DatabaseHandler.COLUMN_TAG_NAME));
 		}
 		return "TAG ID NOT FOUND";
 	}
 
 	public static int checkTagExistByName(Context context, String tagName) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
 		String query = "SELECT * FROM " + DatabaseHandler.TAG_TABLE + " WHERE " + DatabaseHandler.COLUMN_TAG_NAME + " = ?";
 		Cursor cursor = db.rawQuery(query, new String[] {tagName});

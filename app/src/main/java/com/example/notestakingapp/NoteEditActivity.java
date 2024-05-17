@@ -134,7 +134,7 @@ public class NoteEditActivity extends AppCompatActivity {
         noteDetailsAdapter = new NoteDetailsAdapter(NoteEditActivity.this);
         mItemList = new ArrayList<>();
         //tao Item ui
-        noteId = (int) databaseHandler.insertNote(this, null, null, null, null);
+        noteId = (int) databaseHandler.insertNote(this, null, null);
         Toast.makeText(this, "noteId new = " + noteId, Toast.LENGTH_SHORT).show();
         textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, null);
         Log.d("duyIns", String.valueOf(noteId));
@@ -243,7 +243,7 @@ public class NoteEditActivity extends AppCompatActivity {
 
                 if (!deleteNoteIsEmpty(noteId)) {
                     titleText = NoteDetailsAdapter.title;
-                    databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, null, null);
+                    databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, null);
                     Log.d("testInsert", "update" + noteId + " title " + titleText);
                 }
                 finish();

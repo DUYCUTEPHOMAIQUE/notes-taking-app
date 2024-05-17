@@ -77,7 +77,7 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public static void updateOrCreateDatabase(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 1 ) {
+        if (oldVersion < 1) {
 
             //TAG
             db.execSQL("CREATE TABLE TAG(" +
