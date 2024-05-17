@@ -51,11 +51,14 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				mergeAudioTable(context, firebaseNoteId, newInsertedNoteId);
 				mergeImageTable(context, firebaseNoteId, newInsertedNoteId);
 				//TODO: IMPLEMENT TAG FOR NEW DATABASE (NO MORE TAG_ID IN NOTE TABLE)
-				long tagId = cursor.getInt(4);
+
+				long tagId = getTempNoteTagId(context, firebaseNoteId);
 				Log.d("TAG ID", Integer.toString((int) tagId));
+
 				if (tagId != 0) {
 //					//get firebase tag name
 					String tagName = getTempTagById(context, tagId);
+
 					int dbTagId = checkTagExistByName(context, tagName);
 					if (dbTagId == -1) {
 						//Tag name not exist in local database
@@ -109,6 +112,8 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 
 		String query = "SELECT * FROM "+ tableName + " WHERE CREATE_AT = ?";
 		Cursor cursor = db.rawQuery(query, new String[] {CreateAt});
+		Log.d("CREATED AT", CreateAt);
+		Log.d("CREATED AT CHECK", Integer.toString(cursor.getCount()));
 		return cursor.getCount() >= 1;
 	}
 
@@ -127,6 +132,10 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 		return "TAG ID NOT FOUND";
 	}
 
+	/**
+	 Check if tag already exist in local database
+	 @return return tag_id if tag exists and -1 if doesn't exist
+	 */
 	public static int checkTagExistByName(Context context, String tagName) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
@@ -134,8 +143,22 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 		String query = "SELECT * FROM " + DatabaseHandler.TAG_TABLE + " WHERE " + DatabaseHandler.COLUMN_TAG_NAME + " = ?";
 		Cursor cursor = db.rawQuery(query, new String[] {tagName});
 		if (cursor.getCount() > 0) {
+			cursor.moveToFirst();
 			return cursor.getInt(0); //tag id
 		}
 		return -1;
+	}
+	public static int getTempNoteTagId(Context context, long noteId) {
+		SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
+		SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
+
+		String query = "SELECT TAG_ID FROM " + DatabaseHandler.NOTE_TAG_TABLE + " WHERE " + DatabaseHandler.COLUMN_NOTE_ID + " = ?";
+		Cursor cursor = tempDb.rawQuery(query, new String[] {Long.toString(noteId)});
+		if (cursor.getCount() > 0) {
+			cursor.moveToFirst();
+			return cursor.getInt(0);
+		}
+
+		return 0;
 	}
 }

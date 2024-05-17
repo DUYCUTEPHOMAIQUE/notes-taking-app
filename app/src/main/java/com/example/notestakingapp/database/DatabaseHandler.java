@@ -128,7 +128,7 @@ public class DatabaseHandler {
 	}
 	//todo: public void deleteNote(Context context, int noteId)
 	// Xóa 1 Note. Những gì liên quan đến note này (audio, text, image) cũng bị xóa theo
-	public void deleteNote(Context context, int noteId) {
+	public static void deleteNote(Context context, int noteId) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 

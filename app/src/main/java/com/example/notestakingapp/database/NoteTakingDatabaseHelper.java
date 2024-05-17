@@ -97,8 +97,6 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
 //
 //
 //                    );
-
-
             //TEXTSEGMENT
             db.execSQL("CREATE TABLE TEXTSEGMENT (" +
                     COLUMN_TEXT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -143,7 +141,7 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
                     "FOREIGN KEY (" + COLUMN_TAG_ID + ") REFERENCES TAG(" + COLUMN_TAG_ID + "));"
             );
 
-            //tao bang componen, chứa noteid, componentId( là textid, audioid, hoặc imageid), createat, type( text, audio, image)
+            //tao bang component, chứa noteid, componentId( là textid, audioid, hoặc imageid), createat, type(text, audio, image)
             db.execSQL("CREATE TABLE COMPONENT(" +
                     COLUMN_NOTE_ID + " INTEGER, " +
                     COLUMN_COMPONENT_ID + " INTEGER, " +
