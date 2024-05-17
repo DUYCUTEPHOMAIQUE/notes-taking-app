@@ -67,6 +67,7 @@ public class DrawingView extends View {
 
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+
 		super.onSizeChanged(w, h, oldw, oldh);
 		width = w;
 		height = h;
@@ -74,10 +75,19 @@ public class DrawingView extends View {
 		mCanvas = new Canvas(mBitmap);
 	}
 
+	public void drawBitmap(Bitmap bitmap) {
+		mBitmap = Bitmap.createBitmap(bitmap);
+		Bitmap mutableBitmap = mBitmap.copy(Bitmap.Config.ARGB_8888, true);
+		mCanvas = new Canvas(mutableBitmap);
+		mCanvas.drawBitmap(bitmap, 0, 0, null);
+	}
+
+
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 		canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
+
 		canvas.drawPath( mPath,  mPaint);
 		canvas.drawPath( circlePath,  circlePaint);
 	}

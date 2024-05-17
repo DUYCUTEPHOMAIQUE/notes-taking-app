@@ -428,7 +428,7 @@ public class DatabaseHandler {
 		return db.delete(IMAGE_TABLE, COLUMN_IMAGE_ID + " = ?", new String[]{Integer.toString(imageId)});
 	}
 	//todo: public byte[] getImageById(Context context, int imageId)
-	public byte[] getImageById(Context context, int imageId) {
+	public static byte[] getImageById(Context context, int imageId) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 		String query = "SELECT * FROM "+ IMAGE_TABLE+" WHERE " + COLUMN_IMAGE_ID  +" = ?";

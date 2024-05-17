@@ -33,6 +33,7 @@ import com.example.notestakingapp.adapter.ViewPagerAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.ui.BottomDialog;
+import com.example.notestakingapp.ui.DrawingView;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -59,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+//	    Intent drawingIntent = new Intent(MainActivity.this, DrawingActivity.class);
+//	    drawingIntent.putExtra("imageId", 0);
+//	    startActivity(drawingIntent);
+
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
 
         db = noteTakingDatabaseHelper.getReadableDatabase();
@@ -142,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 	public void huyTestingFunction() {
+
+
 		//Huy's database sync test code
 		//insert a test note
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
