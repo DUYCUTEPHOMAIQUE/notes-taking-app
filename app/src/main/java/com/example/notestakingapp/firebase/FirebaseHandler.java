@@ -18,14 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 
 public class FirebaseHandler {
-	//userId-> app.db -> upload
-	//ghi chu-> thoat app -> app.db ->upload
-	//khi thoat nick thi ghi chu van con, khong dang nhap tiep tuc tao ghi chu-> lan tiep theo dang nhap lai-> id cua note o local
 
-	//upload note.db
-	/**
-	 Get the database file "note.db" from Firebase and write in into local's "test"
-	 */
 	public static void syncFromFirebase(Context context) {
 		String userId = FirebaseAuthHandler.getUserId();
 		FirebaseStorage storage = FirebaseStorage.getInstance("gs://androidtest-c883b.appspot.com");

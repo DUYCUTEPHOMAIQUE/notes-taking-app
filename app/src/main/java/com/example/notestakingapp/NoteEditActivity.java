@@ -148,6 +148,7 @@ public class NoteEditActivity extends AppCompatActivity {
         noteDetailsAdapter = new NoteDetailsAdapter(NoteEditActivity.this);
         mItemList = new ArrayList<>();
         //tao Item ui
+
         if (noteId == -1) {
             noteId = (int) databaseHandler.insertNote(NoteEditActivity.this, "", "#FFFFFF");
             textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
@@ -263,6 +264,7 @@ public class NoteEditActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 if (!deleteNoteIsEmpty(noteId)) {
                     titleText = NoteDetailsAdapter.title;
+
                     databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, noteColor);
                 }
                 finish();

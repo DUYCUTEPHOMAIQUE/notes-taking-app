@@ -1,10 +1,15 @@
 package com.example.notestakingapp;
 
+import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.TempDatabaseHelper;
+
+
 import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Component;
 import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
+
 import com.example.notestakingapp.firebase.FirebaseHandler;
 
 import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
@@ -46,7 +51,10 @@ import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.ui.BottomDialog;
+import com.example.notestakingapp.ui.DrawingView;
+
 import com.example.notestakingapp.utils.NoteDetailsComponent;
+
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -82,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+//	    Intent drawingIntent = new Intent(MainActivity.this, DrawingActivity.class);
+//	    drawingIntent.putExtra("imageId", 0);
+//	    startActivity(drawingIntent);
+
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
 
         db = noteTakingDatabaseHelper.getReadableDatabase();
@@ -105,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
 
         //xu li click button
         imageViewAdd.setOnClickListener(new View.OnClickListener() {
-
 
             @Override
             public void onClick(View v) {
@@ -169,10 +180,42 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-//todo: em huy nào làm check lại cmt này
-//	    //Huy's database sync test code
-        FirebaseHandler.syncFromFirebase(this);
+
+		huyTestingFunction();
+
     }
+
+	public void huyTestingFunction() {
+
+
+		//Huy's database sync test code
+		//insert a test note
+//	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
+//	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
+
+//	    DatabaseHandler.deleteAllNote(this);
+//		DatabaseHandler.deleteAllTextSegment(this);
+//		DatabaseHandler.deleteAllTag(this);
+//		DatabaseHandler.deleteAllNoteTag(this);
+//		DatabaseHandler.deleteNote(this, 7);
+//	    FirebaseHandler.syncToFirebase(this);
+//	    FirebaseHandler.syncFromFirebase(this);
+//		DatabaseHandler.deleteAllTodo(this);
+//		TempDatabaseHelper.mergeTodoTable(this);
+//	    TempDatabaseHelper.mergeNoteTable(this);
+
+
+//	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
+//			    DatabaseHandler.NOTE_TABLE,
+//			    "1715798015609")));
+//	    DatabaseHandler.insertTextSegment(this, 11, "Local Text Segment");
+//	    DatabaseHandler.resetAllAutoincrement(this);
+//	    long noteid = DatabaseHandler.insertNote(this, "Local Note", "#FFFFFD");
+//		long tagid = DatabaseHandler.createNewTag(this, "VU ANH HUY");
+//		DatabaseHandler.setTagForNote(this, (int)noteid, (int)tagid);
+
+//		DatabaseHandler.insertTodo(this, 0, "Buy Milk", Long.toString(System.currentTimeMillis()), "0");
+	}
 
     private void routeToTodoEdit() {
         BottomDialog.showToDoDiaLog(MainActivity.this);
