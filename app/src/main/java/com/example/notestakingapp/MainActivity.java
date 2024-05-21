@@ -1,5 +1,12 @@
 package com.example.notestakingapp;
+
+import com.example.notestakingapp.database.NoteComponent.Audio;
+import com.example.notestakingapp.database.NoteComponent.Component;
+import com.example.notestakingapp.database.NoteComponent.Image;
+import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.firebase.FirebaseHandler;
+
 import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
 
 import com.example.notestakingapp.R.id;
@@ -7,6 +14,7 @@ import com.example.notestakingapp.R.id;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -20,20 +28,35 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
+
 
 import com.example.notestakingapp.adapter.ViewPagerAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.ui.BottomDialog;
+import com.example.notestakingapp.utils.NoteDetailsComponent;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private ImageView imageViewAdd;
@@ -46,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
     int currentPage;
 
     private SQLiteDatabase db;
+    public static ActivityResultLauncher<Intent> noteEditLauncher;
+    private SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +92,14 @@ public class MainActivity extends AppCompatActivity {
 
         //khoi chay ui
         initUi();
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        //test
+        noteEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult o) {
+                updateNotes();
+            }
+        });
         //anim popup hehehe T_T
         animButton(imageViewAdd);
 
@@ -125,7 +158,6 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Toast.makeText(MainActivity.this, "Item = " + id.home_main, Toast.LENGTH_SHORT).show();
                 int itemId = menuItem.getItemId();
                 if (itemId == id.home_main) {
                     mViewPager2.setCurrentItem(0);
@@ -139,17 +171,18 @@ public class MainActivity extends AppCompatActivity {
         });
 //todo: em huy nào làm check lại cmt này
 //	    //Huy's database sync test code
-	    FirebaseHandler.syncFromFirebase(this);
+        FirebaseHandler.syncFromFirebase(this);
     }
 
     private void routeToTodoEdit() {
         BottomDialog.showToDoDiaLog(MainActivity.this);
-        Toast.makeText(MainActivity.this, "clicked, going to todo page", Toast.LENGTH_SHORT).show();
     }
 
     private void routeToNoteEdit() {
         Intent intent = new Intent(MainActivity.this, NoteEditActivity.class);
-        startActivity(intent);
+        if (noteEditLauncher != null) {
+            noteEditLauncher.launch(intent);
+        }
     }
 
     private void initUi() {
@@ -184,6 +217,61 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+    private void updateNotes() {
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        List<Note> noteList = databaseHandler.getNoteByCreateAt(this, "desc");
+        LinkedHashMap<Integer, ArrayList<Component>> hashMap = new LinkedHashMap<>();
+        if (noteList != null) {
+            for (Note note : noteList) {
+                hashMap.put(note.getNoteId(), databaseHandler.getAllComponent(this, note.getNoteId()));
+            }
+        }
+
+        List<NoteDetailsComponent> list = componentToProps(hashMap);
+        sharedViewModel.setNotes(list);
+    }
+    private List<NoteDetailsComponent> componentToProps(LinkedHashMap<Integer, ArrayList<Component>> input) {
+        List<NoteDetailsComponent> noteDetailsComponentList = new ArrayList<>();
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+
+        for (Map.Entry<Integer, ArrayList<Component>> entry : input.entrySet()) {
+            Integer key = entry.getKey();
+            ArrayList<Component> value = entry.getValue();
+
+            List<Object> temp = new ArrayList<>();
+            for (Component i : value) {
+                switch (i.getType()) {
+                    case Item.TYPE_EDIT_TEXT:
+                        temp.add(databaseHandler.getTextSegment(this, i));
+                        break;
+                    case Item.TYPE_IMAGE_VIEW:
+                        temp.add(databaseHandler.getImage(this, i));
+                        break;
+                    case Item.TYPE_VOICE_VIEW:
+                        temp.add(databaseHandler.getAudio(this, i));
+                        break;
+                }
+            }
+
+            Note note = databaseHandler.getNoteById(this, key);
+            List<TextSegment> textSegmentList = new ArrayList<>();
+            List<Image> imageList = new ArrayList<>();
+            List<Audio> audioList = new ArrayList<>();
+
+            for (Object i : temp) {
+                if (i instanceof TextSegment) {
+                    textSegmentList.add((TextSegment) i);
+                } else if (i instanceof Image) {
+                    imageList.add((Image) i);
+                } else if (i instanceof Audio) {
+                    audioList.add((Audio) i);
+                }
+            }
+            //todo: tag dang la null
+            noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, null));
+        }
+        return noteDetailsComponentList;
     }
 
 }

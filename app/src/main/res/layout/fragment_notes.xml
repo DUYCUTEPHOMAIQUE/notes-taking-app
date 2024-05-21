@@ -3,10 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorNoteVariant2"
-    tools:context=".NotesFragment">
-    <androidx.recyclerview.widget.RecyclerView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimaryBackground"
+    tools:context=".NotesFragment"
+    android:paddingStart="@dimen/_8sdp"
+    android:paddingEnd="@dimen/_8sdp">
+
+    <androidx.cardview.widget.CardView
+        android:padding="0dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:clipToPadding="false"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="@dimen/_16sdp"
+        app:cardUseCompatPadding="false">
+        <com.factor.bouncy.BouncyRecyclerView
+            android:padding="0dp"
+            android:clipToPadding="false"
+            app:recyclerview_fling_animation_size="0.5"
+            app:recyclerview_overscroll_animation_size="0.5"
+            app:recyclerview_damping_ratio="DAMPING_RATIO_LOW_BOUNCY"
+            app:recyclerview_stiffness="STIFFNESS_LOW"
+            app:allow_drag_reorder="true"
+            app:allow_item_swipe="false"
+            android:id="@+id/recycler_view_notes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.cardview.widget.CardView>
 
 </FrameLayout>

@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryBackground"
     tools:context=".NoteEditActivity">
-
-
     <LinearLayout
         android:id="@+id/layout_back"
         android:layout_width="wrap_content"
@@ -63,16 +61,18 @@
         app:tint="@color/colorBlack" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_alignParentBottom="true"
         android:id="@+id/recycler_view_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20sp"
         android:overScrollMode="always"
         android:padding="0dp"
-        android:layout_below="@+id/layout_back" />
+        android:layout_below="@+id/layout_back"
+        />
 
     <LinearLayout
-
+        android:fitsSystemWindows="true"
         android:id="@+id/tool_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -81,7 +81,6 @@
         android:paddingTop="@dimen/_10sdp"
         android:paddingBottom="@dimen/_10sdp"
         android:translationZ="@dimen/_100sdp"
-        android:fitsSystemWindows="true"
         android:visibility="visible"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true">

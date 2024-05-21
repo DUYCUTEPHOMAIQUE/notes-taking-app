@@ -23,4 +23,5 @@
     <string name="press_quot_enter_quot_to_create_new_task">Press \"Enter\" to create new task</string>
     <string name="done">Done</string>
     <string name="none_title">No title</string>
+    <string name="none_text">No text</string>
 </resources>

@@ -9,6 +9,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -44,6 +45,8 @@ import com.example.notestakingapp.MainActivity;
 import com.example.notestakingapp.NoteEditActivity;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.TodoFragment;
+import com.example.notestakingapp.database.DatabaseHandler;
+import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -56,6 +59,9 @@ import java.util.Calendar;
 import java.util.List;
 
 public class BottomDialog {
+    private static SQLiteDatabase db;
+    static DatabaseHandler databaseHandler;
+
     public static String selectedNoteColor = "#FFFFFF";
     private static Context mContext;
 
@@ -302,7 +308,12 @@ public class BottomDialog {
         linearLayoutConfirmDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int noteId = NoteEditActivity.noteId;
                 //todo: handle delete note
+                NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+                db = noteTakingDatabaseHelper.getReadableDatabase();
+                databaseHandler = new DatabaseHandler();
+                databaseHandler.deleteNote(context, noteId);
                 dialog.dismiss();
                 context.startActivity(new Intent(context, MainActivity.class));
             }
@@ -383,8 +394,6 @@ public class BottomDialog {
                             int endIndex = startIndex + url.length();
                             spannableString.setSpan(new UnderlineSpan(), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                             spannableString.setSpan(new ForegroundColorSpan(colorAccent), startIndex, endIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                            Log.d("duyTextLink", spannableString.toString());
-
                             startIndex = text.indexOf(url, endIndex);
                         }
                     }

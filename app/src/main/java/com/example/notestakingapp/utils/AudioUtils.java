@@ -1,6 +1,8 @@
 package com.example.notestakingapp.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -31,5 +33,9 @@ public class AudioUtils {
             }
         }
         return null;
+    }
+    public static Bitmap byteToBitmap(byte[] imageData) {
+        Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+        return bitmap;
     }
 }
