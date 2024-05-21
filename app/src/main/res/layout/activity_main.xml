@@ -89,6 +89,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryBackground"
         android:clipToPadding="false"
+        android:translationZ="99dp"
         app:itemIconSize="@dimen/_24sdp"
         app:itemIconTint="@drawable/item_selected_navigation"
         app:itemTextColor="@drawable/item_selected_navigation"
@@ -101,6 +102,7 @@
 
     <ImageView
         android:id="@+id/imageAddNoteMain"
+        android:translationZ="100dp"
         android:layout_width="@dimen/_64sdp"
         android:layout_height="@dimen/_64sdp"
         android:background="@drawable/background_add_button"
@@ -113,7 +115,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/layout_nav"
         app:tint="@color/colorBlack"
-        android:visibility="invisible"/>
+        android:visibility="visible"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

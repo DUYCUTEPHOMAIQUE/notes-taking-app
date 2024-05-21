@@ -202,7 +202,7 @@ public class DatabaseHandler {
 	}
 	//todo: public ArrayList<Note> searchNote(Context context, String searchText)
 	// tìm note bằng search text
-	public ArrayList<Note> searchNote(Context context, String searchText){
+	public ArrayList<Note> fNote(Context context, String searchText){
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 

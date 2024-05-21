@@ -1,12 +1,17 @@
 package com.example.notestakingapp.adapter;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -31,6 +36,7 @@ import java.util.zip.Inflater;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
     private List<NoteDetailsComponent> noteDetailsComponentList;
     private NoteListener noteListener;
+
     public void setNoteListener(NoteListener noteListener) {
         this.noteListener = noteListener;
     }
@@ -46,6 +52,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note_main, parent, false);
         return new NoteViewHolder(view);
     }
+
     public interface NoteListener {
         void onItemClick(View view, int position, Note note);
     }
@@ -64,8 +71,24 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(noteListener!=null) {
-                    noteListener.onItemClick(v, position, noteDetailsComponent.getNote());
+                if (noteListener != null) {
+                    AnimatorSet animatorSet = new AnimatorSet();
+                    ObjectAnimator scaleXDown = ObjectAnimator.ofFloat(v, "scaleX", 0.95f);
+                    ObjectAnimator scaleYDown = ObjectAnimator.ofFloat(v, "scaleY", 0.95f);
+                    ObjectAnimator scaleXUp = ObjectAnimator.ofFloat(v, "scaleX", 1f);
+                    ObjectAnimator scaleYUp = ObjectAnimator.ofFloat(v, "scaleY", 1f);
+                    animatorSet.play(scaleXDown).with(scaleYDown);
+                    animatorSet.play(scaleXUp).with(scaleYUp).after(scaleXDown);
+                    animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+                    animatorSet.setDuration(100);
+                    animatorSet.start();
+                    animatorSet.addListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            super.onAnimationEnd(animation);
+                            noteListener.onItemClick(v, position, noteDetailsComponent.getNote());
+                        }
+                    });
                 }
             }
         });
