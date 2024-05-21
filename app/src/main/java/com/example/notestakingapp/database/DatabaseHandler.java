@@ -293,6 +293,31 @@ public class DatabaseHandler {
 		}
 	}
 
+	@SuppressLint("Range")
+	public ArrayList<Component> getAllComponentByCreateAt(Context context, int noteId, String option) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+		//query
+		String query = "SELECT * FROM " + COMPONENT_TABLE + " WHERE " + COLUMN_NOTE_ID + " = ? ORDER BY "+COLUMN_COMPONENT_CREATEAT+" "+optiond .
+				;
+		Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(noteId)});
+
+		if (cursor.moveToFirst()) {
+			ArrayList<Component> list = new ArrayList<>();
+			do {
+				list.add(new Component(
+						cursor.getInt(cursor.getColumnIndex(COLUMN_COMPONENT_ID)),
+						cursor.getInt(cursor.getColumnIndex(COLUMN_COMPONENT_ID)),
+						cursor.getLong(cursor.getColumnIndex(COLUMN_COMPONENT_CREATEAT)),
+						cursor.getInt(cursor.getColumnIndex(COLUMN_COMPONENT_TYPE))
+				));
+			} while (cursor.moveToNext());
+			return list;
+		} else {
+			return null;
+		}
+	}
+
 	//---------------------------------------------TEXTSEGMENT-----------------------------------------
 	//todo: public static long insertTextSegment(Context context, int noteId, String text)
 	// Thêm  1 text Segment
