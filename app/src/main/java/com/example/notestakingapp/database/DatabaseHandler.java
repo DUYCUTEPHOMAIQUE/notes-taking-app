@@ -298,8 +298,7 @@ public class DatabaseHandler {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 		//query
-		String query = "SELECT * FROM " + COMPONENT_TABLE + " WHERE " + COLUMN_NOTE_ID + " = ? ORDER BY "+COLUMN_COMPONENT_CREATEAT+" "+optiond .
-				;
+		String query = "SELECT * FROM " + COMPONENT_TABLE + " WHERE " + COLUMN_NOTE_ID + " = ? ORDER BY "+COLUMN_COMPONENT_CREATEAT+" "+option;
 		Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(noteId)});
 
 		if (cursor.moveToFirst()) {
