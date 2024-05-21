@@ -14,9 +14,11 @@ import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Component;
 import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -705,6 +707,32 @@ public class DatabaseHandler {
 //        else return -1;
 //    }
 
+    //ToDo public void getTagByNoteId(Context context, int noteId)
+    @SuppressLint("Range")
+    public ArrayList<Tag> getTagByNoteId(Context context, int noteId){
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+
+        String query = "SELECT * FROM " + NOTE_TAG_TABLE +" AS NT "+
+                " JOIN "+ TAG_TABLE +" AS T " +
+                "ON " + " T." + COLUMN_TAG_ID +" = NT." + COLUMN_TAG_ID +
+                " WHERE " + COLUMN_NOTE_ID +" = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(noteId)});
+
+        if (cursor.moveToFirst()){
+            ArrayList<Tag> listTag = new ArrayList<>();
+            do{
+                listTag.add(new Tag(
+                        cursor.getInt(cursor.getColumnIndex(COLUMN_TAG_ID)),
+                        cursor.getString(cursor.getColumnIndex(COLUMN_TAG_NAME))
+                ));
+            } while (cursor.moveToNext());
+            return listTag;
+        }
+        else {
+            return null;
+        }
+    }
 
 
     // ToDo --------------------------------------------------------ToDo---------------------------------------
