@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -45,8 +46,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notestakingapp.adapter.NoteDetailsAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
+import com.example.notestakingapp.database.NoteComponent.Audio;
+import com.example.notestakingapp.database.NoteComponent.Component;
+import com.example.notestakingapp.database.NoteComponent.Image;
+import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.ui.BottomDialog;
+import com.example.notestakingapp.utils.AudioUtils;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.ImageUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
@@ -72,7 +79,7 @@ public class NoteEditActivity extends AppCompatActivity {
 
 
     private int textSegmentId = -1;
-    private int noteId = -1;
+    public static int noteId = -1;
     private int voiceId = -1;
     private int imageId = -1;
     private LinearLayout toolNavigation;
@@ -82,7 +89,12 @@ public class NoteEditActivity extends AppCompatActivity {
     //    private EditText titleEditText;
     String titleText = null;
     boolean isTheFirst = true;
+    String noteColor = "#FFFFFF";
+    private SharedFunc sharedFunc;
 
+    public void setSharedFunc(SharedFunc sharedFunc) {
+        this.sharedFunc = sharedFunc;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +106,8 @@ public class NoteEditActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        noteId = getIntent().getIntExtra("note_id", -1);
+        Log.d("noteId...", String.valueOf(noteId));
 
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
         db = noteTakingDatabaseHelper.getReadableDatabase();
@@ -134,18 +148,26 @@ public class NoteEditActivity extends AppCompatActivity {
         noteDetailsAdapter = new NoteDetailsAdapter(NoteEditActivity.this);
         mItemList = new ArrayList<>();
         //tao Item ui
-        noteId = (int) databaseHandler.insertNote(this, null, null);
-        Toast.makeText(this, "noteId new = " + noteId, Toast.LENGTH_SHORT).show();
-        textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, null);
-        Log.d("duyIns", String.valueOf(noteId));
-        Log.d("duyIns", "tao textSegment id = " + textSegmentId + "noteId = " + noteId);
 
-        mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE, noteId));
-        mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
+        if (noteId == -1) {
+            noteId = (int) databaseHandler.insertNote(NoteEditActivity.this, "", "#FFFFFF");
+            textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
+            //ui
+            mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE, noteId));
+            mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
+        } else {
+            Note note = databaseHandler.getNoteById(this, noteId);
+            noteColor = note.getColor();
+            ArrayList<Component> list = databaseHandler.getAllComponentByCreateAt(this, noteId, "ASC");
+            mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE,note.getTitle(), noteId));
+            mItemList.addAll(convertComponentToItem(convertComponentToProps(list)));
+        }
+
+        //ui
+
         noteDetailsAdapter.setData(mItemList);
         recyclerViewDetails.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewDetails.setAdapter(noteDetailsAdapter);
-
         //todo: gan noteId please Duy oi, tao note moi
         //        noteId = (int) AppDatabase.getInstance(AddNoteActivity.this).noteDao().insert(new Note(""));
 
@@ -160,9 +182,9 @@ public class NoteEditActivity extends AppCompatActivity {
                     isTheFirst = false;
                     return;
                 } else if (!isTheFirst) {
-
+                    Item textSegment = mItemList.get(position);
+                    textSegmentId = textSegment.getTextSegmentId();
                     databaseHandler.updateTextSegment(NoteEditActivity.this, textSegmentId, text);
-
                 }
 
             }
@@ -240,11 +262,10 @@ public class NoteEditActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-
                 if (!deleteNoteIsEmpty(noteId)) {
                     titleText = NoteDetailsAdapter.title;
-                    databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, null);
-                    Log.d("testInsert", "update" + noteId + " title " + titleText);
+
+                    databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, noteColor);
                 }
                 finish();
             }
@@ -282,10 +303,25 @@ public class NoteEditActivity extends AppCompatActivity {
 
     private boolean deleteNoteIsEmpty(int noteId) {
         titleText = NoteDetailsAdapter.title;
-        if (mItemList.size() == 2 && mItemList.get(0).getText().isEmpty() && mItemList.get(1).getText().isEmpty() && titleText == null) {
+        if(mItemList.size()>2) {
+            Log.d("update!!", String.valueOf(mItemList.size()));
+            return false;
+        }
+        if(!mItemList.get(0).getText().isEmpty() ) {
+            Log.d("update!!", String.valueOf(mItemList.get(0).getText()));
+            return false;
+        }
+        if (!mItemList.get(1).getText().isEmpty()) {
+            Log.d("update!!", String.valueOf(mItemList.get(1).getText().isEmpty() ));
+            return false;
+        }
+        if(!titleText.isEmpty()) {
+            return false;
+        }
+        if (mItemList.size() == 2 && mItemList.get(0).getText().isEmpty() && mItemList.get(1).getText().isEmpty() && titleText.isEmpty()) {
             //todo: xoa note neu note do la empty cho nay xu li hoi ngu
             databaseHandler.deleteNote(this, noteId);
-            Log.d("testInsert", "deletedNote" + noteId);
+            Log.d("update!!", String.valueOf(mItemList.get(1).getText()));
             return true;
         }
         return false;
@@ -304,13 +340,12 @@ public class NoteEditActivity extends AppCompatActivity {
                     //todo: luu anh vao db nho them try catch
                     try {
                         imageId = (int) databaseHandler.insertImage(NoteEditActivity.this, noteId, ImageUtils.uriToBytes(selectedImageUri, NoteEditActivity.this));
-                        Toast.makeText(this, "Image add into db success", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Image add into db success" + imageId, Toast.LENGTH_SHORT).show();
 
                     } catch (Exception e) {
-                        Toast.makeText(this, "Image add into db error", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(this, "Image add into db error", Toast.LENGTH_SHORT).show();
                     }
 
-                    Log.d("testInsert", "tao Image id = " + imageId + " noteId = " + noteId);
 
                     //hien thi hinh anh ra noteEdit
                     mItemList.add(new Item(Item.TYPE_IMAGE_VIEW, selectedImageUri, imageId, IMAGE_PROP));
@@ -318,20 +353,21 @@ public class NoteEditActivity extends AppCompatActivity {
                     int size = mItemList.size();
                     if (mItemList.get(size - 2).getType() == Item.TYPE_EDIT_TEXT && mItemList.get(size - 2).getText().isEmpty()) {
                         //xoa trong db
-                        Log.d("duong", String.valueOf(size));
                         databaseHandler.deleteTextSegment(NoteEditActivity.this, textSegmentId);
-                        Log.d("testInsert", "da xoa textSegment id = " + textSegmentId + " noteId = " + noteId);
                         //xoa o giao dien
                         mItemList.remove(size - 2);
                         Toast.makeText(NoteEditActivity.this, "Remove editText sucess!", Toast.LENGTH_SHORT).show();
                     }
-                    noteDetailsAdapter.setData(mItemList);
                     //todo: cap nhat lai textSegmentId va them textsegment vao db
                     textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
                     Log.d("duytest", "tao textSegment id = " + textSegmentId + " noteId = " + noteId);
 
                     //textSegmentId = appdb.insert();
+                    //todo: ... OK
+                    EditText titleEditText = findViewById(R.id.edit_text_title);
+                    mItemList.get(0).setText(titleEditText.getText().toString());
                     mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
+                    noteDetailsAdapter.setData(mItemList);
                 } catch (Exception exception) {
                     Toast.makeText(this, "selected image error!", Toast.LENGTH_SHORT).show();
                 }
@@ -371,20 +407,57 @@ public class NoteEditActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public void setColorBackgroundNoteEdit(String color) {
+    public String setColorBackgroundNoteEdit(String color) {
+        noteColor = color;
         RelativeLayout relativeLayout = findViewById(R.id.main);
-        if(color == "#FFFFFF" ) {
-        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.meo);
-        relativeLayout.setBackground(drawable);
-        }
-        else {
-
-        //todo: add color vao db
-        GradientDrawable gradientDrawable = new GradientDrawable();
-        Log.d("duyColor", String.valueOf(relativeLayout));
-        gradientDrawable.setColor(Color.parseColor(color));
+        if (color == "#FFFFFF") {
+        } else {
+            Log.d("color2222", color);
+            //todo: add color vao db
+            titleText = NoteDetailsAdapter.title;
+            databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, color);
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            Log.d("duyColor", String.valueOf(relativeLayout));
+            gradientDrawable.setColor(Color.parseColor(color));
 //        gradientDrawable.set
-        relativeLayout.setBackground(gradientDrawable);
+            relativeLayout.setBackground(gradientDrawable);
         }
+        return noteColor;
+    }
+
+    public List<Object> convertComponentToProps(ArrayList<Component> input) {
+        List<Object> output = new ArrayList<>();
+        for (Component i : input) {
+            switch (i.getType()) {
+                case Item.TYPE_EDIT_TEXT:
+                    output.add(databaseHandler.getTextSegment(this, i));
+                    break;
+                case Item.TYPE_IMAGE_VIEW:
+                    output.add(databaseHandler.getImage(this, i));
+                    break;
+                case Item.TYPE_VOICE_VIEW:
+                    output.add(databaseHandler.getAudio(this, i));
+                    break;
+            }
+        }
+        return output;
+    }
+
+    public List<Item> convertComponentToItem(List<Object> input) {
+        List<Item> output = new ArrayList<>();
+        for (Object i : input) {
+            Class<?> aClass = i.getClass();
+            if (aClass.equals(TextSegment.class)) {
+                output.add(new Item(Item.TYPE_EDIT_TEXT, ((TextSegment) i).getText(), ((TextSegment) i).getTextId()));
+            } else if (aClass.equals(Image.class)) {
+                output.add(new Item(Item.TYPE_IMAGE_VIEW, "", ImageUtils.byteToBitmap(((Image) i).getImageData()), ((Image) i).getImageId(), IMAGE_PROP));
+            } else if (aClass.equals(Audio.class)) {//todo: chưa check lai
+                output.add(new Item(Item.TYPE_VOICE_VIEW, "", AudioUtils.byteToBitmap(((Audio) i).getAudioData()), ((Audio) i).getAudioId(), "audio"));
+            }
+        }
+        return output;
+    }
+    interface SharedFunc {
+        void deleteNote();
     }
 }

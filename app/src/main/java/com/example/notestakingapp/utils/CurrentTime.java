@@ -1,6 +1,8 @@
 package com.example.notestakingapp.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class CurrentTime {
     public static String getCurrentTimeText() {
@@ -18,6 +20,12 @@ public class CurrentTime {
 
         String newStr = year + " " + months[month]+ " "+ dayOfMonth+ " "+hourOfDay+":"+minute+ " |";
         return  newStr;
+    }
+    public static String convertTimeFromMiliSecond(long time) {
+        Date date = new Date(time);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd.HH.mm");
+        String rs = formatter.format(date);
+        return rs;
     }
 
 }

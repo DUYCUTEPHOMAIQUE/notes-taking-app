@@ -1,12 +1,49 @@
 package com.example.notestakingapp;
 
+import static com.example.notestakingapp.MainActivity.noteEditLauncher;
+
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.example.notestakingapp.adapter.NotesAdapter;
+import com.example.notestakingapp.database.DatabaseHandler;
+import com.example.notestakingapp.database.NoteComponent.Audio;
+import com.example.notestakingapp.database.NoteComponent.Component;
+import com.example.notestakingapp.database.NoteComponent.Image;
+import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.NoteComponent.TextSegment;
+import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.shared.SharedViewModel;
+import com.example.notestakingapp.utils.ImageUtils;
+import com.example.notestakingapp.utils.NoteDetailsComponent;
+import com.factor.bouncy.BouncyRecyclerView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +60,14 @@ public class NotesFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    public BouncyRecyclerView recyclerView;
+    public NotesAdapter notesAdapter;
+    private SQLiteDatabase db;
+    private DatabaseHandler databaseHandler;
+    private NoteTakingDatabaseHelper noteTakingDatabaseHelper;
+    private SharedViewModel sharedViewModel;
+    public static ActivityResultLauncher<Intent> noteEditLauncher;
+
 
     public NotesFragment() {
         // Required empty public constructor
@@ -53,6 +98,12 @@ public class NotesFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        noteEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+            @Override
+            public void onActivityResult(ActivityResult o) {
+                updateView();
+            }
+        });
     }
 
     @Override
@@ -60,5 +111,103 @@ public class NotesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_notes, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //khoi tao db
+        noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getActivity());
+        db = noteTakingDatabaseHelper.getReadableDatabase();
+        databaseHandler = new DatabaseHandler();
+        recyclerView = view.findViewById(R.id.recycler_view_notes);
+        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        notesAdapter = new NotesAdapter();
+        notesAdapter.setNoteListener(new NotesAdapter.NoteListener() {
+            @Override
+            public void onItemClick(View view, int position, Note note) {
+
+            }
+        });
+        notesAdapter.setNoteListener(new NotesAdapter.NoteListener() {
+            @Override
+            public void onItemClick(View view, int position, Note note) {
+                Intent intent = new Intent(getActivity(), NoteEditActivity.class);
+                intent.putExtra("note_id", note.getNoteId());
+                noteEditLauncher.launch(intent);
+            }
+        });
+        updateView();
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedViewModel.getNotes().observe(getViewLifecycleOwner(), new Observer<List<NoteDetailsComponent>>() {
+            @Override
+            public void onChanged(List<NoteDetailsComponent> noteDetailsComponents) {
+                notesAdapter.setNotes(noteDetailsComponents);
+                notesAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+    public void updateView() {
+        List<Note> noteList = databaseHandler.getNoteByCreateAt(getActivity(), "desc");
+        LinkedHashMap<Integer, ArrayList<Component>> hashMap = new LinkedHashMap<>();
+        if (noteList != null) {
+            for (Note note : noteList) {
+                hashMap.put(note.getNoteId(), databaseHandler.getAllComponent(getActivity(), note.getNoteId()));
+            }
+        }
+
+        List<NoteDetailsComponent> list = componentToProps(hashMap);
+        notesAdapter.setNotes(list);
+        recyclerView.setAdapter(notesAdapter);
+    }
+
+    public List<NoteDetailsComponent> componentToProps(HashMap<Integer, ArrayList<Component>> input) {
+        List<NoteDetailsComponent> noteDetailsComponentList = new ArrayList<>();
+        LinkedHashMap<Integer, List<Object>> output = new LinkedHashMap<>();
+        for (Map.Entry<Integer, ArrayList<Component>> entry : input.entrySet()) {
+            Integer key = entry.getKey();
+            ArrayList<Component> value = entry.getValue();
+            List<Object> temp = new ArrayList<>();
+
+            for (Component i: value) {
+                switch (i.getType()) {
+                    case Item.TYPE_EDIT_TEXT:
+                        temp.add(databaseHandler.getTextSegment(getActivity(), i));
+                        break;
+                    case Item.TYPE_IMAGE_VIEW:
+                        temp.add(databaseHandler.getImage(getActivity(), i));
+                        break;
+                    case Item.TYPE_VOICE_VIEW:
+                        temp.add(databaseHandler.getAudio(getActivity(), i));
+                        break;
+                }
+            }
+            output.put(key, temp);
+        }
+
+
+        for (Map.Entry<Integer, List<Object>> entry : output.entrySet()) {
+            Note note;
+            List<TextSegment> textSegmentList = new ArrayList<>();
+            List<Image> imageList = new ArrayList<>();
+            List<Audio> audioList = new ArrayList<>();
+
+            List<Object> value = entry.getValue();
+            note = databaseHandler.getNoteById(getActivity(), entry.getKey());
+            for (Object i: value) {
+                if(i instanceof TextSegment) {
+                    textSegmentList.add((TextSegment) i);
+                } else if (i instanceof Image) {
+                    imageList.add((Image) i);
+                } else if (i instanceof Audio) {
+                    audioList.add((Audio) i);
+                }
+                else {
+                    //loi
+                }
+            }
+            noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, null));
+        }
+        return noteDetailsComponentList;
     }
 }

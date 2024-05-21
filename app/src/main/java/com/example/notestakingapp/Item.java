@@ -26,14 +26,13 @@ public class Item {
 
     //tao Item khi image selected from thu vien or camera
     public Item(int type, Uri propUri, int propId, String props) {
-        if(Objects.equals(props, "image")) {
-        this.type = type;
-        this.text = text;
-        this.imageUri = propUri;
-        this.imageId = propId;
+        if (Objects.equals(props, "image")) {
+            this.type = type;
+            this.text = text;
+            this.imageUri = propUri;
+            this.imageId = propId;
 
-        }
-        else if (Objects.equals(props, "voice")) {
+        } else if (Objects.equals(props, "voice")) {
             this.type = type;
             this.text = text;
             this.voiceUri = propUri;
@@ -42,22 +41,18 @@ public class Item {
     }
 
     public Item(int type, String text, Bitmap propBitmap, int propId, String props) {
-        if(Objects.equals(props, "image")) {
-
-        this.type = type;
-        this.text = text;
-        this.imageBitmap = propBitmap;
-        this.imageId = propId;
-        }
-        else if(Objects.equals(props, "voice")) {
+        if (Objects.equals(props, "image")) {
+            this.type = type;
+            this.text = text;
+            this.imageBitmap = propBitmap;
+            this.imageId = propId;
+        } else if (Objects.equals(props, "voice")) {
             this.type = type;
             this.text = text;
             this.voiceBitmap = propBitmap;
             this.voiceId = propId;
         }
     }
-
-
 
 
     //tao item text khi bat dau vao noteedit
@@ -72,6 +67,7 @@ public class Item {
         this.text = text;
         this.textSegmentId = textSegmentId;
     }
+
     public void setType(int type) {
         this.type = type;
     }

@@ -19,9 +19,12 @@ public class ImageUtils {
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), drawableId);
 
         // Chuyển đổi Bitmap thành mảng byte
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
+        if (bitmap != null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            return stream.toByteArray();
+        }
+        return null;
     }
 
     //uri to byte[]

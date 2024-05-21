@@ -15,9 +15,11 @@ import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Component;
 import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -87,6 +89,7 @@ public class DatabaseHandler {
 
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
 
 		ContentValues ct = new ContentValues();
 
@@ -607,6 +610,7 @@ public class DatabaseHandler {
 //        }
 //        else return -1;
 //    }
+
 
 	//--------------------------------------------------------TODO---------------------------------------
 	public static void deleteAllTodo(Context context) {

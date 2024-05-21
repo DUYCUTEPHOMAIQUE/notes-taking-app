@@ -36,9 +36,11 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public int getNoteId() {
         return noteId;
     }
+
     public NoteDetailsAdapter(Context context) {
         this.mContext = context;
     }
+
     public Context mContext;
     public static String title;
     private int noteId;
@@ -80,11 +82,9 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 editTextSegment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                     @Override
                     public void onFocusChange(View v, boolean hasFocus) {
-                        if(hasFocus) {
-                            Log.d("duyText", " focus textsegment");
+                        if (hasFocus) {
                         }
                         if (!hasFocus) {
-                            Log.d("duyText", "no focus textsegment");
                             // EditText không còn focus, thực hiện xử lý ở đây
                             String text = editTextSegment.getText().toString();
                             List<String> urls = new ArrayList<>();
@@ -130,7 +130,11 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 break;
             case Item.TYPE_IMAGE_VIEW:
                 ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
-                imageViewHolder.imageView.setImageURI(item.getImageUri());
+                if (item.getImageBitmap() != null) {
+                    imageViewHolder.imageView.setImageBitmap(item.getImageBitmap());
+                } else {
+                    imageViewHolder.imageView.setImageURI(item.getImageUri());
+                }
                 break;
 
             case Item.TYPE_EDIT_TEXT_TITLE:
@@ -232,7 +236,7 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public interface EditTextTitleListener {
-        void onTitleTextChanged(String text) ;
+        void onTitleTextChanged(String text);
     }
 
 }

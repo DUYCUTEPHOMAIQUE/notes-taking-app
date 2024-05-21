@@ -65,4 +65,15 @@ public class NoteDetailsComponent {
 
     private List<Audio> audioList;
     private Tag tag;
+
+    @Override
+    public String toString() {
+        return "NoteDetailsComponent{" +
+                "note=" + note +
+                ", textSegmentList=" + textSegmentList +
+                ", imageList=" + imageList +
+                ", audioList=" + audioList +
+                ", tag=" + tag +
+                '}';
+    }
 }
