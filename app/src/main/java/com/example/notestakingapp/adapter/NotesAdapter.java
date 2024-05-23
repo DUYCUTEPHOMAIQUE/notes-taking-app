@@ -12,7 +12,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,12 +33,37 @@ import com.example.notestakingapp.utils.ImageUtils;
 import com.example.notestakingapp.utils.NoteDetailsComponent;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.Inflater;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
     private List<NoteDetailsComponent> noteDetailsComponentList;
     private NoteListener noteListener;
+    private int currentPosition = -1;
+    private boolean isChecked = false;
+    public static boolean showCheckboxes = false;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
+    public boolean isLongClick() {
+        return isLongClick;
+    }
+
+    public void setLongClick(boolean longClick) {
+        isLongClick = longClick;
+    }
+
+    public static boolean isLongClick = false;
+    public static List<Integer> listNoteIdChecked;
+    public static int numberNoteChecked;
 
     public void setNoteListener(NoteListener noteListener) {
         this.noteListener = noteListener;
@@ -44,6 +72,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     public void setNotes(List<NoteDetailsComponent> noteDetailsComponentList) {
         this.noteDetailsComponentList = noteDetailsComponentList;
         notifyDataSetChanged();
+    }
+
+    public List<Integer> getCheckboxStates() {
+        List<Boolean> states = new ArrayList<>();
+        List<Integer> listNoteId = new ArrayList<>();
+        for (NoteDetailsComponent component : noteDetailsComponentList) {
+            states.add(component.isChecked());
+            if (component.isChecked()) {
+                listNoteId.add(component.getNote().getNoteId());
+            }
+        }
+        listNoteIdChecked = listNoteId;
+        return listNoteId;
     }
 
     @NonNull
@@ -55,41 +96,80 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public interface NoteListener {
         void onItemClick(View view, int position, Note note);
+
+        void onItemLongPress(View view, int position, Note note);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, @SuppressLint("RecyclerView") int position) {
         NoteDetailsComponent noteDetailsComponent = noteDetailsComponentList.get(position);
-        holder.setNote(noteDetailsComponent);
+        holder.setNote(noteDetailsComponent, showCheckboxes, isChecked, currentPosition, position);
+        holder.checkBox.setChecked(noteDetailsComponent.isChecked());
+        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                noteDetailsComponent.setChecked(isChecked);
+                listNoteIdChecked = getCheckboxStates();
+                numberNoteChecked = listNoteIdChecked.size();
+            }
+        });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-
-                return false;
+                isLongClick = true;
+                currentPosition = position;
+                AnimatorSet animatorSet = new AnimatorSet();
+                ObjectAnimator scaleXDown = ObjectAnimator.ofFloat(v, "scaleX", 0.95f);
+                ObjectAnimator scaleYDown = ObjectAnimator.ofFloat(v, "scaleY", 0.95f);
+                ObjectAnimator scaleXUp = ObjectAnimator.ofFloat(v, "scaleX", 1f);
+                ObjectAnimator scaleYUp = ObjectAnimator.ofFloat(v, "scaleY", 1f);
+                ObjectAnimator alphaDown = ObjectAnimator.ofFloat(v, "alpha", 0.8f);
+                ObjectAnimator alphaUp = ObjectAnimator.ofFloat(v, "alpha", 1f);
+                animatorSet.play(scaleXDown).with(scaleYDown).with(alphaDown);
+                animatorSet.play(scaleXUp).with(scaleYUp).with(alphaUp).after(scaleXDown);
+                animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+                animatorSet.setDuration(100);
+                animatorSet.start();
+                noteListener.onItemLongPress(v, position, noteDetailsComponent.getNote());
+                showCheckboxes = true;
+                notifyItemChanged(position);
+                return true;
             }
         });
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (noteListener != null) {
-                    AnimatorSet animatorSet = new AnimatorSet();
-                    ObjectAnimator scaleXDown = ObjectAnimator.ofFloat(v, "scaleX", 0.95f);
-                    ObjectAnimator scaleYDown = ObjectAnimator.ofFloat(v, "scaleY", 0.95f);
-                    ObjectAnimator scaleXUp = ObjectAnimator.ofFloat(v, "scaleX", 1f);
-                    ObjectAnimator scaleYUp = ObjectAnimator.ofFloat(v, "scaleY", 1f);
-                    animatorSet.play(scaleXDown).with(scaleYDown);
-                    animatorSet.play(scaleXUp).with(scaleYUp).after(scaleXDown);
-                    animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
-                    animatorSet.setDuration(100);
-                    animatorSet.start();
-                    animatorSet.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            noteListener.onItemClick(v, position, noteDetailsComponent.getNote());
-                        }
-                    });
+                if (!isLongClick) {
+                    if (noteListener != null) {
+                        AnimatorSet animatorSet = new AnimatorSet();
+                        ObjectAnimator scaleXDown = ObjectAnimator.ofFloat(v, "scaleX", 0.95f);
+                        ObjectAnimator scaleYDown = ObjectAnimator.ofFloat(v, "scaleY", 0.95f);
+                        ObjectAnimator scaleXUp = ObjectAnimator.ofFloat(v, "scaleX", 1f);
+                        ObjectAnimator scaleYUp = ObjectAnimator.ofFloat(v, "scaleY", 1f);
+                        ObjectAnimator alphaDown = ObjectAnimator.ofFloat(v, "alpha", 0.8f);
+                        ObjectAnimator alphaUp = ObjectAnimator.ofFloat(v, "alpha", 1f);
+
+                        animatorSet.play(scaleXDown).with(scaleYDown).with(alphaDown);
+                        animatorSet.play(scaleXUp).with(scaleYUp).with(alphaUp).after(scaleXDown);
+                        animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
+                        animatorSet.setDuration(100);
+                        animatorSet.start();
+                        animatorSet.addListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                noteListener.onItemClick(v, position, noteDetailsComponent.getNote());
+                            }
+                        });
+                    }
+                } else {
+
+
+                    //reset flag
+                    isLongClick = false;
                 }
+                isLongClick = false;
+
             }
         });
     }
@@ -107,6 +187,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         TextView textTag;
         RoundedImageView imageView;
         CardView cardView;
+        CheckBox checkBox;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -116,9 +197,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             textTag = itemView.findViewById(R.id.text_tag_main);
             imageView = itemView.findViewById(R.id.image_main);
             cardView = itemView.findViewById(R.id.card_note_main);
+            checkBox = itemView.findViewById(R.id.checkbox);
         }
 
-        public void setNote(NoteDetailsComponent noteDetailsComponent) {
+        public void setNote(NoteDetailsComponent noteDetailsComponent, boolean showCheckbox, boolean isChecked, int currentPosition, int position) {
             if (noteDetailsComponent != null) {
                 Note note = noteDetailsComponent.getNote();
                 Tag tag = noteDetailsComponent.getTag();
@@ -164,6 +246,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                     cardView.setCardBackgroundColor(Color.parseColor(note.getColor()));
                 }
 
+                if (currentPosition != -1) {
+                    checkBox.setVisibility(showCheckbox && currentPosition == position ? View.VISIBLE : View.INVISIBLE);
+                    checkBox.setChecked(isChecked);
+                }
                 // Todo: Set UI for audio
             }
 

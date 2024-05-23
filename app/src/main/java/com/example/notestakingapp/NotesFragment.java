@@ -1,6 +1,9 @@
 package com.example.notestakingapp;
 
 import static com.example.notestakingapp.MainActivity.noteEditLauncher;
+import static com.example.notestakingapp.adapter.NotesAdapter.isLongClick;
+import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
+import static com.example.notestakingapp.adapter.NotesAdapter.showCheckboxes;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.notestakingapp.adapter.NotesAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
@@ -36,6 +40,7 @@ import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.ImageUtils;
 import com.example.notestakingapp.utils.NoteDetailsComponent;
 import com.factor.bouncy.BouncyRecyclerView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -59,6 +64,7 @@ public class NotesFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mParam1;
+    public List<NoteDetailsComponent> list;
     private String mParam2;
     public BouncyRecyclerView recyclerView;
     public NotesAdapter notesAdapter;
@@ -66,7 +72,9 @@ public class NotesFragment extends Fragment {
     private DatabaseHandler databaseHandler;
     private NoteTakingDatabaseHelper noteTakingDatabaseHelper;
     private SharedViewModel sharedViewModel;
+    private List<Integer> listNoteIDChecked;
     public static ActivityResultLauncher<Intent> noteEditLauncher;
+    FloatingActionButton exitButton;
 
 
     public NotesFragment() {
@@ -94,14 +102,26 @@ public class NotesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
         noteEditLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
             @Override
             public void onActivityResult(ActivityResult o) {
                 updateView();
+            }
+        });
+        sharedViewModel.getClearUiEvent().observe(getActivity(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean clearUi) {
+                try {
+                    if (clearUi != null && clearUi) {
+                        clearUiAndStateCheck();
+                        notesAdapter.notifyDataSetChanged();
+                    }
+                } catch (Exception e) {
+
+                }
+
             }
         });
     }
@@ -110,6 +130,7 @@ public class NotesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_notes, container, false);
     }
 
@@ -121,14 +142,10 @@ public class NotesFragment extends Fragment {
         db = noteTakingDatabaseHelper.getReadableDatabase();
         databaseHandler = new DatabaseHandler();
         recyclerView = view.findViewById(R.id.recycler_view_notes);
+
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         notesAdapter = new NotesAdapter();
-        notesAdapter.setNoteListener(new NotesAdapter.NoteListener() {
-            @Override
-            public void onItemClick(View view, int position, Note note) {
 
-            }
-        });
         notesAdapter.setNoteListener(new NotesAdapter.NoteListener() {
             @Override
             public void onItemClick(View view, int position, Note note) {
@@ -136,9 +153,19 @@ public class NotesFragment extends Fragment {
                 intent.putExtra("note_id", note.getNoteId());
                 noteEditLauncher.launch(intent);
             }
+
+            @Override
+            public void onItemLongPress(View view, int position, Note note) {
+                // Cập nhật shared view model
+                if (listNoteIdChecked != null) {
+
+
+                }
+                sharedViewModel.setItemLongPressed(true);
+            }
         });
         updateView();
-        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
         sharedViewModel.getNotes().observe(getViewLifecycleOwner(), new Observer<List<NoteDetailsComponent>>() {
             @Override
             public void onChanged(List<NoteDetailsComponent> noteDetailsComponents) {
@@ -146,7 +173,33 @@ public class NotesFragment extends Fragment {
                 notesAdapter.notifyDataSetChanged();
             }
         });
+        sharedViewModel.getDataChanged().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isDataChanged) {
+                try {
+                    notesAdapter.notifyDataSetChanged();
+                    updateView();
+                } catch (Exception e) {
+
+                }
+            }
+        });
+        sharedViewModel.getIsDelete().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isDeletedOK) {
+                if (isDeletedOK != null && isDeletedOK) {
+                    try {
+                        //
+                    } catch (Exception e) {
+
+                    }
+                }
+                notesAdapter.notifyDataSetChanged();
+                updateView();
+            }
+        });
     }
+
     public void updateView() {
         List<Note> noteList = databaseHandler.getNoteByCreateAt(getActivity(), "desc");
         LinkedHashMap<Integer, ArrayList<Component>> hashMap = new LinkedHashMap<>();
@@ -156,7 +209,7 @@ public class NotesFragment extends Fragment {
             }
         }
 
-        List<NoteDetailsComponent> list = componentToProps(hashMap);
+        list = componentToProps(hashMap);
         notesAdapter.setNotes(list);
         recyclerView.setAdapter(notesAdapter);
     }
@@ -169,7 +222,7 @@ public class NotesFragment extends Fragment {
             ArrayList<Component> value = entry.getValue();
             List<Object> temp = new ArrayList<>();
 
-            for (Component i: value) {
+            for (Component i : value) {
                 switch (i.getType()) {
                     case Item.TYPE_EDIT_TEXT:
                         temp.add(databaseHandler.getTextSegment(getActivity(), i));
@@ -194,20 +247,27 @@ public class NotesFragment extends Fragment {
 
             List<Object> value = entry.getValue();
             note = databaseHandler.getNoteById(getActivity(), entry.getKey());
-            for (Object i: value) {
-                if(i instanceof TextSegment) {
+            for (Object i : value) {
+                if (i instanceof TextSegment) {
                     textSegmentList.add((TextSegment) i);
                 } else if (i instanceof Image) {
                     imageList.add((Image) i);
                 } else if (i instanceof Audio) {
                     audioList.add((Audio) i);
-                }
-                else {
+                } else {
                     //loi
                 }
             }
             noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, null));
         }
         return noteDetailsComponentList;
+    }
+
+    public void clearUiAndStateCheck() {
+        showCheckboxes = false;
+        for (NoteDetailsComponent i :
+                list) {
+            i.setChecked(false);
+        }
     }
 }

@@ -2,6 +2,8 @@ package com.example.notestakingapp.ui;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
+import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
+
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -40,6 +42,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.notestakingapp.MainActivity;
 import com.example.notestakingapp.NoteEditActivity;
@@ -47,6 +50,7 @@ import com.example.notestakingapp.R;
 import com.example.notestakingapp.TodoFragment;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -109,6 +113,7 @@ public class BottomDialog {
             int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
             int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
             int currentMinutes = calendar.get(Calendar.MINUTE);
+
             @Override
             public void onClick(View v) {
                 MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder
@@ -118,7 +123,7 @@ public class BottomDialog {
                         .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                         .build();
 
-                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Date");
+                datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Date");
                 datePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
@@ -161,14 +166,14 @@ public class BottomDialog {
                             @Override
                             public void onClick(View v) {
                                 timePicker.dismiss();
-                                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Time2");
+                                datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Time2");
                             }
                         });
                         timePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
                                 timePicker.dismiss();
-                                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Time2");
+                                datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Time2");
                             }
                         });
                         timePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Time");
@@ -283,9 +288,14 @@ public class BottomDialog {
 
     }
 
-    private static void showConfirmDeleteNote(Context context) {
-        Log.d("duy123456", "clicked");
+    public static void showConfirmDeleteNote(Context context) {
         final Dialog dialog = new Dialog(context);
+        SharedViewModel sharedViewModel = new SharedViewModel();
+        if (context instanceof MainActivity) {
+            ViewModelProvider viewModelProvider = new ViewModelProvider((MainActivity) context);
+            sharedViewModel = viewModelProvider.get(SharedViewModel.class);
+        }
+
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_confirm_delete_dialog);
 
@@ -298,24 +308,50 @@ public class BottomDialog {
         LinearLayout linearLayoutRestore = dialog.findViewById(R.id.layout_restore_note);
         LinearLayout linearLayoutConfirmDelete = dialog.findViewById(R.id.layout_confirm_delete_note);
 
+        SharedViewModel finalSharedViewModel = sharedViewModel;
+
         linearLayoutRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dialog.dismiss();
-                showToolDialog(context);
+                if (context instanceof MainActivity) {
+                    finalSharedViewModel.setItemLongPressed(false);
+                    finalSharedViewModel.triggerClearUiEvent();
+                    dialog.dismiss();
+                } else {
+                    dialog.dismiss();
+                    showToolDialog(context);
+                }
             }
         });
         linearLayoutConfirmDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int noteId = NoteEditActivity.noteId;
-                //todo: handle delete note
                 NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
                 db = noteTakingDatabaseHelper.getReadableDatabase();
                 databaseHandler = new DatabaseHandler();
-                databaseHandler.deleteNote(context, noteId);
-                dialog.dismiss();
-                context.startActivity(new Intent(context, MainActivity.class));
+                if (context instanceof MainActivity  ) {
+                    if(  listNoteIdChecked!=null && !listNoteIdChecked.isEmpty()) {
+                        for (int i: listNoteIdChecked) {
+                            databaseHandler.deleteNote(context, i);
+                            if (finalSharedViewModel !=null) {
+                                finalSharedViewModel.setItemLongPressed(false);
+                                finalSharedViewModel.triggerClearUiEvent();
+                                finalSharedViewModel.notifyDataChanged();
+                            }
+                            dialog.dismiss();
+                        }
+                    }else {
+                        Toast.makeText(context, "No Item Selected!", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    int noteId = NoteEditActivity.noteId;
+                    //todo: handle delete note
+
+                    databaseHandler.deleteNote(context, noteId);
+                    dialog.dismiss();
+                    context.startActivity(new Intent(context, MainActivity.class));
+                }
             }
         });
         linearLayoutXButton.setOnClickListener(new View.OnClickListener() {
@@ -412,12 +448,11 @@ public class BottomDialog {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(editText.getText().toString().isEmpty()) {
+                if (editText.getText().toString().isEmpty()) {
                     int color = ContextCompat.getColor(context, R.color.colorTextHint);
                     Log.d("duyToDo", String.valueOf(color));
                     textViewDone.setTextColor(color);
-                }
-                else {
+                } else {
                     int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
                     textViewDone.setTextColor(colorAccent);
                     textViewDone.setOnClickListener(new View.OnClickListener() {
@@ -472,7 +507,7 @@ public class BottomDialog {
                         .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                         .build();
 
-                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Date");
+                datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Date");
 
                 datePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
@@ -516,14 +551,14 @@ public class BottomDialog {
                             @Override
                             public void onClick(View v) {
                                 timePicker.dismiss();
-                                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Time2");
+                                datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Time2");
                             }
                         });
                         timePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(DialogInterface dialog) {
                                 timePicker.dismiss();
-                                datePicker.show(((AppCompatActivity)context).getSupportFragmentManager(), "Time2");
+                                datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Time2");
                             }
                         });
                         timePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Time");

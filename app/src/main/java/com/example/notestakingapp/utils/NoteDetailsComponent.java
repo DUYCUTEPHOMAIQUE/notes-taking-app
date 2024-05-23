@@ -14,6 +14,15 @@ public class NoteDetailsComponent {
     private Note note;
     private List<TextSegment> textSegmentList;
     private List<Image> imageList;
+    private boolean isChecked;
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
 
     public NoteDetailsComponent(Note note, @Nullable List<TextSegment> textSegmentList, @Nullable List<Image> imageList, @Nullable List<Audio> audioList, @Nullable Tag tag) {
         this.note = note;
@@ -21,6 +30,7 @@ public class NoteDetailsComponent {
         this.imageList = imageList;
         this.audioList = audioList;
         this.tag = tag;
+        this.isChecked = false;
     }
 
     public Note getNote() {
@@ -72,6 +82,7 @@ public class NoteDetailsComponent {
                 "note=" + note +
                 ", textSegmentList=" + textSegmentList +
                 ", imageList=" + imageList +
+                ", isChecked=" + isChecked +
                 ", audioList=" + audioList +
                 ", tag=" + tag +
                 '}';

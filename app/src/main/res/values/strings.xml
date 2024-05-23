@@ -24,4 +24,5 @@
     <string name="done">Done</string>
     <string name="none_title">No title</string>
     <string name="none_text">No text</string>
+    <string name="select_to_delete">Select to delete</string>
 </resources>

@@ -4,13 +4,12 @@
 
     <uses-feature
         android:name="android.hardware.camera"
-        android:required="false" />
-<!--    try add required false-->
-
+        android:required="false" /> <!-- try add required false -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -21,15 +20,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NotesTakingApp"
         tools:targetApi="31">
-		<activity
-			android:name=".DrawingActivity"
-			android:exported="false"
-			android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DrawingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".NoteEditActivity"
             android:exported="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

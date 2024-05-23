@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryBackground"
     tools:context=".MainActivity">
+
     <TextView
         android:id="@+id/text_my_notes"
         android:layout_width="match_parent"
@@ -20,16 +21,18 @@
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/_20ssp"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ImageView
+        android:id="@+id/image_settings"
         android:layout_width="@dimen/_24sdp"
         android:layout_height="@dimen/_24sdp"
-        android:src="@drawable/cog_outline"
-        app:tint="@color/colorBlack"
-        android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:src="@drawable/cog_outline"
         app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/colorBlack" />
+
     <LinearLayout
         android:id="@+id/layout_search"
         android:layout_width="match_parent"
@@ -70,13 +73,13 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager2"
-        android:clipToPadding="false"
-        android:paddingStart="0dp"
-        android:layout_marginTop="@dimen/_20sdp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:elevation="0dp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:background="@color/colorPrimaryBackground"
+        android:clipToPadding="false"
+        android:elevation="0dp"
+        android:paddingStart="0dp"
         app:layout_constraintBottom_toTopOf="@+id/layout_nav"
         app:layout_constraintTop_toBottomOf="@+id/layout_search"
         app:layout_constraintVertical_bias="0.0"
@@ -102,7 +105,6 @@
 
     <ImageView
         android:id="@+id/imageAddNoteMain"
-        android:translationZ="100dp"
         android:layout_width="@dimen/_64sdp"
         android:layout_height="@dimen/_64sdp"
         android:background="@drawable/background_add_button"
@@ -110,12 +112,73 @@
         android:elevation="8dp"
         android:padding="@dimen/_8sdp"
         android:src="@drawable/round_add_24"
+        android:translationZ="100dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/layout_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/layout_nav"
-        app:tint="@color/colorBlack"
-        android:visibility="visible"/>
+        app:tint="@color/colorBlack" />
+
+    <LinearLayout
+        android:id="@+id/layout_delete_some_note"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_80sdp"
+        android:background="@color/colorPrimaryBackground"
+        android:orientation="vertical"
+        android:translationZ="101dp"
+        android:elevation="@dimen/_8sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/regular"
+            android:gravity="center"
+            android:text="@string/select_to_delete"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/colorBlack"
+            android:includeFontPadding="false"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_4sdp" />
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_marginStart="@dimen/_12sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/x_icon_main_image"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:src="@drawable/x_icon"
+                    app:tint="@color/colorGrayDark"
+                   />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_12sdp"
+                android:gravity="right"
+                android:layout_weight="1">
+                <ImageView
+                    android:id="@+id/delete_some_note"
+                    android:layout_width="@dimen/_24sdp"
+                    android:layout_height="@dimen/_24sdp"
+                    android:src="@drawable/trash"
+                    app:tint="@color/colorError" />
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

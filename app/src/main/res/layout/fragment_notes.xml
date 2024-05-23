@@ -19,6 +19,7 @@
         app:cardCornerRadius="@dimen/_16sdp"
         app:cardUseCompatPadding="false">
         <com.factor.bouncy.BouncyRecyclerView
+            android:translationZ="1dp"
             android:padding="0dp"
             android:clipToPadding="false"
             app:recyclerview_fling_animation_size="0.5"
@@ -30,6 +31,7 @@
             android:id="@+id/recycler_view_notes"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+
     </androidx.cardview.widget.CardView>
 
 </FrameLayout>

@@ -12,10 +12,13 @@ import com.example.notestakingapp.database.NoteComponent.TextSegment;
 
 import com.example.notestakingapp.firebase.FirebaseHandler;
 
+import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
 
 import com.example.notestakingapp.R.id;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,11 +28,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -42,6 +47,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -67,9 +73,12 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private ImageView imageViewAdd;
+    public ImageView imageViewAdd;
     private BottomNavigationView bottomNavigationView;
     private EditText inputSearch;
+    private LinearLayout layoutDelete;
+    private ImageView imageViewXButton, imageSettings;
+    private ImageView imageTrashButton;
 
     private ViewPagerAdapter mViewPagerAdapter;
     private BottomNavigationView mBottomNavigationView;
@@ -181,6 +190,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        sharedViewModel.getItemLongPressed().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isLongPressed) {
+                if(isLongPressed) {
+                    layoutDelete.setVisibility(View.VISIBLE);
+                    mBottomNavigationView.setVisibility(View.GONE);
+                    imageViewAdd.setVisibility(View.GONE);
+                }
+                else {
+                    layoutDelete.setVisibility(View.GONE);
+                    mBottomNavigationView.setVisibility(View.VISIBLE);
+                    imageViewAdd.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        //click x button
+        imageViewXButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sharedViewModel.setItemLongPressed(false);
+                sharedViewModel.triggerClearUiEvent();
+            }
+        });
+        imageTrashButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listNoteIdChecked!=null && !listNoteIdChecked.isEmpty())
+                    BottomDialog.showConfirmDeleteNote(MainActivity.this);
+                }
+                //todo: chinh sua lai de xoa note va cap nhat giao dien OK
+        });
+        imageSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+            }
+        });
+
 		huyTestingFunction();
 
     }
@@ -233,6 +282,10 @@ public class MainActivity extends AppCompatActivity {
         mViewPager2 = findViewById(R.id.view_pager2);
         mBottomNavigationView = findViewById(R.id.layout_nav);
         inputSearch = findViewById(R.id.inputSearch);
+        layoutDelete = findViewById(id.layout_delete_some_note);
+        imageViewXButton = findViewById(id.x_icon_main_image);
+        imageTrashButton = findViewById(id.delete_some_note);
+        imageSettings = findViewById(id.image_settings);
     }
 
     private void animButton(ImageView imageView) {
