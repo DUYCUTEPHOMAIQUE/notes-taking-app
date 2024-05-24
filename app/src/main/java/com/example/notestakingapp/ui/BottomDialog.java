@@ -366,7 +366,7 @@ public class BottomDialog {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if(context instanceof MainActivity)
+                if(context instanceof MainActivity && listNoteIdChecked!=null)
                     listNoteIdChecked.clear();
             }
         });

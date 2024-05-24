@@ -124,7 +124,7 @@
         android:id="@+id/layout_delete_some_note"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_80sdp"
-        android:background="@color/colorPrimaryBackground"
+        android:background="@drawable/bg_layout_delete_some_note"
         android:orientation="vertical"
         android:translationZ="101dp"
         android:elevation="@dimen/_8sdp"
@@ -144,25 +144,40 @@
             android:layout_marginBottom="@dimen/_4sdp" />
 
         <LinearLayout
+            android:id="@+id/layout_back_delete"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            <RelativeLayout
+            <LinearLayout
                 android:layout_marginStart="@dimen/_12sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="left"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/x_icon_main_image"
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
                     android:src="@drawable/x_icon"
-                    app:tint="@color/colorGrayDark"
+                    android:layout_gravity="center_vertical"
+                    app:tint="@color/colorBlack"
                    />
-            </RelativeLayout>
-            <RelativeLayout
+                <TextView
+                    android:includeFontPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/back"
+                    android:textColor="@color/colorBlack"
+                    android:fontFamily="@font/regular"
+                    android:textSize="@dimen/_20ssp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_do_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_12sdp"
@@ -173,8 +188,19 @@
                     android:layout_width="@dimen/_24sdp"
                     android:layout_height="@dimen/_24sdp"
                     android:src="@drawable/trash"
+                    android:layout_gravity="center_vertical"
                     app:tint="@color/colorError" />
-            </RelativeLayout>
+                <TextView
+                    android:includeFontPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/delete"
+                    android:textColor="@color/colorError"
+                    android:fontFamily="@font/regular"
+                    android:textSize="@dimen/_20ssp"
+                    android:layout_marginStart="@dimen/_12sdp"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
 

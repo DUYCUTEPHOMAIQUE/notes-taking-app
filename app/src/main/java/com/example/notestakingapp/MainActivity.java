@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     public static ActivityResultLauncher<Intent> noteEditLauncher;
     private SharedViewModel sharedViewModel;
+    private LinearLayout layoutBackDelete, layoutDoDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,19 +210,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //click x button
-        imageViewXButton.setOnClickListener(new View.OnClickListener() {
+        layoutBackDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sharedViewModel.setItemLongPressed(false);
                 sharedViewModel.triggerClearUiEvent();
             }
         });
-        imageTrashButton.setOnClickListener(new View.OnClickListener() {
+        layoutDoDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 BottomDialog.showConfirmDeleteNote(MainActivity.this);
             }
-            //todo: chinh sua lai de xoa note va cap nhat giao dien OK
+            //todo: chinh sua lai de xoa note va cap nhat giao dien -- OK
         });
         imageSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -287,6 +288,8 @@ public class MainActivity extends AppCompatActivity {
         imageViewXButton = findViewById(id.x_icon_main_image);
         imageTrashButton = findViewById(id.delete_some_note);
         imageSettings = findViewById(id.image_settings);
+        layoutBackDelete = findViewById(id.layout_back_delete);
+        layoutDoDelete = findViewById(id.layout_do_delete);
     }
 
     private void animButton(ImageView imageView) {
