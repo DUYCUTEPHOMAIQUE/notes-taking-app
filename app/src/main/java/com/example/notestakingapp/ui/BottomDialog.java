@@ -357,7 +357,17 @@ public class BottomDialog {
         linearLayoutXButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(context instanceof MainActivity)
+                    listNoteIdChecked.clear();
                 dialog.dismiss();
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if(context instanceof MainActivity)
+                    listNoteIdChecked.clear();
             }
         });
     }

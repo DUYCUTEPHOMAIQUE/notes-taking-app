@@ -193,12 +193,14 @@ public class MainActivity extends AppCompatActivity {
         sharedViewModel.getItemLongPressed().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isLongPressed) {
-                if(isLongPressed) {
+                if (isLongPressed) {
+                    if (layoutDelete.getVisibility() == View.GONE && listNoteIdChecked!=null) {
+                        listNoteIdChecked.clear();
+                    }
                     layoutDelete.setVisibility(View.VISIBLE);
                     mBottomNavigationView.setVisibility(View.GONE);
                     imageViewAdd.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     layoutDelete.setVisibility(View.GONE);
                     mBottomNavigationView.setVisibility(View.VISIBLE);
                     imageViewAdd.setVisibility(View.VISIBLE);
@@ -217,10 +219,9 @@ public class MainActivity extends AppCompatActivity {
         imageTrashButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listNoteIdChecked!=null && !listNoteIdChecked.isEmpty())
-                    BottomDialog.showConfirmDeleteNote(MainActivity.this);
-                }
-                //todo: chinh sua lai de xoa note va cap nhat giao dien OK
+                BottomDialog.showConfirmDeleteNote(MainActivity.this);
+            }
+            //todo: chinh sua lai de xoa note va cap nhat giao dien OK
         });
         imageSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,15 +231,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-		huyTestingFunction();
+        huyTestingFunction();
 
     }
 
-	public void huyTestingFunction() {
+    public void huyTestingFunction() {
 
 
-		//Huy's database sync test code
-		//insert a test note
+        //Huy's database sync test code
+        //insert a test note
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
 //	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
 
@@ -264,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
 //		DatabaseHandler.setTagForNote(this, (int)noteid, (int)tagid);
 
 //		DatabaseHandler.insertTodo(this, 0, "Buy Milk", Long.toString(System.currentTimeMillis()), "0");
-	}
+    }
 
     private void routeToTodoEdit() {
         BottomDialog.showToDoDiaLog(MainActivity.this);
@@ -314,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
+
     private void updateNotes() {
         DatabaseHandler databaseHandler = new DatabaseHandler();
         List<Note> noteList = databaseHandler.getNoteByCreateAt(this, "desc");
@@ -327,6 +329,7 @@ public class MainActivity extends AppCompatActivity {
         List<NoteDetailsComponent> list = componentToProps(hashMap);
         sharedViewModel.setNotes(list);
     }
+
     private List<NoteDetailsComponent> componentToProps(LinkedHashMap<Integer, ArrayList<Component>> input) {
         List<NoteDetailsComponent> noteDetailsComponentList = new ArrayList<>();
         DatabaseHandler databaseHandler = new DatabaseHandler();
