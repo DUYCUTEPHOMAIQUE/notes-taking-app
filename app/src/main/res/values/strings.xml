@@ -26,4 +26,6 @@
     <string name="none_text">No text</string>
     <string name="select_to_delete">Select to delete</string>
     <string name="delete">Delete</string>
+    <string name="complete_task">Complete Task</string>
+    <string name="expired">Expired</string>
 </resources>

@@ -40,6 +40,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -393,12 +394,23 @@ public class BottomDialog {
         });
     }
 
-    public static void showToDoDiaLog(Context context) {
+    public static void showToDoDiaLog(Context context, @Nullable ToDoTest todo) {
+        SQLiteDatabase db;
+        DatabaseHandler databaseHandler;
+        NoteTakingDatabaseHelper noteTakingDatabaseHelper;
+        noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        db = noteTakingDatabaseHelper.getReadableDatabase();
+        databaseHandler = new DatabaseHandler();
         final int[] yearPicker = {-1};
         final int[] monthPicker = {-1};
         final int[] dayPicker = {-1};
         final int[] hourPicker = {-1};
         final int[] minutePicker = {-1};
+        final long[] miLiSecond = {-1};
+
+        int color = ContextCompat.getColor(context, R.color.colorTextHint);
+        int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
+        final String[] content = {""};
 
         Calendar calendar = Calendar.getInstance();
         int currentYear = calendar.get(Calendar.YEAR);
@@ -412,6 +424,12 @@ public class BottomDialog {
         dialog.setContentView(R.layout.layout_to_do_edit);
         EditText editText = dialog.findViewById(R.id.edittext_todo);
         TextView textViewDone = dialog.findViewById(R.id.textview_done);
+
+        if(todo != null) {
+            editText.setText(todo.getContent());
+            textViewDone.setTextColor(colorAccent);
+            miLiSecond[0] = todo.getDuration();
+        }
         editText.requestFocus();
         editText.postDelayed(new Runnable() {
             @Override
@@ -432,7 +450,6 @@ public class BottomDialog {
                     List<String> urls = new ArrayList<>();
                     urls = TextUtils.linkDetectFromText(text);
                     SpannableString spannableString = new SpannableString(text);
-                    int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
 
                     for (String url : urls) {
                         int startIndex = text.indexOf(url);
@@ -459,18 +476,27 @@ public class BottomDialog {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (editText.getText().toString().isEmpty()) {
-                    int color = ContextCompat.getColor(context, R.color.colorTextHint);
                     Log.d("duyToDo", String.valueOf(color));
                     textViewDone.setTextColor(color);
                 } else {
-                    int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
+                    content[0] = s.toString();
                     textViewDone.setTextColor(colorAccent);
                     textViewDone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //todo: add toDo
-                            dialog.dismiss();
-                            Toast.makeText(context, "add task test", Toast.LENGTH_SHORT).show();
+                            if (todo!= null) {
+                                //todo: update todo
+                            }
+                            else {
+                                //todo: add toDo
+                                if(miLiSecond[0] != -1) {
+                                    DatabaseHandler.insertTodo(context,0, content[0], "hehe", String.valueOf(miLiSecond[0]));
+                                }else {
+                                    DatabaseHandler.insertTodo(context,0, content[0], "hehe", null);
+                                }
+                                dialog.dismiss();
+                                Toast.makeText(context, "add task test", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                 }
@@ -549,12 +575,16 @@ public class BottomDialog {
                             //todo: add setTime date todo task
                             int selectedHour = timePicker.getHour();
                             int selectedMinute = timePicker.getMinute();
-                            Toast.makeText(context, "Date: " +
-                                    calendar.get(Calendar.YEAR) + "-"
-                                    + (calendar.get(Calendar.MONTH) + 1) + "-" +
-                                    calendar.get(Calendar.DAY_OF_MONTH) +
-                                    " Time: " + selectedHour + ":" +
-                                    selectedMinute, Toast.LENGTH_SHORT).show();
+
+                            // Set time in calendar
+                            calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                            calendar.set(Calendar.MINUTE, selectedMinute);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.MILLISECOND, 0);
+                            miLiSecond[0] = calendar.getTimeInMillis();
+                            Log.d("timePickDuy", String.valueOf(miLiSecond[0]));
+                            Log.d("timePickDuy",  String.valueOf(System.currentTimeMillis())+ "system" );
+                            //todo: add OK cho duong lam ham
                         });
 
                         timePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {

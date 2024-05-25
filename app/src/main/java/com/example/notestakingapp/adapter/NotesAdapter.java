@@ -28,6 +28,7 @@ import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
+import com.example.notestakingapp.utils.AnimUtils;
 import com.example.notestakingapp.utils.CurrentTime;
 import com.example.notestakingapp.utils.ImageUtils;
 import com.example.notestakingapp.utils.NoteDetailsComponent;
@@ -118,18 +119,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             public boolean onLongClick(View v) {
                 isLongClick = true;
                 currentPosition = position;
-                AnimatorSet animatorSet = new AnimatorSet();
-                ObjectAnimator scaleXDown = ObjectAnimator.ofFloat(v, "scaleX", 0.95f);
-                ObjectAnimator scaleYDown = ObjectAnimator.ofFloat(v, "scaleY", 0.95f);
-                ObjectAnimator scaleXUp = ObjectAnimator.ofFloat(v, "scaleX", 1f);
-                ObjectAnimator scaleYUp = ObjectAnimator.ofFloat(v, "scaleY", 1f);
-                ObjectAnimator alphaDown = ObjectAnimator.ofFloat(v, "alpha", 0.8f);
-                ObjectAnimator alphaUp = ObjectAnimator.ofFloat(v, "alpha", 1f);
-                animatorSet.play(scaleXDown).with(scaleYDown).with(alphaDown);
-                animatorSet.play(scaleXUp).with(scaleYUp).with(alphaUp).after(scaleXDown);
-                animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
-                animatorSet.setDuration(100);
-                animatorSet.start();
+                AnimUtils.setAnim(v);
                 noteListener.onItemLongPress(v, position, noteDetailsComponent.getNote());
                 showCheckboxes = true;
                 notifyItemChanged(position);
@@ -141,19 +131,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             public void onClick(View v) {
                 if (!isLongClick) {
                     if (noteListener != null) {
-                        AnimatorSet animatorSet = new AnimatorSet();
-                        ObjectAnimator scaleXDown = ObjectAnimator.ofFloat(v, "scaleX", 0.95f);
-                        ObjectAnimator scaleYDown = ObjectAnimator.ofFloat(v, "scaleY", 0.95f);
-                        ObjectAnimator scaleXUp = ObjectAnimator.ofFloat(v, "scaleX", 1f);
-                        ObjectAnimator scaleYUp = ObjectAnimator.ofFloat(v, "scaleY", 1f);
-                        ObjectAnimator alphaDown = ObjectAnimator.ofFloat(v, "alpha", 0.8f);
-                        ObjectAnimator alphaUp = ObjectAnimator.ofFloat(v, "alpha", 1f);
-
-                        animatorSet.play(scaleXDown).with(scaleYDown).with(alphaDown);
-                        animatorSet.play(scaleXUp).with(scaleYUp).with(alphaUp).after(scaleXDown);
-                        animatorSet.setInterpolator(new AccelerateDecelerateInterpolator());
-                        animatorSet.setDuration(100);
-                        animatorSet.start();
+                        AnimatorSet animatorSet = AnimUtils.setAnim(v);
                         animatorSet.addListener(new AnimatorListenerAdapter() {
                             @Override
                             public void onAnimationEnd(Animator animation) {

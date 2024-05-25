@@ -269,7 +269,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void routeToTodoEdit() {
-        BottomDialog.showToDoDiaLog(MainActivity.this);
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+        BottomDialog.showToDoDiaLog(MainActivity.this, null);
     }
 
     private void routeToNoteEdit() {
