@@ -28,4 +28,11 @@
     <string name="delete">Delete</string>
     <string name="complete_task">Complete Task</string>
     <string name="expired">Expired</string>
+    <!-- Login strings -->
+    <string name="login">Log in</string>
+    <string name="email">Email</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="password">Password</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="forgot_password">Forgot your password?</string>
 </resources>
