@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.notestakingapp.database.TempDatabaseHelper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -35,6 +36,9 @@ public class FirebaseHandler {
 				try {
 					FileOutputStream output = new FileOutputStream(dbPath);
 					output.write(retrievedBytes);
+
+					TempDatabaseHelper.mergeNoteTable(context);
+					TempDatabaseHelper.mergeTodoTable(context);
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
