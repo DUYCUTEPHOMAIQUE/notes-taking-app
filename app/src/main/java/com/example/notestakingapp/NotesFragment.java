@@ -1,13 +1,14 @@
 package com.example.notestakingapp;
 
-import static com.example.notestakingapp.MainActivity.noteEditLauncher;
-import static com.example.notestakingapp.adapter.NotesAdapter.isLongClick;
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 import static com.example.notestakingapp.adapter.NotesAdapter.showCheckboxes;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -18,15 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.notestakingapp.adapter.NotesAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
@@ -37,18 +30,15 @@ import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
-import com.example.notestakingapp.utils.ImageUtils;
 import com.example.notestakingapp.utils.NoteDetailsComponent;
 import com.factor.bouncy.BouncyRecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.

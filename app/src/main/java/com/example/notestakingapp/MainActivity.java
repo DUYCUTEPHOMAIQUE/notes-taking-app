@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(Boolean isLongPressed) {
                 if (isLongPressed) {
-                    if (layoutDelete.getVisibility() == View.GONE && listNoteIdChecked!=null) {
+                    if (layoutDelete.getVisibility() == View.GONE && listNoteIdChecked != null) {
                         listNoteIdChecked.clear();
                     }
                     layoutDelete.setVisibility(View.VISIBLE);
