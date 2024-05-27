@@ -1,10 +1,7 @@
 package com.example.notestakingapp;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,10 +13,10 @@ import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.ui.DrawingView;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
+
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class DrawingActivity extends AppCompatActivity {
-	private int imageId;
 	public DrawingView dv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,16 +28,8 @@ public class DrawingActivity extends AppCompatActivity {
 			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 			return insets;
 		});
-		Intent intent = getIntent();
-		imageId = intent.getIntExtra("imageId", 0);
-		imageId = 3;
 		dv = (DrawingView) findViewById(R.id.drawing_view);
-		byte[] imageByteArray = DatabaseHandler.getImageById(this, imageId);
-		Log.d("BYTE ARRAY", Arrays.toString(imageByteArray));
-		Bitmap bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
-
-		dv.drawBitmap(bitmap);
-
+		dv.mDefaultColor = 0;
 	}
 
 	@Override
@@ -49,15 +38,30 @@ public class DrawingActivity extends AppCompatActivity {
 	}
 
 	public void onClickSave(View v) {
+		saveImage();
+	}
+	public void onClickChooseColor(View v) {
+		openColorPickerDialogue();
+	}
+	private void openColorPickerDialogue() {
+		final AmbilWarnaDialog colorPickerDialogue = new AmbilWarnaDialog(this, dv.mDefaultColor,
+				new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					@Override
+					public void onCancel(AmbilWarnaDialog dialog) {
+					}
+					@Override
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						dv.mDefaultColor = color;
+						dv.changeColor(dv.mDefaultColor);
+					}
+				});
+		colorPickerDialogue.show();
+	}
+	private void saveImage() {
 		Bitmap bitmap = dv.getBitmap();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 		byte[] byteArray = stream.toByteArray();
-//		Log.d("Inserted", "OK");
 		DatabaseHandler.insertImage(this, 0, byteArray);
-	}
-
-	public void saveImage() {
-
 	}
 }
