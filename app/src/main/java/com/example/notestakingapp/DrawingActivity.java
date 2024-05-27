@@ -31,16 +31,7 @@ public class DrawingActivity extends AppCompatActivity {
 			v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
 			return insets;
 		});
-		Intent intent = getIntent();
-		imageId = intent.getIntExtra("imageId", 0);
-		imageId = 3;
 		dv = (DrawingView) findViewById(R.id.drawing_view);
-		byte[] imageByteArray = DatabaseHandler.getImageById(this, imageId);
-		Log.d("BYTE ARRAY", Arrays.toString(imageByteArray));
-		Bitmap bitmap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
-
-		dv.drawBitmap(bitmap);
-
 	}
 
 	@Override
@@ -53,7 +44,6 @@ public class DrawingActivity extends AppCompatActivity {
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 		byte[] byteArray = stream.toByteArray();
-//		Log.d("Inserted", "OK");
 		DatabaseHandler.insertImage(this, 0, byteArray);
 	}
 

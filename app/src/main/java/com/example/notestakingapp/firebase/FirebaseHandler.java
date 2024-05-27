@@ -3,6 +3,7 @@ package com.example.notestakingapp.firebase;
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -72,10 +73,12 @@ public class FirebaseHandler {
 			@Override
 			public void onFailure(@NonNull Exception exception) {
 				// Handle unsuccessful uploads
+				Toast.makeText(context, "Upload failed", Toast.LENGTH_SHORT).show();
 			}
 		}).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 			@Override
 			public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+				Toast.makeText(context, "Upload successfully", Toast.LENGTH_SHORT).show();
 			}
 		});
 	}
