@@ -33,6 +33,7 @@
 				android:layout_margin="10dp"
 				android:layout_weight="1"
 				android:text="Color"
+				android:onClick="onClickChooseColor"
 				android:layout_width="wrap_content"
 				android:layout_height="match_parent"/>
 		</LinearLayout>

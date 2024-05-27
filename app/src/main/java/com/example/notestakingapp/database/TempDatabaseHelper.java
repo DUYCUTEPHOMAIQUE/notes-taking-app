@@ -1,19 +1,15 @@
 package com.example.notestakingapp.database;
-import com.example.notestakingapp.database.DatabaseHandler;
-import com.example.notestakingapp.database.NoteComponent.Note;
-import com.example.notestakingapp.database.NoteComponent.TextSegment;
-import com.example.notestakingapp.database.NoteComponent.ToDo;
 
 import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.notestakingapp.database.NoteComponent.Note;
 
 public class TempDatabaseHelper extends SQLiteOpenHelper {
 	public static final String DB_NAME = "test";

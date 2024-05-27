@@ -18,6 +18,8 @@ import com.example.notestakingapp.ui.DrawingView;
 import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 
+import yuku.ambilwarna.AmbilWarnaDialog;
+
 public class DrawingActivity extends AppCompatActivity {
 	private int imageId;
 	public DrawingView dv;
@@ -32,6 +34,7 @@ public class DrawingActivity extends AppCompatActivity {
 			return insets;
 		});
 		dv = (DrawingView) findViewById(R.id.drawing_view);
+		dv.mDefaultColor = 0;
 	}
 
 	@Override
@@ -40,14 +43,46 @@ public class DrawingActivity extends AppCompatActivity {
 	}
 
 	public void onClickSave(View v) {
+		saveImage();
+	}
+	public void onClickChooseColor(View v) {
+		openColorPickerDialogue();
+	}
+	private void openColorPickerDialogue() {
+
+		// the AmbilWarnaDialog callback needs 3 parameters
+		// one is the context, second is default color,
+		final AmbilWarnaDialog colorPickerDialogue = new AmbilWarnaDialog(this, dv.mDefaultColor,
+				new AmbilWarnaDialog.OnAmbilWarnaListener() {
+					@Override
+					public void onCancel(AmbilWarnaDialog dialog) {
+						// leave this function body as
+						// blank, as the dialog
+						// automatically closes when
+						// clicked on cancel button
+					}
+
+					@Override
+					public void onOk(AmbilWarnaDialog dialog, int color) {
+						// change the mDefaultColor to
+						// change the GFG text color as
+						// it is returned when the OK
+						// button is clicked from the
+						// color picker dialog
+						dv.mDefaultColor = color;
+						dv.changeColor(dv.mDefaultColor);
+						// now change the picked color
+						// preview box to mDefaultColor
+//						mColorPreview.setBackgroundColor(mDefaultColor);
+					}
+				});
+		colorPickerDialogue.show();
+	}
+	private void saveImage() {
 		Bitmap bitmap = dv.getBitmap();
 		ByteArrayOutputStream stream = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 		byte[] byteArray = stream.toByteArray();
 		DatabaseHandler.insertImage(this, 0, byteArray);
-	}
-
-	public void saveImage() {
-
 	}
 }

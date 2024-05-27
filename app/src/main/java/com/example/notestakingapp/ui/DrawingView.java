@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 public class DrawingView extends View {
+	public int mDefaultColor;
 	private int width, height;
 	private Bitmap mBitmap;
 	private Canvas mCanvas;
