@@ -1,10 +1,7 @@
 package com.example.notestakingapp;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +13,10 @@ import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.ui.DrawingView;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Arrays;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class DrawingActivity extends AppCompatActivity {
-	private int imageId;
 	public DrawingView dv;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,31 +44,15 @@ public class DrawingActivity extends AppCompatActivity {
 		openColorPickerDialogue();
 	}
 	private void openColorPickerDialogue() {
-
-		// the AmbilWarnaDialog callback needs 3 parameters
-		// one is the context, second is default color,
 		final AmbilWarnaDialog colorPickerDialogue = new AmbilWarnaDialog(this, dv.mDefaultColor,
 				new AmbilWarnaDialog.OnAmbilWarnaListener() {
 					@Override
 					public void onCancel(AmbilWarnaDialog dialog) {
-						// leave this function body as
-						// blank, as the dialog
-						// automatically closes when
-						// clicked on cancel button
 					}
-
 					@Override
 					public void onOk(AmbilWarnaDialog dialog, int color) {
-						// change the mDefaultColor to
-						// change the GFG text color as
-						// it is returned when the OK
-						// button is clicked from the
-						// color picker dialog
 						dv.mDefaultColor = color;
 						dv.changeColor(dv.mDefaultColor);
-						// now change the picked color
-						// preview box to mDefaultColor
-//						mColorPreview.setBackgroundColor(mDefaultColor);
 					}
 				});
 		colorPickerDialogue.show();
