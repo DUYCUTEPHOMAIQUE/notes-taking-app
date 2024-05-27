@@ -237,8 +237,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void huyTestingFunction() {
-
-
         //Huy's database sync test code
         //insert a test note
 //	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
@@ -255,10 +253,6 @@ public class MainActivity extends AppCompatActivity {
 //		TempDatabaseHelper.mergeTodoTable(this);
 //	    TempDatabaseHelper.mergeNoteTable(this);
 
-
-//	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
-//			    DatabaseHandler.NOTE_TABLE,
-//			    "1715798015609")));
 //	    DatabaseHandler.insertTextSegment(this, 11, "Local Text Segment");
 //	    DatabaseHandler.resetAllAutoincrement(this);
 //	    long noteid = DatabaseHandler.insertNote(this, "Local Note", "#FFFFFD");
