@@ -224,13 +224,9 @@ public class DatabaseHandler {
 				" FROM " + NOTE_TABLE + " N " +
 				" JOIN " + TEXTSEGMENT_TABLE + " T " + " ON " + "N.NOTE_ID = T.NOTE_ID " +
 				" WHERE " + "N." + COLUMN_NOTE_TITLE + " LIKE ? OR T." + COLUMN_TEXT + " LIKE ? " +
-//				" WHERE " + "N." + COLUMN_NOTE_TITLE + " LIKE %" + searchText + "% " +
-				" ORDER BY " + COLUMN_NOTE_CREATEAT + " DESC";
+				" ORDER BY " +" N." + COLUMN_NOTE_CREATEAT + " DESC";
 
 		Cursor cursor = db.rawQuery(query, new String[]{"%" + searchText + "%", "%" + searchText + "%"});
-		Toast.makeText(context, searchText, Toast.LENGTH_SHORT).show();
-//		Cursor cursor = db.rawQuery(query, null);
-		Toast.makeText(context, "duong", Toast.LENGTH_SHORT).show();
 		ArrayList<Note> listNote = new ArrayList<Note>();
 		try {
 			if (cursor.moveToFirst()){
