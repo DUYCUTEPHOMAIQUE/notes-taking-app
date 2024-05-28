@@ -21,6 +21,7 @@ import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHandler {
 	public static final int TAG_ID_DEFAULT = 1;
@@ -60,6 +61,7 @@ public class DatabaseHandler {
 	public static final String COLUMN_TODO_ID = "TODO_ID";
 	public static final String COLUMN_TODO_CREATEAT = "CREATE_AT";
 	public static final String COLUMN_TODO_DURATION = "DURATION";
+	public static final String COLUMN_TODO_COMPLETE = "COMPLETE";
 
 
 	//COMPONENT columns
@@ -688,35 +690,63 @@ public class DatabaseHandler {
 	}
 
 	//todo: public long insertTodo(Context context, int todoId, @Nullable String content,@NonNull String createAt,@Nullable String duration )
-	public static long insertTodo(Context context, String content,@Nullable Long duration) {
+//	public static long insertTodo(Context context, String content, long duration, boolean isCompleted) {
+//		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+//		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+//
+//		ContentValues ct = new ContentValues();
+//
+//		ct.put(COLUMN_TODO_CONTENT, content);
+//		ct.put(COLUMN_TODO_CREATEAT , System.currentTimeMillis());
+//		ct.put(COLUMN_TODO_DURATION, duration);
+//		ct.put(COLUMN_TODO_COMPLETE, isCompleted);
+//
+//		return db.insert(TODO_TABLE, null, ct);
+//	}
+
+	public static long insertTodo(Context context, String content,Long duration) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
 		ContentValues ct = new ContentValues();
 
 		ct.put(COLUMN_TODO_CONTENT, content);
-		ct.put(COLUMN_TODO_CREATEAT , System.currentTimeMillis());
+		ct.put(COLUMN_TODO_CREATEAT, System.currentTimeMillis());
 		ct.put(COLUMN_TODO_DURATION, duration);
-
-		return db.insert(TODO_TABLE, null, ct);
-	}
-
-	public static long insertTodo(Context context, String content,Long createAt,Long duration) {
-		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
-
-		ContentValues ct = new ContentValues();
-
-		ct.put(COLUMN_TODO_CONTENT, content);
-		ct.put(COLUMN_TODO_CREATEAT , System.currentTimeMillis());
-		ct.put(COLUMN_TODO_CREATEAT, createAt);
-		ct.put(COLUMN_TODO_DURATION, duration);
+		ct.put(COLUMN_TODO_COMPLETE, false);
 
 		return db.insert(TODO_TABLE, null, ct);
 	}
 
 	//todo: public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull String createAt,@Nullable String duration)
-	public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull String createAt,@Nullable String duration) {
+	public int updateTodo(Context context, int todoId, Long duration) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+		ContentValues ct = new ContentValues();
+
+		ct.put(COLUMN_TODO_ID , todoId);
+		ct.put(COLUMN_TODO_DURATION, duration);
+
+		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
+	}
+
+
+	public int updateTodo(Context context, int todoId, Boolean isComplete) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+		ContentValues ct = new ContentValues();
+
+		ct.put(COLUMN_TODO_ID , todoId);
+		ct.put(COLUMN_TODO_COMPLETE, isComplete);
+
+		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
+	}
+
+
+
+	public int updateTodo(Context context, int todoId, String content) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -724,11 +754,27 @@ public class DatabaseHandler {
 
 		ct.put(COLUMN_TODO_ID , todoId);
 		ct.put(COLUMN_TODO_CONTENT, content);
-		ct.put(COLUMN_TODO_CREATEAT , createAt);
-		ct.put(COLUMN_TODO_DURATION, duration);
+
 
 		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
 	}
+
+//	public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull Long createAt,@Nullable Long duration) {
+//		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+//		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+//
+//		ContentValues ct = new ContentValues();
+//
+//		ct.put(COLUMN_TODO_ID , todoId);
+//		ct.put(COLUMN_TODO_CONTENT, content);
+//		ct.put(COLUMN_TODO_CREATEAT , createAt);
+//		ct.put(COLUMN_TODO_DURATION, duration);
+//
+//		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
+//	}
+
+
+
 	//todo: public int deleteTodo(Context context, int todoId)
 	public int deleteTodo(Context context, int todoId) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -751,11 +797,37 @@ public class DatabaseHandler {
 				listToDo.add(new ToDo(cursor.getInt(0),
 						cursor.getString(1),
 						cursor.getLong(2),
-						cursor.getLong(3) ) );
+						cursor.getLong(3),
+						cursor.getInt(4) == 1
+				) );
 			} while (cursor.moveToNext());
 			return listToDo;
+		} else {
+			return null;
 		}
-		else return null;
+	}
+
+	public ArrayList<ToDo> getToDoListCompletedOrNot (Context context, Boolean isCompleted, String orderBy ){
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+
+		String query = "SELECT * FROM " + TODO_TABLE + " WHERE " + COLUMN_TODO_COMPLETE + " = ? ORDER BY " + orderBy;
+		Cursor cursor = db.rawQuery(query, new String[]{Boolean.toString(isCompleted)});
+
+		if (cursor.moveToFirst()){
+			ArrayList<ToDo> listToDo = new ArrayList<ToDo>();
+			do{
+				listToDo.add(new ToDo(cursor.getInt(0),
+						cursor.getString(1),
+						cursor.getLong(2),
+						cursor.getLong(3),
+						cursor.getInt(4) == 1
+				) );
+			} while (cursor.moveToNext());
+			return listToDo;
+		} else {
+			return null;
+		}
 	}
 
 
