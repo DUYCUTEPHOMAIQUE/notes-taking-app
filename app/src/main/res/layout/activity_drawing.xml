@@ -13,17 +13,30 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 	<LinearLayout
-		android:layout_weight="5"
+		android:layout_weight="8"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:orientation="vertical">
-		<Button
+		<LinearLayout
 			android:layout_weight="1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:onClick="onClickSave"
-			android:text="Save" />
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			<Button
+				android:layout_margin="10dp"
+				android:layout_weight="1"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:onClick="onClickSave"
 
+				android:text="Save" />
+			<Button
+				android:layout_margin="10dp"
+				android:layout_weight="1"
+				android:text="Color"
+				android:onClick="onClickChooseColor"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"/>
+		</LinearLayout>
 	</LinearLayout>
 
 </LinearLayout>

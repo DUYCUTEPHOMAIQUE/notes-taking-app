@@ -1,4 +1,5 @@
 package com.example.notestakingapp.database;
+
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,18 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.notestakingapp.Item;
-import com.example.notestakingapp.TodoFragment;
 import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Component;
 import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
-import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class DatabaseHandler {
 	public static final int TAG_ID_DEFAULT = 1;

@@ -231,41 +231,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        huyTestingFunction();
-
-    }
-
-    public void huyTestingFunction() {
-
-
-        //Huy's database sync test code
-        //insert a test note
-//	    DatabaseHandler.insertNote(this, "Test Note 2", "#FFFFFF");
-//	    DatabaseHandler.insertNote(this, "Test Note 3", "#FFFFFF");
-
-//	    DatabaseHandler.deleteAllNote(this);
-//		DatabaseHandler.deleteAllTextSegment(this);
-//		DatabaseHandler.deleteAllTag(this);
-//		DatabaseHandler.deleteAllNoteTag(this);
-//		DatabaseHandler.deleteNote(this, 7);
-//	    FirebaseHandler.syncToFirebase(this);
-//	    FirebaseHandler.syncFromFirebase(this);
-//		DatabaseHandler.deleteAllTodo(this);
-//		TempDatabaseHelper.mergeTodoTable(this);
-//	    TempDatabaseHelper.mergeNoteTable(this);
-
-
-//	    Log.d("Check exist by created at", Boolean.toString(TempDatabaseHelper.checkExistByCreateAt(this,
-//			    DatabaseHandler.NOTE_TABLE,
-//			    "1715798015609")));
-//	    DatabaseHandler.insertTextSegment(this, 11, "Local Text Segment");
-//	    DatabaseHandler.resetAllAutoincrement(this);
-//	    long noteid = DatabaseHandler.insertNote(this, "Local Note", "#FFFFFD");
-//		long tagid = DatabaseHandler.createNewTag(this, "VU ANH HUY");
-//		DatabaseHandler.setTagForNote(this, (int)noteid, (int)tagid);
-
-//		DatabaseHandler.insertTodo(this, 0, "Buy Milk", Long.toString(System.currentTimeMillis()), "0");
     }
 
     private void routeToTodoEdit() {
