@@ -4,6 +4,7 @@ import static androidx.core.content.ContextCompat.startActivity;
 
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -47,6 +48,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.notestakingapp.MainActivity;
 import com.example.notestakingapp.NoteEditActivity;
 import com.example.notestakingapp.R;
@@ -376,26 +378,6 @@ public class BottomDialog {
         });
     }
 
-    public static void showVoiceDialog(Context context) {
-        Log.d("duy123456", "clicked");
-        final Dialog dialog = new Dialog(context);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_voice_press);
-
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-        LinearLayout linearLayoutXButton = dialog.findViewById(R.id.layout_x_button);
-        linearLayoutXButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-    }
 
     public static void showToDoDiaLog(Context context, @Nullable ToDo todo) {
         SharedViewModel sharedViewModel = new ViewModelProvider((FragmentActivity) context).get(SharedViewModel.class);

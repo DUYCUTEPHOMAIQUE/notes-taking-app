@@ -75,7 +75,15 @@ public class SharedViewModel extends ViewModel {
     }
 
     private final MutableLiveData<Boolean> isTodoChange = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> isToDoCheckedChange = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getNoteEditChangeInsertAudio() {
+        return noteEditChangeInsertAudio;
+    }
+    public void setNoteEditChangeInsertAudio(boolean t) {
+        noteEditChangeInsertAudio.setValue(t);
+    }
+
+    private final MutableLiveData<Boolean> noteEditChangeInsertAudio = new MutableLiveData<>();
 
     public LiveData<Boolean> getIsTodoChange() {
         return isTodoChange;
@@ -85,12 +93,43 @@ public class SharedViewModel extends ViewModel {
         isTodoChange.setValue(i);
     }
 
-    public LiveData<Boolean> getIsToDoCheckedChanged() {
-        return isToDoCheckedChange;
+    private int AudioId = -1;
+    private byte[] audioDate = null;
+
+    public byte[] getAudioDate() {
+        return audioDate;
     }
 
-    public void setIsToDoCheckedChanged(boolean i) {
-        isToDoCheckedChange.setValue(i);
+    public void setAudioDate(byte[] audioDate) {
+        this.audioDate = audioDate;
     }
 
+    public int getAudioId() {
+        return AudioId;
+    }
+
+    public void setAudioId(int audioId) {
+        AudioId = audioId;
+    }
+
+
+    private final MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        isPlaying.setValue(playing);
+    }
+
+    private MutableLiveData<Integer> playingPosition = new MutableLiveData<>();
+
+    public LiveData<Integer> getPlayingPosition() {
+        return playingPosition;
+    }
+
+    public void setPlayingPosition(int position) {
+        playingPosition.setValue(position);
+    }
 }

@@ -636,7 +636,29 @@ public class DatabaseHandler {
 			}
 		}
 	}
+	@SuppressLint("Range")
+	public Audio getAudioByAudioId (Context context, int audioId) {
+			SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+			SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
+			String query = "SELECT * FROM " + AUDIO_TABLE + " WHERE " + COLUMN_AUDIO_ID + " = ?";
+			Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(audioId)});
+
+			if (cursor.moveToFirst()){
+				int noteId = cursor.getInt(cursor.getColumnIndex(COLUMN_NOTE_ID));
+				byte[] audioData = cursor.getBlob(cursor.getColumnIndex(COLUMN_AUDIO_DATA));
+				long createdAt = cursor.getLong(cursor.getColumnIndex(COLUMN_AUDIO_CREATEAT));
+				return new Audio(
+						audioId,
+						noteId,
+						audioData,
+						createdAt
+				);
+			}
+			else {
+				return null;
+			}
+	}
 
 
 	//todo--------------------------------------------------------TAG------------------------------------------
