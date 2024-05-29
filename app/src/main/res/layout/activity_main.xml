@@ -113,7 +113,7 @@
         android:padding="@dimen/_8sdp"
         android:src="@drawable/round_add_24"
         android:translationZ="100dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/layout_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
