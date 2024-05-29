@@ -30,6 +30,10 @@
             android:name=".SignUpActivity"
             android:exported="true"/>
         <activity
+            android:name=".DrawingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".NoteEditActivity"
             android:exported="false"
             android:screenOrientation="portrait"
