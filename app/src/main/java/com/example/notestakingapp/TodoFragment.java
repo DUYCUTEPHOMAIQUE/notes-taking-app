@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,8 +29,8 @@ import com.example.notestakingapp.adapter.TodoAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.ui.BottomDialog;
-import com.example.notestakingapp.ui.ToDoTest;
 import com.factor.bouncy.BouncyRecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -48,6 +50,8 @@ public class TodoFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
+
+    private SharedViewModel sharedViewModel;
     private String mParam1;
     private String mParam2;
     public TodoAdapter todoAdapter;
@@ -57,8 +61,8 @@ public class TodoFragment extends Fragment {
     private NoteTakingDatabaseHelper noteTakingDatabaseHelper;
     public RecyclerView recyclerView, completedRecyclerView;
     public List<ToDo> list;
-    public List<ToDoTest> mList = new ArrayList<>();
-    public List<ToDoTest> completedMList = new ArrayList<>();
+    public List<ToDo> mList = new ArrayList<>();
+    public List<ToDo> completedMList = new ArrayList<>();
 
     public TodoFragment() {
         // Required empty public constructor
@@ -90,15 +94,12 @@ public class TodoFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
         //test
-        mList.add(new ToDoTest(1, "Task 1", 1716601500000L , false));
-        mList.add(new ToDoTest(2, "Task 2", 1716601500000L , false));
-        mList.add(new ToDoTest(3, "Task 3", 1716601500000L , false));
-        mList.add(new ToDoTest(4, "Task 4", 1716601500000L , false));
-
-        completedMList.add(new ToDoTest(6, "Task 6", 1716601500000L , true));
-        completedMList.add(new ToDoTest(7, "Task 7", 1716601500000L , true));
-        completedMList.add(new ToDoTest(8, "Task 8", 1716601500000L , true));
-        completedMList.add(new ToDoTest(9, "Task 9", 1716601500000L, true));
+        noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getActivity());
+        db = noteTakingDatabaseHelper.getReadableDatabase();
+        databaseHandler = new DatabaseHandler();
+        mList = databaseHandler.getToDoListCompletedOrNot(getActivity(), false, "DESC");
+        completedMList = databaseHandler.getToDoListCompletedOrNot(getActivity(), true, "DESC");
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     @Override
@@ -111,9 +112,6 @@ public class TodoFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getActivity());
-        db = noteTakingDatabaseHelper.getReadableDatabase();
-        databaseHandler = new DatabaseHandler();
         //
         recyclerView = view.findViewById(R.id.task_recycler);
         completedRecyclerView = view.findViewById(R.id.completed_task_recycler);
@@ -126,14 +124,50 @@ public class TodoFragment extends Fragment {
         updateView();
         completedTodoAdapter.setTodoListener(new TodoAdapter.TodoListener() {
             @Override
-            public void onItemClick(View v, int position, ToDoTest todo) {
+            public void onItemClick(View v, int position, ToDo todo) {
                 routeToTodoEditUpdate(getActivity(), todo);
+            }
+
+            @Override
+            public void onCheckBoxClick(int position, ToDo toDo, boolean isChecked) {
+                toDo.setCompleted(isChecked);
+                databaseHandler.updateTodo(getActivity(), toDo.getId(), isChecked);
+                sharedViewModel.setIsTodoChange(true);
             }
         });
         todoAdapter.setTodoListener(new TodoAdapter.TodoListener() {
             @Override
-            public void onItemClick(View v, int position, ToDoTest todo) {
+            public void onItemClick(View v, int position, ToDo todo) {
                 routeToTodoEditUpdate(getActivity(), todo);
+            }
+
+            @Override
+            public void onCheckBoxClick(int position, ToDo toDo, boolean isChecked) {
+                toDo.setCompleted(isChecked);
+                databaseHandler.updateTodo(getActivity(), toDo.getId(), isChecked);
+                if(toDo == null)
+                        return;
+                if(isChecked) {
+                    mList.remove(position);
+                    todoAdapter.notifyItemRemoved(position);
+                    completedMList.add(0, toDo);
+                    completedTodoAdapter.notifyItemInserted(0);
+                }
+                else {
+                    completedMList.remove(position);
+                    completedTodoAdapter.notifyItemRemoved(position);
+                    mList.add(0, toDo);
+                    todoAdapter.notifyItemInserted(0);
+                }
+            }
+        });
+
+
+        sharedViewModel.getIsTodoChange().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                updateViewWhenInsertOrUpdate();
+                Log.d("updateView", "upppp!!");
             }
         });
         ItemTouchHelper incompleteTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
@@ -145,13 +179,10 @@ public class TodoFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                ToDoTest task = mList.get(position);
-                task.setCompleted(true);
+                ToDo task = mList.get(position);
+                //ui
                 mList.remove(position);
                 todoAdapter.notifyItemRemoved(position);
-                completedMList.add(0, task);
-                completedTodoAdapter.notifyItemInserted(0);
-
                 Snackbar snackbar = Snackbar.make(recyclerView, "Task completed", Snackbar.LENGTH_LONG);
                 snackbar.setAction("Undo", new View.OnClickListener() {
                     @Override
@@ -160,14 +191,20 @@ public class TodoFragment extends Fragment {
                         task.setCompleted(false);
                         mList.add(position, task);
                         todoAdapter.notifyItemInserted(position);
-                        completedMList.remove(task);
-                        completedTodoAdapter.notifyDataSetChanged();
-
-                        //todo: db
                     }
 
                 });
                 snackbar.show();
+                snackbar.addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                            // Perform the deletion from the database after the Snackbar is dismissed and not due to an "Undo" action
+                            //todo: db --OK
+                            databaseHandler.deleteTodo(getActivity(), task.getId());
+                        }
+                    }
+                });
             }
 
             //gpt draw canvas view on RecyclerView
@@ -293,7 +330,7 @@ public class TodoFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-                ToDoTest task = completedMList.get(position);
+                ToDo task = completedMList.get(position);
                 task.setCompleted(false);
                 completedMList.remove(position);
                 completedTodoAdapter.notifyItemRemoved(position);
@@ -323,15 +360,29 @@ public class TodoFragment extends Fragment {
         completeTouchHelper.attachToRecyclerView(completedRecyclerView);
     }
 
-    private void updateView() {
-        list = databaseHandler.getAllToDo(getActivity());
 
+    private void updateViewWhenInsertOrUpdate() {
+        mList = databaseHandler.getToDoListCompletedOrNot(getActivity(), false, "DESC");
+        completedMList = databaseHandler.getToDoListCompletedOrNot(getActivity(), true, "DESC");
         //todo: test
-        if(mList!= null && completedMList != null) {
-            Log.d("todoDuy", mList.toString()+" ** "+completedMList.toString());
+        if(mList!= null) {
             todoAdapter.setTodos(mList);
             recyclerView.setAdapter(todoAdapter);
-
+        }
+        if (completedMList != null) {
+            completedTodoAdapter.setTodos(completedMList);
+            completedRecyclerView.setAdapter(completedTodoAdapter);
+        }
+    }
+    private void updateView() {
+        todoAdapter.notifyItemInserted(0);
+        completedTodoAdapter.notifyItemInserted(0);
+        //todo: test
+        if(mList!= null) {
+            todoAdapter.setTodos(mList);
+            recyclerView.setAdapter(todoAdapter);
+        }
+        if (completedMList != null) {
             completedTodoAdapter.setTodos(completedMList);
             completedRecyclerView.setAdapter(completedTodoAdapter);
         }
@@ -340,7 +391,7 @@ public class TodoFragment extends Fragment {
     private void routeToTodoEdit(Context context) {
         BottomDialog.showToDoDiaLog(context, null );
     }
-    private void routeToTodoEditUpdate(Context context, ToDoTest todo) {
+    private void routeToTodoEditUpdate(Context context, ToDo todo) {
         BottomDialog.showToDoDiaLog(context, todo);
     }
 }

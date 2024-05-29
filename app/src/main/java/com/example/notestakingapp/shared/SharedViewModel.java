@@ -73,4 +73,24 @@ public class SharedViewModel extends ViewModel {
     public void notifyDataChanged() {
         dataChanged.setValue(true);
     }
+
+    private final MutableLiveData<Boolean> isTodoChange = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isToDoCheckedChange = new MutableLiveData<>();
+
+    public LiveData<Boolean> getIsTodoChange() {
+        return isTodoChange;
+    }
+
+    public void setIsTodoChange(boolean i) {
+        isTodoChange.setValue(i);
+    }
+
+    public LiveData<Boolean> getIsToDoCheckedChanged() {
+        return isToDoCheckedChange;
+    }
+
+    public void setIsToDoCheckedChanged(boolean i) {
+        isToDoCheckedChange.setValue(i);
+    }
+
 }

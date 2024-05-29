@@ -731,6 +731,20 @@ public class DatabaseHandler {
 		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
 	}
 
+	public int updateTodo(Context context, int todoId, String content, Long duration, boolean isCompleted) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+		ContentValues ct = new ContentValues();
+
+		ct.put(COLUMN_TODO_ID, todoId);
+		ct.put(COLUMN_TODO_DURATION, duration);
+		ct.put(COLUMN_TODO_CONTENT, content);
+		ct.put(COLUMN_TODO_COMPLETE, isCompleted);
+
+		return db.update(TODO_TABLE, ct, COLUMN_TODO_ID + " = ?", new String[]{Integer.toString(todoId)});
+	}
+
 
 	public int updateTodo(Context context, int todoId, Boolean isComplete) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -811,8 +825,8 @@ public class DatabaseHandler {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
-		String query = "SELECT * FROM " + TODO_TABLE + " WHERE " + COLUMN_TODO_COMPLETE + " = ? ORDER BY " + orderBy;
-		Cursor cursor = db.rawQuery(query, new String[]{Boolean.toString(isCompleted)});
+		String query = "SELECT * FROM " + TODO_TABLE + " WHERE " + COLUMN_TODO_COMPLETE + " = ? ORDER BY "+COLUMN_TODO_CREATEAT+ " " + orderBy;
+		Cursor cursor = db.rawQuery(query, new String[]{isCompleted ? "1": "0"});
 
 		if (cursor.moveToFirst()){
 			ArrayList<ToDo> listToDo = new ArrayList<ToDo>();
@@ -826,7 +840,7 @@ public class DatabaseHandler {
 			} while (cursor.moveToNext());
 			return listToDo;
 		} else {
-			return null;
+			return new ArrayList<>();
 		}
 	}
 
