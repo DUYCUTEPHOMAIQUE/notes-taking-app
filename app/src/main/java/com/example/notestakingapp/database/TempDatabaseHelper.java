@@ -37,11 +37,11 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 			Cursor cursor = tempDb.rawQuery(query, null);
 			while (cursor.moveToNext()) {
 				String todoContent = cursor.getString(1);
-				String todoCreateAt = cursor.getString(2);
-				String todoDuration = cursor.getString(3);
+				Long todoCreateAt = cursor.getLong(2);
+				Long todoDuration = cursor.getLong(3);
 				if (!checkExistByCreateAt(context, DatabaseHandler.TODO_TABLE, todoCreateAt)) {
 					//todoid = 0?
-					DatabaseHandler.insertTodo(context, 0, todoContent, todoCreateAt, todoDuration);
+//					DatabaseHandler.insertTodo(context, todoContent, todoCreateAt, todoDuration);
 				}
 			}
 		} catch(SQLiteException e) {
@@ -63,7 +63,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 						cursor.getString(3) );          //color
 				long firebaseNoteId = cursor.getInt(0);
 				//Note với created at này chưa tồn tại
-				if (!checkExistByCreateAt(context, DatabaseHandler.NOTE_TABLE, Long.toString(note.getCreateAt()))) {
+				if (!checkExistByCreateAt(context, DatabaseHandler.NOTE_TABLE, note.getCreateAt())) {
 					long newInsertedNoteId = DatabaseHandler.insertNote(context, note.getTitle(), note.getColor());
 					mergeTextSegmentTable(context, firebaseNoteId, newInsertedNoteId);
 					mergeAudioTable(context, firebaseNoteId, newInsertedNoteId);
@@ -136,14 +136,14 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 	}
-	public static boolean checkExistByCreateAt(Context context, String tableName, String CreateAt) {
+	public static boolean checkExistByCreateAt(Context context, String tableName, Long CreateAt) {
 		try {
 			SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 			SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
 			String query = "SELECT * FROM "+ tableName + " WHERE CREATE_AT = ?";
-			Cursor cursor = db.rawQuery(query, new String[] {CreateAt});
-			Log.d("CREATED AT", CreateAt);
+			Cursor cursor = db.rawQuery(query, new String[] {Long.toString(CreateAt)});
+
 			Log.d("CREATED AT CHECK", Integer.toString(cursor.getCount()));
 			return cursor.getCount() >= 1;
 		} catch(SQLiteException e) {

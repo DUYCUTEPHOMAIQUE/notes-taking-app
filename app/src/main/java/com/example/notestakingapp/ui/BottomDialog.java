@@ -490,9 +490,9 @@ public class BottomDialog {
                             else {
                                 //todo: add toDo
                                 if(miLiSecond[0] != -1) {
-                                    DatabaseHandler.insertTodo(context,0, content[0], "hehe", String.valueOf(miLiSecond[0]));
+                                    DatabaseHandler.insertTodo(context, content[0],miLiSecond[0]);
                                 }else {
-                                    DatabaseHandler.insertTodo(context,0, content[0], "hehe", null);
+                                    DatabaseHandler.insertTodo(context, content[0],  null);
                                 }
                                 dialog.dismiss();
                                 Toast.makeText(context, "add task test", Toast.LENGTH_SHORT).show();
