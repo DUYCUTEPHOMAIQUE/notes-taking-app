@@ -100,6 +100,7 @@ public class TodoFragment extends Fragment {
         mList = databaseHandler.getToDoListCompletedOrNot(getActivity(), false, "DESC");
         completedMList = databaseHandler.getToDoListCompletedOrNot(getActivity(), true, "DESC");
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        Log.d("duyTodo", String.valueOf(mList.get(mList.size()-1).getDuration()));
     }
 
     @Override

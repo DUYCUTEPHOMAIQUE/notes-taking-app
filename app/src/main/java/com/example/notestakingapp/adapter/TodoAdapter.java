@@ -93,8 +93,11 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                 //todo: setcheckbox nx
                 todoContent.setText(todo.getContent());
                 checkBox.setChecked(todo.isCompleted());
-                if (todo.getDuration() != null) {
+                if (todo.getDuration() != null && todo.getDuration()!=0) {
+                    Log.d("duyTodoT","id="+todo.getId()+"dur: "+todo.getDuration() + "bool:"+String.valueOf(todo.getDuration()> System.currentTimeMillis()));
                     todoExpired.setVisibility(todo.getDuration() > System.currentTimeMillis() ? View.GONE : View.VISIBLE);
+                } else {
+                    todoExpired.setVisibility(View.GONE);
                 }
 
                 //su kien o checkbox
