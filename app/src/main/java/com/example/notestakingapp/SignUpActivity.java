@@ -89,8 +89,7 @@ public class SignUpActivity extends AppCompatActivity {
                         Activity.INPUT_METHOD_SERVICE);
         if(inputMethodManager.isAcceptingText()){
             inputMethodManager.hideSoftInputFromWindow(
-                    Objects.requireNonNull(activity.getCurrentFocus()).getWindowToken(),
-                    0
+                    Objects.requireNonNull(activity.getCurrentFocus()).getWindowToken(), 0
             );
         }
     }
