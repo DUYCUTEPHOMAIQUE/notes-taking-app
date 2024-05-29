@@ -18,15 +18,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Objects;
-import com.example.notestakingapp.authen.*;
+import com.example.notestakingapp.firebase.*;
 
 public class SignInActivity extends AppCompatActivity {
-    EditText email;
-    EditText password;
-    TextView forgotPassButton, signInButton, signUpText, googleButton;
+    EditText email, password;
+    TextView backButton, forgotPassButton, signInButton, signUpText, googleButton;
     private static final int SIGN_IN_REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,36 +43,33 @@ public class SignInActivity extends AppCompatActivity {
         setupUI(findViewById(R.id.sign_in)); // hide software keyboard
 
         // funcs for buttons
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { finish(); }
+        });
         forgotPassButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // button animation when clicked
-                Animation animation = AnimationUtils.loadAnimation(SignInActivity.this, R.anim.scale_animation);
-                forgotPassButton.startAnimation(animation);
+
             }
         });
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // button animation when clicked
-                Animation animation = AnimationUtils.loadAnimation(SignInActivity.this, R.anim.scale_animation);
-                signInButton.startAnimation(animation);
+
             }
         });
         signUpText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // button animation when clicked
-                Animation animation = AnimationUtils.loadAnimation(SignInActivity.this, R.anim.scale_animation);
-                signUpText.startAnimation(animation);
+                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
+                startActivity(intent);
             }
         });
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // button animation when clicked
-                Animation animation = AnimationUtils.loadAnimation(SignInActivity.this, R.anim.scale_animation);
-                googleButton.startAnimation(animation);
+
             }
         });
     }
@@ -112,6 +109,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+        backButton = findViewById(R.id.back_button);
         email = findViewById(R.id.input_email);
         password = findViewById(R.id.input_password);
         forgotPassButton = findViewById(R.id.text_forgot_password);

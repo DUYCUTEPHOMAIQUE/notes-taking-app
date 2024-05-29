@@ -11,25 +11,41 @@
     tools:context=".SignInActivity">
 
     <TextView
-        android:id="@+id/text_sign_up"
-        android:layout_width="match_parent"
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_6sdp"
         android:layout_marginTop="@dimen/_20sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/back"
+        android:textSize="20sp"
+        android:textColor="@color/text_color_state_accent"
+        app:drawableStartCompat="@drawable/round_arrow_back_ios_24"
+        app:drawableTint="@color/colorAccent"/>
+
+    <TextView
+        android:id="@+id/text_sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
         android:text="@string/sign_up"
         android:textColor="@color/colorBlack"
         android:textStyle="bold"
-        android:textSize="@dimen/_20sdp"
-        app:layout_constraintTop_toTopOf="parent"/>
+        android:textSize="@dimen/_25sdp"/>
 
     <TextView
         android:id="@+id/text_email"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_50sdp"
+        android:layout_marginTop="@dimen/_40sdp"
         android:text="@string/email"
         android:textColor="@color/colorBlack"
         android:textStyle="bold"
@@ -55,7 +71,7 @@
 
     <TextView
         android:id="@+id/text_password"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
@@ -85,11 +101,11 @@
 
     <TextView
         android:id="@+id/text_confirm_password"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_6sdp"
+        android:layout_marginTop="@dimen/_10sdp"
         android:text="@string/confirm_password"
         android:textColor="@color/colorBlack"
         android:textStyle="bold"
@@ -100,7 +116,7 @@
         android:layout_height="@dimen/_35sdp"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_6sdp"
         android:paddingStart="@dimen/_10sdp"
         android:paddingEnd="@dimen/_10sdp"
         android:background="@drawable/background_search"
@@ -120,16 +136,17 @@
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_20sdp"
-        android:background="@drawable/button_general"
-        android:backgroundTint="@color/colorAccent"
-        android:text="@string/sign_in"
+        android:background="@drawable/button_custom"
+        android:backgroundTint="@color/text_color_state_accent"
+        android:padding="@dimen/_8sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_gravity="center_vertical"
+        android:text="@string/sign_up"
         android:textSize="@dimen/_16sdp"
         android:textStyle="bold"
         android:textColor="@color/colorBlack"
-        android:gravity="center"
-        android:clickable="true"
-        android:focusable="true"
-        android:layout_gravity="center_vertical"/>
+        android:gravity="center"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -166,11 +183,12 @@
 
     <TextView
         android:id="@+id/text_or_sign_up_with"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_20sdp"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="@string/or_sign_up_with"
         android:textColor="@color/colorBlack"
@@ -185,18 +203,21 @@
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginEnd="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_6sdp"
-        android:background="@drawable/button_outline"
+        android:background="@drawable/button_custom"
         android:backgroundTint="#FBE38A"
         android:gravity="center"
-        android:paddingStart="@dimen/_10sdp"
-        android:paddingEnd="@dimen/_10sdp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_8sdp"
+        android:paddingStart="@dimen/_25sdp"
+        android:paddingEnd="@dimen/_25sdp"
         android:text="@string/google"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/_12sdp"
         android:textStyle="bold"
         android:clickable="true"
         android:focusable="true"
-        app:drawableStartCompat="@drawable/google_icon"/>
+        app:drawableStartCompat="@drawable/google_icon"
+        android:drawablePadding="@dimen/_10sdp" />
 
 
 </LinearLayout>

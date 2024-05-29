@@ -2,6 +2,7 @@ package com.example.notestakingapp;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,18 +12,25 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Objects;
+import com.example.notestakingapp.firebase.*;
+import com.google.firebase.auth.AuthResult;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 public class SignUpActivity extends AppCompatActivity {
-    EditText email, password, reenteredPassword;
-    TextView signUpButton, signInText, googleButton;
+    EditText emailEditText, passwordEditText, reenteredPassword;
+    TextView backButton, signUpButton, signInText, googleButton;
+    private FirebaseAuthHandler authHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,29 +44,39 @@ public class SignUpActivity extends AppCompatActivity {
         initUI(); // initiate UI components
         setupUI(findViewById(R.id.sign_up)); // hide software keyboard
 
+        // Initialize FirebaseAuthHandler
+        authHandler = new FirebaseAuthHandler();
+
         // funcs for buttons
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // button animation when clicked
-                Animation animation = AnimationUtils.loadAnimation(SignUpActivity.this, R.anim.scale_animation);
-                signUpButton.startAnimation(animation);
+                String email = emailEditText.getText().toString().trim();
+                String password = passwordEditText.getText().toString().trim();
+                if (!email.isEmpty() && !password.isEmpty()) {
+                    signUp(email, password);
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         signInText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // button animation when clicked
-                Animation animation = AnimationUtils.loadAnimation(SignUpActivity.this, R.anim.scale_animation);
-                signInText.startAnimation(animation);
+                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+                startActivity(intent);
             }
         });
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // button animation when clicked
-                Animation animation = AnimationUtils.loadAnimation(SignUpActivity.this, R.anim.scale_animation);
-                googleButton.startAnimation(animation);
+
             }
         });
     }
@@ -96,9 +114,26 @@ public class SignUpActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void signUp(String email, String password) {
+        authHandler.signUp(email, password, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(SignUpActivity.this, "Sign up successful", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                    startActivity(intent);
+                    // Optionally, navigate to another activity or update UI
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
     private void initUI() {
-        email = findViewById(R.id.input_email);
-        password = findViewById(R.id.input_password);
+        backButton = findViewById(R.id.back_button);
+        emailEditText = findViewById(R.id.input_email);
+        passwordEditText = findViewById(R.id.input_password);
         reenteredPassword = findViewById(R.id.input_reentered_password);
         signUpButton = findViewById(R.id.sign_up_button);
         signInText = findViewById(R.id.sign_in_text);

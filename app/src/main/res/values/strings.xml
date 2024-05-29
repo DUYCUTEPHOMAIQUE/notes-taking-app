@@ -46,4 +46,10 @@
     <string name="already_have_an_account">Already have an account?</string>
     <!-- Settings strings -->
     <string name="settings">Settings</string>
+    <string name="example_email">example@mail.com</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="app_settings">App settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="change_password">Change password</string>
+    <string name="sign_out">Sign out</string>
 </resources>
