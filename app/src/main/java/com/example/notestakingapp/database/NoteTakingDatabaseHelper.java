@@ -1,14 +1,16 @@
 package com.example.notestakingapp.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
 public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "note.db";
-    public static final int DB_VERSION = 2;
+    public static final int DB_VERSION = 4;
 
     //NOTE
     public static final String COLUMN_NOTE_TITLE = "NOTE_TITLE";
@@ -43,6 +45,7 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TODO_ID = "TODO_ID";
     public static final String COLUMN_TODO_CREATEAT = "CREATE_AT";
     public static final String COLUMN_TODO_DURATION = "DURATION";
+    public static final String COLUMN_TODO_COMPLETE = "COMPLETE";
 
 
     //COMPONENT
@@ -126,8 +129,8 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE TODO(" +
                     COLUMN_TODO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     COLUMN_TODO_CONTENT + " TEXT," +
-                    COLUMN_TODO_CREATEAT + " TEXT," +
-                    COLUMN_TODO_DURATION + " TEXT);"
+                    COLUMN_TODO_CREATEAT + " INTEGER," +
+                    COLUMN_TODO_DURATION + " INTEGER);"
             );
         }
 
@@ -163,10 +166,38 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE " + AUDIO_TABLE +
                     " ADD COLUMN " + COLUMN_TEXT_CREATEAT + " INTEGER"
             );
-
-
         }
 
+//        if (oldVersion < 3){
+//
+//            db.execSQL("CREATE TABLE TEMP_TODO(" +
+//                        COLUMN_TODO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+//                        COLUMN_TODO_CONTENT + " TEXT," +
+//                        COLUMN_TODO_CREATEAT + "INTEGER, " +
+//                        COLUMN_TODO_DURATION + "INTEGER )"
+//                    );
+//
+//            db.execSQL("INSERT INTO TEMP_TODO "  +
+//                        "SELECT " + COLUMN_TODO_ID + ", " + COLUMN_TODO_CONTENT + ", " +
+//                            "CAST( " + COLUMN_TODO_CREATEAT + " AS INTEGER )" + ", " +
+//                            "CAST( " + COLUMN_TODO_DURATION + " AS INTEGER )" +
+//                    "FROM TODO"
+//                    );
+//
+//            db.execSQL("DROP TABLE TODO");
+//
+//            db.execSQL("ALTER TABLE TODO_TEMP RENAME TO TODO");
+//        }
+        if (oldVersion < 3){
+            db.execSQL("ALTER TABLE " + TODO_TABLE + " ADD COLUMN " + COLUMN_TODO_COMPLETE + " NUMERIC;");
+        }
+        if (oldVersion < 4){
+            ContentValues ct = new ContentValues();
+
+            ct.put(COLUMN_TODO_COMPLETE, 0);
+
+            db.update(TODO_TABLE,ct, COLUMN_TODO_COMPLETE + " IS NULL", null);
+        }
     }
 
 }

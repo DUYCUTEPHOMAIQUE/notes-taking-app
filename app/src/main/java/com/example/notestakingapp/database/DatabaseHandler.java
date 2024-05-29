@@ -6,6 +6,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseHandler {
 	public static final int TAG_ID_DEFAULT = 1;
@@ -58,6 +61,7 @@ public class DatabaseHandler {
 	public static final String COLUMN_TODO_ID = "TODO_ID";
 	public static final String COLUMN_TODO_CREATEAT = "CREATE_AT";
 	public static final String COLUMN_TODO_DURATION = "DURATION";
+	public static final String COLUMN_TODO_COMPLETE = "COMPLETE";
 
 
 	//COMPONENT columns
@@ -147,7 +151,7 @@ public class DatabaseHandler {
 
 		//xoa du lieu trong bang component
 		db.delete(COMPONENT_TABLE, COLUMN_NOTE_ID + " = ?", new String[]{Integer.toString(noteId)});
-
+		//xoa du lieu trong bang note
 		db.delete(NOTE_TABLE, COLUMN_NOTE_ID + " = ?", new String[]{Integer.toString(noteId)});
 	}
 	//todo: public static void deleteAllNote(Context context)
@@ -172,61 +176,104 @@ public class DatabaseHandler {
 					cursor.getString(1),       //title
 					cursor.getLong(2),          //createAt
 					cursor.getString(3) );       //color
+		} else {
+			return null;
 		}
-		else return null;
 	}
+
+	//todo tag--------------
 	//todo: public ArrayList<Note> getNoteByTag(Context context, String tagName)
-	// trả về ArrayList<Note> thông qua tag
-	public ArrayList<Note> getNoteByTag(Context context, String tagName) {
+	// trả về ArrayList<Note> thông qua  tag
+	@SuppressLint("Range")
+	public ArrayList<Note> getNoteByTagName(Context context, String tagName) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
-		String query = "SELECT * FROM "+ NOTE_TABLE+" WHERE " + COLUMN_TAG_NAME  +" = ?";
+		String query = "SELECT " + COLUMN_NOTE_ID + ", " + COLUMN_NOTE_TITLE + ", " + COLUMN_NOTE_CREATEAT + ", " + COLUMN_NOTE_COLOR  +
+				" FROM " + NOTE_TAG_TABLE +  " NT " +
+				" JOIN " + TAG_TABLE + " T "+ " ON " + "NT.TAG_ID = T.TAG_ID" +
+				" WHERE " + COLUMN_TAG_NAME + " = ?" +
+				" ORDER BY " + COLUMN_NOTE_CREATEAT + " DESC";
 
-		Cursor cursor = db.rawQuery(query, new String[]{tagName});
+		Cursor cursor = db.rawQuery(query, new String[]{tagName.trim().toLowerCase()});
 
 		if (cursor.moveToFirst()){
 			ArrayList<Note> listNote = new ArrayList<Note>();
 			do{
-				listNote.add(new Note(cursor.getInt(0),  //noteId
-						cursor.getString(1),       //title
-						cursor.getLong(2),          //createAt
-						cursor.getString(3) ) );      //color
+				listNote.add(new Note(cursor.getInt(cursor.getColumnIndex(COLUMN_NOTE_ID)),  //noteId
+						cursor.getString(cursor.getColumnIndex(COLUMN_NOTE_TITLE)),       //title
+						cursor.getLong(cursor.getColumnIndex(COLUMN_NOTE_CREATEAT)),          //createAt
+						cursor.getString(cursor.getColumnIndex(COLUMN_NOTE_COLOR)) ) );      //color
 			} while (cursor.moveToNext());
 			return listNote;
+		} else {
+			return null;
 		}
-		else return null;
 	}
 	//todo: public ArrayList<Note> searchNote(Context context, String searchText)
 	// tìm note bằng search text
+	@SuppressLint("Range")
 	public ArrayList<Note> fNote(Context context, String searchText){
+
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
-		String query = "SELECT * FROM "+ NOTE_TABLE +" WHERE " + COLUMN_TODO_CONTENT + " LIKE ? ";
+		//String query = "SELECT * FROM "+ NOTE_TABLE +" WHERE " + COLUMN_TODO_CONTENT + " LIKE ? " + " ORDER BY " + COLUMN_NOTE_CREATEAT + " DESC";
+		String query = "SELECT DISTINCT " + "N." + COLUMN_NOTE_ID + ", " + "N." + COLUMN_NOTE_TITLE + ", " + "N." + COLUMN_NOTE_CREATEAT + ", " + "N." + COLUMN_NOTE_COLOR  +
+				" FROM " + NOTE_TABLE + " N " +
+				" JOIN " + TEXTSEGMENT_TABLE + " T " + " ON " + "N.NOTE_ID = T.NOTE_ID " +
+				" WHERE " + "N." + COLUMN_NOTE_TITLE + " LIKE ? OR T." + COLUMN_TEXT + " LIKE ? " +
+				" ORDER BY " +" N." + COLUMN_NOTE_CREATEAT + " DESC";
 
-		Cursor cursor = db.rawQuery(query, new String[]{"'%" + searchText + "%'"});
+		Cursor cursor = db.rawQuery(query, new String[]{"%" + searchText + "%", "%" + searchText + "%"});
+		ArrayList<Note> listNote = new ArrayList<Note>();
+		try {
+			if (cursor.moveToFirst()){
 
-		if (cursor.moveToFirst()){
-			ArrayList<Note> listNote = new ArrayList<Note>();
-			do{
-				listNote.add(new Note(cursor.getInt(0),  //noteId
-						cursor.getString(1),       //title
-						cursor.getLong(2),          //createAt
-						cursor.getString(3) ) );      //color
-			} while (cursor.moveToNext());
-			return listNote;
+				do{
+					listNote.add(new Note(cursor.getInt(cursor.getColumnIndex(COLUMN_NOTE_ID)),  //noteId
+							cursor.getString(cursor.getColumnIndex(COLUMN_NOTE_TITLE)),       //title
+							cursor.getLong(cursor.getColumnIndex(COLUMN_NOTE_CREATEAT)),          //createAt
+							cursor.getString(cursor.getColumnIndex(COLUMN_NOTE_COLOR)) ) );      //color
+				} while (cursor.moveToNext());
+
+			}
+		} catch (Exception e){
+			e.printStackTrace();
 		}
-		else return null;
+		return listNote;
 	}
 
+//	@SuppressLint("Range")
+//	public void fNote(Context context, String searchText){
+//		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+//		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+//
+//		String query = "SELECT " + "N." + COLUMN_NOTE_ID + ", " + "N." +  COLUMN_NOTE_TITLE + ", " + "N." +  COLUMN_NOTE_CREATEAT + ", " + "N." +  COLUMN_NOTE_COLOR  +
+//				" FROM " + NOTE_TABLE + " N " +
+//				" JOIN " + TEXTSEGMENT_TABLE + " T " + " ON " + "N.NOTE_ID = T.NOTE_ID " +
+////				" WHERE " + "N." + COLUMN_NOTE_TITLE + " LIKE ? OR T." + COLUMN_TEXT + " LIKE ? " +
+//				" WHERE " + "N." + COLUMN_NOTE_TITLE + " LIKE ? "+
+//				" ORDER BY " + COLUMN_NOTE_CREATEAT + " DESC";
+//		Log.d("Duong", "xxx");
+//		Cursor cursor = db.rawQuery(query, new String[]{"%" + searchText + "%"});
+//
+//		if (cursor.moveToFirst()){
+//			ArrayList<Note> listNote = new ArrayList<Note>();
+//			do{
+//				for (int i = 0; i < cursor.getColumnCount(); i++){
+//					System.out.println(cursor.getType(i));
+//				}
+//			} while (cursor.moveToNext());
+//		}
+//	}
 	//todo: public ArrayList<Note> getAllNote(Context context)
 	// lấy tất cả các Note
 	public ArrayList<Note> getAllNote(Context context) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
-		String query = "SELECT * FROM "+ NOTE_TABLE;
+		String query = "SELECT * FROM "+ NOTE_TABLE + " ORDER BY " + COLUMN_NOTE_CREATEAT + " DESC";
 
 		Cursor cursor = db.rawQuery(query, null);
 
@@ -239,8 +286,9 @@ public class DatabaseHandler {
 						cursor.getString(3) ) );      //color
 			} while (cursor.moveToNext());
 			return listNote;
+		} else {
+			return null;
 		}
-		else return null;
 	}
 	//todo: public ArrayList<Note> getNoteByCreateAt(Context context, String order)
 	public ArrayList<Note> getNoteByCreateAt(Context context, String order) {    //truyền giá trị biến order là  "desc" hoặc "asc"
@@ -260,8 +308,9 @@ public class DatabaseHandler {
 						cursor.getString(3) ) );      //color
 			} while (cursor.moveToNext());
 			return listNote;
+		} else {
+			return null;
 		}
-		else return null;
 	}
 	//todo: public ArrayList<Component> getAllComponent(Context context, int noteId)
 	//trả về 1 list component . thằng duy dùng cái này để update
@@ -284,8 +333,7 @@ public class DatabaseHandler {
 				));
 			} while (cursor.moveToNext());
 			return  list;
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -314,7 +362,7 @@ public class DatabaseHandler {
 		}
 	}
 
-	//---------------------------------------------TEXTSEGMENT-----------------------------------------
+	//todo---------------------------------------------TEXTSEGMENT-----------------------------------------
 	//todo: public static long insertTextSegment(Context context, int noteId, String text)
 	// Thêm  1 text Segment
 	public static long insertTextSegment(Context context, int noteId, String text) {
@@ -410,7 +458,7 @@ public class DatabaseHandler {
 		}
 	}
 
-	//------------------------------------------------------ IMAGE------------------------------------------
+	//todo------------------------------------------------------ IMAGE------------------------------------------
 	//todo: public static long insertImage(Context context, int noteId, byte[] imageData)
 	// thêm 1 bản ghi image vào bảng Image
 	public static long insertImage(Context context, int noteId, byte[] imageData) {
@@ -506,7 +554,7 @@ public class DatabaseHandler {
 
 
 
-	//----------------------------------------------------- AUDIO-------------------------------------------
+	//todo----------------------------------------------------- AUDIO-------------------------------------------
 	//todo: public static long insertAudio(Context context, int noteId, byte[] audioData)
 	public static long insertAudio(Context context, int noteId, byte[] audioData) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -591,7 +639,7 @@ public class DatabaseHandler {
 
 
 
-	//--------------------------------------------------------TAG------------------------------------------
+	//todo--------------------------------------------------------TAG------------------------------------------
 	//todo: public static void deleteAllTag(Context context)
 	//huy's testing function
 	public static void deleteAllTag(Context context) {
@@ -606,7 +654,7 @@ public class DatabaseHandler {
 
 		ContentValues ct = new ContentValues();
 
-		ct.put(COLUMN_TAG_NAME, tagName.trim());
+		ct.put(COLUMN_TAG_NAME, tagName.trim().toLowerCase());
 
 		return db.insert(TAG_TABLE, null, ct);
 	}
@@ -620,6 +668,7 @@ public class DatabaseHandler {
 		db.delete(TAG_TABLE, COLUMN_TAG_ID + " = ?", new String[]{Integer.toString(tagId)});
 	}
 	//ToDo public int getTagByTagName(Context context, String tagName)
+
 //    public int getTagByTagName(Context context, String tagName){
 //        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 //        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
@@ -641,21 +690,63 @@ public class DatabaseHandler {
 	}
 
 	//todo: public long insertTodo(Context context, int todoId, @Nullable String content,@NonNull String createAt,@Nullable String duration )
-	public static long insertTodo(Context context, int todoId, @Nullable String content,@NonNull String createAt,@Nullable String duration) {
+//	public static long insertTodo(Context context, String content, long duration, boolean isCompleted) {
+//		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+//		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+//
+//		ContentValues ct = new ContentValues();
+//
+//		ct.put(COLUMN_TODO_CONTENT, content);
+//		ct.put(COLUMN_TODO_CREATEAT , System.currentTimeMillis());
+//		ct.put(COLUMN_TODO_DURATION, duration);
+//		ct.put(COLUMN_TODO_COMPLETE, isCompleted);
+//
+//		return db.insert(TODO_TABLE, null, ct);
+//	}
+
+	public static long insertTodo(Context context, String content,Long duration) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
 		ContentValues ct = new ContentValues();
-		//todo's id is auto increment?
-//		ct.put(COLUMN_TODO_ID , todoId);
+
 		ct.put(COLUMN_TODO_CONTENT, content);
-		ct.put(COLUMN_TODO_CREATEAT , createAt);
+		ct.put(COLUMN_TODO_CREATEAT, System.currentTimeMillis());
 		ct.put(COLUMN_TODO_DURATION, duration);
+		ct.put(COLUMN_TODO_COMPLETE, false);
 
 		return db.insert(TODO_TABLE, null, ct);
 	}
+
 	//todo: public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull String createAt,@Nullable String duration)
-	public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull String createAt,@Nullable String duration) {
+	public int updateTodo(Context context, int todoId, Long duration) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+		ContentValues ct = new ContentValues();
+
+		ct.put(COLUMN_TODO_ID , todoId);
+		ct.put(COLUMN_TODO_DURATION, duration);
+
+		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
+	}
+
+
+	public int updateTodo(Context context, int todoId, Boolean isComplete) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+		ContentValues ct = new ContentValues();
+
+		ct.put(COLUMN_TODO_ID , todoId);
+		ct.put(COLUMN_TODO_COMPLETE, isComplete);
+
+		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
+	}
+
+
+
+	public int updateTodo(Context context, int todoId, String content) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -663,11 +754,27 @@ public class DatabaseHandler {
 
 		ct.put(COLUMN_TODO_ID , todoId);
 		ct.put(COLUMN_TODO_CONTENT, content);
-		ct.put(COLUMN_TODO_CREATEAT , createAt);
-		ct.put(COLUMN_TODO_DURATION, duration);
+
 
 		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
 	}
+
+//	public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull Long createAt,@Nullable Long duration) {
+//		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+//		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+//
+//		ContentValues ct = new ContentValues();
+//
+//		ct.put(COLUMN_TODO_ID , todoId);
+//		ct.put(COLUMN_TODO_CONTENT, content);
+//		ct.put(COLUMN_TODO_CREATEAT , createAt);
+//		ct.put(COLUMN_TODO_DURATION, duration);
+//
+//		return  db.update(TODO_TABLE, ct, COLUMN_TODO_ID +" = ?", new String[]{Integer.toString(todoId)});
+//	}
+
+
+
 	//todo: public int deleteTodo(Context context, int todoId)
 	public int deleteTodo(Context context, int todoId) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -690,11 +797,37 @@ public class DatabaseHandler {
 				listToDo.add(new ToDo(cursor.getInt(0),
 						cursor.getString(1),
 						cursor.getLong(2),
-						cursor.getLong(3) ) );
+						cursor.getLong(3),
+						cursor.getInt(4) == 1
+				) );
 			} while (cursor.moveToNext());
 			return listToDo;
+		} else {
+			return null;
 		}
-		else return null;
+	}
+
+	public ArrayList<ToDo> getToDoListCompletedOrNot (Context context, Boolean isCompleted, String orderBy ){
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+
+		String query = "SELECT * FROM " + TODO_TABLE + " WHERE " + COLUMN_TODO_COMPLETE + " = ? ORDER BY " + orderBy;
+		Cursor cursor = db.rawQuery(query, new String[]{Boolean.toString(isCompleted)});
+
+		if (cursor.moveToFirst()){
+			ArrayList<ToDo> listToDo = new ArrayList<ToDo>();
+			do{
+				listToDo.add(new ToDo(cursor.getInt(0),
+						cursor.getString(1),
+						cursor.getLong(2),
+						cursor.getLong(3),
+						cursor.getInt(4) == 1
+				) );
+			} while (cursor.moveToNext());
+			return listToDo;
+		} else {
+			return null;
+		}
 	}
 
 

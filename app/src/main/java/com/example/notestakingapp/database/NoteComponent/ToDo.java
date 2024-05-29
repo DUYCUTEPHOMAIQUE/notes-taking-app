@@ -8,12 +8,14 @@ public class ToDo {
     private String content;
     private long createAt;
     private long duration;
+    private boolean isCompleted;
 
-    public ToDo(int todoId, @Nullable String content, @NonNull long createAt, @Nullable  long duration) {
+    public ToDo(int todoId, String content, long createAt, long duration, boolean isCompleted) {
         this.todoId = todoId;
         this.content = content;
         this.createAt = createAt;
         this.duration = duration;
+        this.isCompleted = isCompleted;
     }
 
     public int getId() {
@@ -46,5 +48,13 @@ public class ToDo {
 
     public void setDuration(long duration) {
         this.duration = duration;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 }
