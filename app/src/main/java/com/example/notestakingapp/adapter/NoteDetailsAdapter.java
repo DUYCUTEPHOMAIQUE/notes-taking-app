@@ -277,33 +277,42 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             playBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    sharedViewModel.setPlaying(true);
+                    int currentPosition = getAdapterPosition();
+                    sharedViewModel.setPlayingPosition(currentPosition);
                     sharedViewModel.isPlaying().observe(lifecycleOwner, new Observer<Boolean>() {
                         @Override
                         public void onChanged(Boolean startPlaying) {
-                            Log.d("audioDuyTest", "bool = "+ startPlaying);
+                            if (currentPosition == sharedViewModel.getPlayingPosition().getValue()) {
+                                if (currentPosition == getAdapterPosition()) {
+                                    if (startPlaying) {
+                                        ValueAnimator animator = ValueAnimator.ofFloat(0f, 0.5f);
+                                        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                            @Override
+                                            public void onAnimationUpdate(@NonNull ValueAnimator animation) {
+                                                playBtn.setProgress((Float) animation.getAnimatedValue());
+                                            }
+                                        });
+                                        animator.setDuration(500);
+                                        playingBar.setRepeatCount(ValueAnimator.INFINITE);
+                                        animator.start();
+                                        playingBar.playAnimation();
+                                    } else {
+                                        ValueAnimator animator = ValueAnimator.ofFloat(0.5f, 1f);
+                                        animator.addUpdateListener(animation -> playBtn.setProgress((Float) animation.getAnimatedValue()));
 
-                            if (startPlaying) {
-                                ValueAnimator animator = ValueAnimator.ofFloat(0f, 0.5f);
-                                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                                    @Override
-                                    public void onAnimationUpdate(@NonNull ValueAnimator animation) {
-                                        playBtn.setProgress((Float) animation.getAnimatedValue());
+                                        animator.setDuration(500);
+                                        animator.start();
+
+                                        playingBar.pauseAnimation();
                                     }
-                                });
-                                animator.setDuration(500);
-                                playingBar.setRepeatCount(ValueAnimator.INFINITE);
-                                animator.start();
-                                playingBar.playAnimation();
-                            } else {
-                                ValueAnimator animator = ValueAnimator.ofFloat(0.5f, 1f);
-                                animator.addUpdateListener(animation -> playBtn.setProgress((Float) animation.getAnimatedValue()));
-
-                                animator.setDuration(500);
-                                animator.start();
-
+                                    sharedViewModel.setPlayingPosition(-1);
+                                }
+                            }else {
+                                playBtn.setProgress(0f);
                                 playingBar.pauseAnimation();
                             }
+
+
                         }
                     });
                     int adapterPosition = getAdapterPosition();

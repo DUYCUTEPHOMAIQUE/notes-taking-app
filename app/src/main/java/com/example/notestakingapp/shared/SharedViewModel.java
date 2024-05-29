@@ -1,4 +1,6 @@
 package com.example.notestakingapp.shared;
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -113,13 +115,14 @@ public class SharedViewModel extends ViewModel {
     }
 
 
-    private final MutableLiveData<Boolean> isPlaying = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(true);
 
     public MutableLiveData<Boolean> isPlaying() {
         return isPlaying;
     }
 
     public void setPlaying(boolean playing) {
+        Log.d("audioDuyTest", "set lai playing" + playing);
         isPlaying.setValue(playing);
     }
 

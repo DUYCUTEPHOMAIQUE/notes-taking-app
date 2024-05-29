@@ -208,13 +208,12 @@ public class NoteEditActivity extends AppCompatActivity {
                 Item audioItem = mItemList.get(position);
                 boolean fixTempTest = true;
                 byte[] audioData = audioItem.getAudioData();
-
+                Log.d("audioDuyT", "isPlaying="+sharedViewModel.isPlaying().getValue());
                 if(sharedViewModel.isPlaying().getValue() && audioData!= null) {
                     startPlaying(audioData);
-                    Log.d("playing", "OK");
+                    sharedViewModel.setPlaying(false);
                 }
                 else {
-                    Log.d("playing", "not OK");
                     stopPlaying();
                 }
             }
@@ -332,7 +331,7 @@ public class NoteEditActivity extends AppCompatActivity {
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
-                    sharedViewModel.setPlaying(false);
+                    sharedViewModel.setPlaying(true);
                 }
             });
             player.prepare();
@@ -343,7 +342,7 @@ public class NoteEditActivity extends AppCompatActivity {
     }
 
     private void stopPlaying() {
-        sharedViewModel.setPlaying(false);
+        sharedViewModel.setPlaying(true);
         if(player == null) return;
         player.release();
         player = null;
@@ -474,6 +473,10 @@ public class NoteEditActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         titleText = NoteDetailsAdapter.title;
+        if(player!=null) {
+            player.release();
+            player = null;
+        }
         super.onDestroy();
     }
 
