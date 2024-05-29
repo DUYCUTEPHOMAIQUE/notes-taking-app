@@ -54,8 +54,8 @@ public class TodoFragment extends Fragment {
     private SharedViewModel sharedViewModel;
     private String mParam1;
     private String mParam2;
-    public TodoAdapter todoAdapter;
-    public TodoAdapter completedTodoAdapter;
+    public static TodoAdapter todoAdapter;
+    public static TodoAdapter completedTodoAdapter;
     private SQLiteDatabase db;
     private DatabaseHandler databaseHandler;
     private NoteTakingDatabaseHelper noteTakingDatabaseHelper;
@@ -360,6 +360,10 @@ public class TodoFragment extends Fragment {
         completeTouchHelper.attachToRecyclerView(completedRecyclerView);
     }
 
+    public static void performSearch(String query) {
+        todoAdapter.getFilter().filter(query);
+        completedTodoAdapter.getFilter().filter(query);
+    }
 
     private void updateViewWhenInsertOrUpdate() {
         mList = databaseHandler.getToDoListCompletedOrNot(getActivity(), false, "DESC");

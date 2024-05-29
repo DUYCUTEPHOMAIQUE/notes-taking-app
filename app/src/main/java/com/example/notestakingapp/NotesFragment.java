@@ -67,7 +67,7 @@ public class NotesFragment extends Fragment {
     public List<NoteDetailsComponent> list;
     private String mParam2;
     public BouncyRecyclerView recyclerView;
-    public NotesAdapter notesAdapter;
+    public static NotesAdapter notesAdapter;
     private SQLiteDatabase db;
     private DatabaseHandler databaseHandler;
     private NoteTakingDatabaseHelper noteTakingDatabaseHelper;
@@ -144,7 +144,7 @@ public class NotesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_notes);
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        notesAdapter = new NotesAdapter();
+        notesAdapter = new NotesAdapter(getActivity());
 
         notesAdapter.setNoteListener(new NotesAdapter.NoteListener() {
             @Override
@@ -198,6 +198,11 @@ public class NotesFragment extends Fragment {
                 updateView();
             }
         });
+    }
+
+    public static void performSearch(String query) {
+        Log.d("filterDuy", "query = " + query);
+        notesAdapter.getFilter().filter(query);
     }
 
     public void updateView() {

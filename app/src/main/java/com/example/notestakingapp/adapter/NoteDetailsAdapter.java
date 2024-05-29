@@ -273,6 +273,15 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             playBtn = itemView.findViewById(R.id.play_button_item);
             playingBar = itemView.findViewById(R.id.playing_bar_item);
             trashImage = itemView.findViewById(R.id.image_trash_audio);
+            trashImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    if (audioListener != null && adapterPosition != RecyclerView.NO_POSITION) {
+                        audioListener.onTrashClick(adapterPosition);
+                    }
+                }
+            });
 
             playBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

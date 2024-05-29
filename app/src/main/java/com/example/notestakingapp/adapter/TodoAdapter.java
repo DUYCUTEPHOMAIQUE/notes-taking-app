@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +23,14 @@ import com.example.notestakingapp.TodoFragment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.ui.ToDoTest;
 import com.example.notestakingapp.utils.AnimUtils;
+import com.example.notestakingapp.utils.NoteDetailsComponent;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> {
+public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> implements Filterable {
     List<ToDo> listTodo;
+    List<ToDo> oldList;
     TodoListener todoListener;
 
     public void setTodoListener(TodoListener todoListener) {
@@ -34,6 +39,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
 
     public void setTodos(List<ToDo> list) {
         this.listTodo = list;
+        this.oldList = list;
         notifyDataSetChanged();
     }
 
@@ -69,6 +75,35 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
         if (listTodo != null)
             return listTodo.size();
         return 0;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String query = constraint.toString().trim();
+                List<ToDo> list = new ArrayList<>();
+                if (query == null || query.isEmpty()) {
+                    list = oldList;
+                } else {
+                    for(ToDo i: oldList) {
+                        if(i.getContent().toLowerCase().contains(query.toLowerCase())) {
+                            list.add(i);
+                        }
+                    }
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = list;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                listTodo = (List<ToDo>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     static class TodoViewHolder extends RecyclerView.ViewHolder {

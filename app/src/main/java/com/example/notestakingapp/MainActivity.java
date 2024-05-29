@@ -25,6 +25,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -159,10 +161,34 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         mBottomNavigationView.getMenu().findItem(R.id.home_main).setChecked(true);
                         inputSearch.setHint("Search Notes..");
+                        inputSearch.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    String query = s.toString().trim();
+                                    searchNotes(query);
+                            }
+                            @Override
+                            public void afterTextChanged(Editable s) {}
+                        });
                         break;
                     case 1:
                         mBottomNavigationView.getMenu().findItem(R.id.todo_main).setChecked(true);
                         inputSearch.setHint("Search To do..");
+                        inputSearch.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    String query = s.toString().trim();
+                                    Log.d("todoFrg", query);
+                                    searchToDo(query);
+                            }
+                            @Override
+                            public void afterTextChanged(Editable s) {}
+                        });
                         break;
 
                 }
@@ -231,6 +257,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+
+    private void searchToDo(String query) {
+        TodoFragment.performSearch(query);
+    }
+
+    private void searchNotes(String query) {
+        NotesFragment.performSearch(query);
     }
 
     private void routeToTodoEdit() {

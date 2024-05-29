@@ -220,7 +220,10 @@ public class NoteEditActivity extends AppCompatActivity {
 
             @Override
             public void onTrashClick(int position) {
-
+                Log.d("audioDuyT", "clicked");
+                databaseHandler.deleteAudio(NoteEditActivity.this, mItemList.get(position).getVoiceId());
+                mItemList.remove(position);
+                noteDetailsAdapter.notifyItemRemoved(position);
             }
         });
 
