@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class FirebaseAuthHandler {
-
     public static final String TAG = "EmailPassword";
     public FirebaseAuth mAuth;
 
@@ -20,7 +19,7 @@ public class FirebaseAuthHandler {
     public FirebaseAuthHandler() {
         mAuth = FirebaseAuth.getInstance();
     }
-    public void signUp(String email, String password, final OnCompleteListener<AuthResult> context) {
+    public void signUp(String email, String password, final Context context) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -31,7 +30,7 @@ public class FirebaseAuthHandler {
                             updateUI(user);
                         } else {
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText((Context) context, "Authentication failed.",
+                            Toast.makeText(context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }

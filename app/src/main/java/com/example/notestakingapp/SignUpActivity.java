@@ -116,19 +116,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUp(String email, String password) {
-        authHandler.signUp(email, password, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(SignUpActivity.this, "Sign up successful", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    // Optionally, navigate to another activity or update UI
-                } else {
-                    Toast.makeText(SignUpActivity.this, "Sign up failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        authHandler.signUp(email, password, this);
     }
     private void initUI() {
         backButton = findViewById(R.id.back_button);
