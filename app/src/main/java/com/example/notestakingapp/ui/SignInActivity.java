@@ -43,7 +43,7 @@ public class SignInActivity extends AppCompatActivity {
         initUI(); // initiate UI components
         setupUI(findViewById(R.id.sign_in)); // hide software keyboard
 
-        // Initialize FirebaseAuthHandler
+        // initialize FirebaseAuthHandler
         authHandler = new FirebaseAuthHandler();
 
         // funcs for buttons
@@ -70,9 +70,6 @@ public class SignInActivity extends AppCompatActivity {
                     if (!email.isEmpty() && !password.isEmpty()) {
                         if (validateInput(email, password)) {
                             signIn(email, password);
-                            Toast.makeText(SignInActivity.this, "Sign in successful!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                            startActivity(intent);
                         }
                     } else {
                         Toast.makeText(SignInActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();

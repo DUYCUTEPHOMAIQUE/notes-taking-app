@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -51,6 +52,12 @@ public class SettingsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        SharedPreferences sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String userEmail = sharedPref.getString("userEmail", "No Email");
+        TextView textProfileName = findViewById(R.id.text_profile_name);
+        textProfileName.setText(userEmail);
+
         initUI(); // initiate UI components
 
         // Initialize FirebaseAuthHandler
@@ -103,22 +110,7 @@ public class SettingsActivity extends AppCompatActivity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authHandler.signOut(SettingsActivity.this);
-                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                    // Show a toast message
-                    Toast.makeText(SettingsActivity.this, "Sign out successful!", Toast.LENGTH_SHORT).show();
-
-                    // Redirect to login screen or main screen
-                    Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-
-                    // Finish the current activity
-                    finish();
-                } else {
-                    // Show a toast message indicating sign out failed
-                    Toast.makeText(SettingsActivity.this, "Sign out failed. Please try again.", Toast.LENGTH_SHORT).show();
-                }
+                showConfirmSignOut(SettingsActivity.this);
             }
         });
     }
@@ -132,7 +124,6 @@ public class SettingsActivity extends AppCompatActivity {
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.layout_confirm_sign_out);
-
         dialog.show();
         Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -151,6 +142,21 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 authHandler.signOut(SettingsActivity.this);
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    // Show a toast message
+                    Toast.makeText(SettingsActivity.this, "Sign out successful!", Toast.LENGTH_SHORT).show();
+
+                    // redirect to login screen or main screen
+                    Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+                    // finish the current activity
+                    finish();
+                } else {
+                    // Show a toast message indicating sign out failed
+                    Toast.makeText(SettingsActivity.this, "Sign out failed. Please try again.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
