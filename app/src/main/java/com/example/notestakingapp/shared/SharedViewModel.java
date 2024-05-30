@@ -179,4 +179,16 @@ public class SharedViewModel extends ViewModel {
     public void setTest(MutableLiveData<Boolean> test) {
         this.test = test;
     }
+
+    public MutableLiveData<Boolean> getIsInputFocus() {
+        return isInputFocus;
+    }
+
+    private MutableLiveData<Boolean> isInputFocus = new MutableLiveData<>();
+
+
+
+    public void setInputFocus(boolean inputFocus) {
+        isInputFocus.setValue(inputFocus);
+    }
 }

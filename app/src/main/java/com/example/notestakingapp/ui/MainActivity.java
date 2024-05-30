@@ -187,6 +187,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        inputSearch.setOnFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus) {
+                sharedViewModel.setInputFocus(hasFocus);
+            }else {
+                sharedViewModel.setInputFocus(hasFocus);
+            }
+        });
         //su kien item in menu thay doi
         mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")

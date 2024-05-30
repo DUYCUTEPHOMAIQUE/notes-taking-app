@@ -167,6 +167,7 @@ public class TodoFragment extends Fragment {
                 Log.d("updateView", "upppp!!");
             }
         });
+
         ItemTouchHelper incompleteTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             @Override
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -177,14 +178,21 @@ public class TodoFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 ToDo task = mList.get(position);
+                if(sharedViewModel.getIsInputFocus().getValue()) {
+                    return;
+                }
                 //ui
                 mList.remove(position);
                 todoAdapter.notifyItemRemoved(position);
+
                 Snackbar snackbar = Snackbar.make(recyclerView, "Task completed", Snackbar.LENGTH_LONG);
                 snackbar.setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //ui
+                        if(sharedViewModel.getIsInputFocus().getValue()) {
+                            return;
+                        }
                         task.setCompleted(false);
                         mList.add(position, task);
                         todoAdapter.notifyItemInserted(position);
@@ -209,6 +217,9 @@ public class TodoFragment extends Fragment {
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
                                     @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                     int actionState, boolean isCurrentlyActive) {
+                if(sharedViewModel.getIsInputFocus().getValue()) {
+                    return;
+                }
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     View itemView = viewHolder.itemView;
                     float itemHeight = itemView.getBottom() - itemView.getTop();
@@ -273,6 +284,9 @@ public class TodoFragment extends Fragment {
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
                                     @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,
                                     int actionState, boolean isCurrentlyActive) {
+                if(sharedViewModel.getIsInputFocus().getValue()) {
+                    return;
+                }
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     View itemView = viewHolder.itemView;
                     float itemHeight = itemView.getBottom() - itemView.getTop();
@@ -331,6 +345,9 @@ public class TodoFragment extends Fragment {
                 ToDo task = completedMList.get(position);
                 completedMList.remove(position);
                 completedTodoAdapter.notifyItemRemoved(position);
+                if(sharedViewModel.getIsInputFocus().getValue()) {
+                    return;
+                }
                 Snackbar snackbar = Snackbar.make(completedRecyclerView, "Delete Task completed", Snackbar.LENGTH_LONG);
                 snackbar.setAction("Undo", new View.OnClickListener() {
                     @Override
