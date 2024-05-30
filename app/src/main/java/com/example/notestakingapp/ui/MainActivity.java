@@ -244,11 +244,12 @@ public class MainActivity extends AppCompatActivity {
 				startActivity(intent);
 			}
 		});
-//		huyTesting();
+		huyTesting();
 	}
 
 	private void huyTesting() {
-		FirebaseHandler.syncToFirebase(this);
+//		FirebaseHandler.syncToFirebase(this);
+		DatabaseHandler.insertTodo(this, "Buôn ma tuý", 0l, false);
 	}
 
 	private void searchToDo(String query) {
