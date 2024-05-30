@@ -30,6 +30,7 @@ import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.firebase.FirebaseAuthHandler;
 import com.example.notestakingapp.shared.SharedViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public class SettingsActivity extends AppCompatActivity {
     TextView backButton;
     RelativeLayout profile;
     LinearLayout editProfileButton, notificationsButton, signInButton, signUpButton, changePasswordButton, signOutButton;
-    private static FirebaseAuthHandler authHandler;
+    private FirebaseAuthHandler authHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,7 +101,22 @@ public class SettingsActivity extends AppCompatActivity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showConfirmSignOut(SettingsActivity.this);
+                authHandler.signOut(SettingsActivity.this);
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    // Show a toast message
+                    Toast.makeText(SettingsActivity.this, "Sign out successful!", Toast.LENGTH_SHORT).show();
+
+                    // Redirect to login screen or main screen
+                    Intent intent = new Intent(SettingsActivity.this, SignInActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
+                    // Finish the current activity
+                    finish();
+                } else {
+                    // Show a toast message indicating sign out failed
+                    Toast.makeText(SettingsActivity.this, "Sign out failed. Please try again.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -132,8 +148,7 @@ public class SettingsActivity extends AppCompatActivity {
         confirmSignOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                authHandler.signOut();
-
+                authHandler.signOut(SettingsActivity.this);
             }
         });
 

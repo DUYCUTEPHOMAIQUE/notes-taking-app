@@ -1,6 +1,7 @@
 package com.example.notestakingapp.firebase;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -59,8 +60,12 @@ public class FirebaseAuthHandler {
                 });
     }
 
-    public void signOut() {
+    public void signOut(Context context) {
         FirebaseAuth.getInstance().signOut();
+        SharedPreferences preferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
 
