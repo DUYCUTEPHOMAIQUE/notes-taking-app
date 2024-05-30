@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Initialize FirebaseAuthHandler
         authHandler = new FirebaseAuthHandler();
 
-        // funcs for buttons
+        // methods for buttons
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,12 +56,22 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
         signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View v) {
+                signUpAttempt();
+            }
+
+            private void signUpAttempt() {
                 String email = emailEditText.getText().toString().trim();
                 String password = passwordEditText.getText().toString().trim();
+                String rePassword = reenteredPassword.getText().toString().trim();
+
                 if (!email.isEmpty() && !password.isEmpty()) {
-                    signUp(email, password);
+                    if (validateInput(email, password, rePassword)) {
+                        signUp(email, password);
+                        Toast.makeText(SignUpActivity.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
                 } else {
                     Toast.makeText(SignUpActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
                 }
@@ -79,6 +90,25 @@ public class SignUpActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean validateInput(String email, String password, String rePassword) {
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(SignUpActivity.this, "Please enter a valid email address.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (password.isEmpty() || password.length() < 6) {
+            Toast.makeText(SignUpActivity.this, "Password must be at least 6 characters long.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!password.equals(rePassword)) {
+            Toast.makeText(SignUpActivity.this, "Passwords do not match.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     // hide software keyboard
