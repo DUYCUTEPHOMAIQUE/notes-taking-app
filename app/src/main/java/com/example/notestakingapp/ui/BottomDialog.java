@@ -1,30 +1,21 @@
 package com.example.notestakingapp.ui;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 
-import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.transition.Fade;
-import android.transition.Visibility;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -32,27 +23,19 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.airbnb.lottie.LottieAnimationView;
-import com.example.notestakingapp.MainActivity;
-import com.example.notestakingapp.NoteEditActivity;
 import com.example.notestakingapp.R;
-import com.example.notestakingapp.TodoFragment;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;

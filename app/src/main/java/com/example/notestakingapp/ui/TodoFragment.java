@@ -1,9 +1,8 @@
-package com.example.notestakingapp;
+package com.example.notestakingapp.ui;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -25,13 +24,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.notestakingapp.R;
 import com.example.notestakingapp.adapter.TodoAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
-import com.example.notestakingapp.ui.BottomDialog;
-import com.factor.bouncy.BouncyRecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -145,15 +143,14 @@ public class TodoFragment extends Fragment {
             public void onCheckBoxClick(int position, ToDo toDo, boolean isChecked) {
                 toDo.setCompleted(isChecked);
                 databaseHandler.updateTodo(getActivity(), toDo.getId(), isChecked);
-                if(toDo == null)
-                        return;
-                if(isChecked) {
+                if (toDo == null)
+                    return;
+                if (isChecked) {
                     mList.remove(position);
                     todoAdapter.notifyItemRemoved(position);
                     completedMList.add(0, toDo);
                     completedTodoAdapter.notifyItemInserted(0);
-                }
-                else {
+                } else {
                     completedMList.remove(position);
                     completedTodoAdapter.notifyItemRemoved(position);
                     mList.add(0, toDo);
@@ -271,6 +268,7 @@ public class TodoFragment extends Fragment {
             public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
                 return false;
             }
+
             @Override
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
                                     @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,
@@ -331,13 +329,9 @@ public class TodoFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
                 ToDo task = completedMList.get(position);
-                task.setCompleted(false);
                 completedMList.remove(position);
                 completedTodoAdapter.notifyItemRemoved(position);
-                mList.add(task);
-                todoAdapter.notifyItemInserted(mList.size() - 1 );
-
-                Snackbar snackbar = Snackbar.make(completedRecyclerView, "Task completed", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(completedRecyclerView, "Delete Task completed", Snackbar.LENGTH_LONG);
                 snackbar.setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -353,6 +347,15 @@ public class TodoFragment extends Fragment {
 
                 });
                 snackbar.show();
+                snackbar.addCallback(new Snackbar.Callback() {
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
+                            //todo: db --OK
+                            databaseHandler.deleteTodo(getActivity(), task.getId());
+                        }
+                    }
+                });
             }
         });
 
@@ -369,7 +372,7 @@ public class TodoFragment extends Fragment {
         mList = databaseHandler.getToDoListCompletedOrNot(getActivity(), false, "DESC");
         completedMList = databaseHandler.getToDoListCompletedOrNot(getActivity(), true, "DESC");
         //todo: test
-        if(mList!= null) {
+        if (mList != null) {
             todoAdapter.setTodos(mList);
             recyclerView.setAdapter(todoAdapter);
         }
@@ -378,11 +381,12 @@ public class TodoFragment extends Fragment {
             completedRecyclerView.setAdapter(completedTodoAdapter);
         }
     }
+
     private void updateView() {
         todoAdapter.notifyItemInserted(0);
         completedTodoAdapter.notifyItemInserted(0);
         //todo: test
-        if(mList!= null) {
+        if (mList != null) {
             todoAdapter.setTodos(mList);
             recyclerView.setAdapter(todoAdapter);
         }
@@ -393,8 +397,9 @@ public class TodoFragment extends Fragment {
     }
 
     private void routeToTodoEdit(Context context) {
-        BottomDialog.showToDoDiaLog(context, null );
+        BottomDialog.showToDoDiaLog(context, null);
     }
+
     private void routeToTodoEditUpdate(Context context, ToDo todo) {
         BottomDialog.showToDoDiaLog(context, todo);
     }

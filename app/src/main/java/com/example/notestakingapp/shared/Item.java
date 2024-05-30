@@ -1,4 +1,4 @@
-package com.example.notestakingapp;
+package com.example.notestakingapp.shared;
 
 import android.graphics.Bitmap;
 import android.net.Uri;

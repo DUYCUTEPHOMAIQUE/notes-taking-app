@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryBackground"
-    tools:context=".NotesFragment"
+    tools:context=".ui.NotesFragment"
     android:paddingStart="@dimen/_8sdp"
     android:paddingEnd="@dimen/_8sdp">
 

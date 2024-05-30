@@ -16,10 +16,8 @@ import android.view.Window;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.notestakingapp.NoteEditActivity;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.shared.SharedViewModel;

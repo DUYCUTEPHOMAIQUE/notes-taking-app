@@ -12,18 +12,13 @@ import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.notestakingapp.MainActivity;
 import com.example.notestakingapp.R;
-import com.example.notestakingapp.TodoFragment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
-import com.example.notestakingapp.ui.ToDoTest;
 import com.example.notestakingapp.utils.AnimUtils;
-import com.example.notestakingapp.utils.NoteDetailsComponent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,21 +1,16 @@
 package com.example.notestakingapp.adapter;
 
 
-import static com.example.notestakingapp.ui.VoiceDiaLog.playBtn;
 import static com.example.notestakingapp.ui.VoiceDiaLog.stopAnim;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.res.Resources;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +27,7 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.example.notestakingapp.Item;
-import com.example.notestakingapp.NoteEditActivity;
+import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.CurrentTime;

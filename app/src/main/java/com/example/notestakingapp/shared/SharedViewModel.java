@@ -86,6 +86,25 @@ public class SharedViewModel extends ViewModel {
     }
 
     private final MutableLiveData<Boolean> noteEditChangeInsertAudio = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> noteEditChangeInsertDraw = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getNoteEditChangeInsertDraw() {
+        return noteEditChangeInsertDraw;
+    }
+    public void setNoteEditChangeInsertDraw(boolean t) {
+        noteEditChangeInsertDraw.setValue(t);
+    }
+
+
+    public int getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
+    }
+
+    private int imageId = -1;
 
     public LiveData<Boolean> getIsTodoChange() {
         return isTodoChange;
@@ -97,6 +116,15 @@ public class SharedViewModel extends ViewModel {
 
     private int AudioId = -1;
     private byte[] audioDate = null;
+    private  byte[] imageData = null;
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
 
     public byte[] getAudioDate() {
         return audioDate;
@@ -134,5 +162,18 @@ public class SharedViewModel extends ViewModel {
 
     public void setPlayingPosition(int position) {
         playingPosition.setValue(position);
+    }
+
+    private MutableLiveData<Boolean> test = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getTest() {
+        return test;
+    }
+    public void setTest(boolean t) {
+        test.setValue(t);
+    }
+
+    public void setTest(MutableLiveData<Boolean> test) {
+        this.test = test;
     }
 }

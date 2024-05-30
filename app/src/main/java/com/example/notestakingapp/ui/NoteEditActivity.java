@@ -1,9 +1,6 @@
-package com.example.notestakingapp;
-
-import static com.example.notestakingapp.adapter.NoteDetailsAdapter.mStartPlaying;
+package com.example.notestakingapp.ui;
 
 import android.Manifest;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,16 +8,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-
-import android.os.Handler;
-import android.provider.MediaStore;
 
 import android.util.Log;
 import android.view.View;
@@ -49,6 +41,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.notestakingapp.shared.Item;
+import com.example.notestakingapp.R;
 import com.example.notestakingapp.adapter.NoteDetailsAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.Audio;
@@ -58,14 +52,11 @@ import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
-import com.example.notestakingapp.ui.BottomDialog;
-import com.example.notestakingapp.ui.VoiceDiaLog;
 import com.example.notestakingapp.utils.AudioUtils;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.ImageUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -150,7 +141,6 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
 
-
         // khoi chay ui
         initUi();
 
@@ -170,9 +160,21 @@ public class NoteEditActivity extends AppCompatActivity {
         } else {
             Note note = databaseHandler.getNoteById(this, noteId);
             noteColor = note.getColor();
+            RelativeLayout relativeLayout = findViewById(R.id.main);
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            Log.d("duyColor", String.valueOf(relativeLayout));
+            gradientDrawable.setColor(Color.parseColor(noteColor));
+            Log.d("duyColor111", String.valueOf(relativeLayout));
+            relativeLayout.setBackground(gradientDrawable);
             ArrayList<Component> list = databaseHandler.getAllComponentByCreateAt(this, noteId, "ASC");
             mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE,note.getTitle(), noteId));
             mItemList.addAll(convertComponentToItem(convertComponentToProps(list)));
+            if(mItemList.get(mItemList.size()-1).getType()!=Item.TYPE_EDIT_TEXT) {
+                //ui
+                mItemList.add(new Item(Item.TYPE_EDIT_TEXT, noteId));
+                //db
+                databaseHandler.insertTextSegment(this, noteId, "");
+            }
             Log.d("updateDuynote", String.valueOf(mItemList.get(mItemList.size()-1).getType()));
         }
 
@@ -309,6 +311,34 @@ public class NoteEditActivity extends AppCompatActivity {
             mItemList.add(new Item(Item.TYPE_VOICE_VIEW, databaseHandler.getAudioByAudioId(NoteEditActivity.this, audioId).getAudioData(), audioId ));
             //todo: db --OK su dung Item temp
             noteDetailsAdapter.notifyItemInserted(mItemList.size()-1);
+        });
+
+        sharedViewModel.getTest().observe(this, aBoolean -> {
+            //ui
+            Log.d("aaccc", "ok");
+
+            mItemList.add(new Item(Item.TYPE_IMAGE_VIEW,"", ImageUtils.byteToBitmap(sharedViewModel.getImageData()), imageId, IMAGE_PROP));
+            textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
+            mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
+            noteDetailsAdapter.setData(mItemList);
+            noteDetailsAdapter.notifyDataSetChanged();
+        });
+
+        //draw
+        scribbleImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NoteEditActivity.this, DrawingActivity.class);
+                intent.putExtra("note_id", noteId);
+                startActivity(intent);
+            }
+        });
+
+        sharedViewModel.getNoteEditChangeInsertDraw().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+
+            }
         });
 
         //xu li su kien khi back quay ve activity truoc cua dien thoai
@@ -495,7 +525,7 @@ public class NoteEditActivity extends AppCompatActivity {
             GradientDrawable gradientDrawable = new GradientDrawable();
             Log.d("duyColor", String.valueOf(relativeLayout));
             gradientDrawable.setColor(Color.parseColor(color));
-//        gradientDrawable.set
+            Log.d("duyColor111", String.valueOf(relativeLayout));
             relativeLayout.setBackground(gradientDrawable);
         }
         return noteColor;
