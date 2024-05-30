@@ -40,12 +40,12 @@
 
     <ImageView
         android:id="@+id/image_shirt"
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_20sdp"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
         android:layout_marginStart="@dimen/_6sdp"
         android:layout_marginTop="@dimen/_20sdp"
         android:layout_marginEnd="@dimen/_40sdp"
-        android:src="@drawable/shirt_icon"
+        android:src="@drawable/more_icon"
         android:layout_alignEnd="@+id/image_save"
         app:tint="@color/colorBlack" />
 

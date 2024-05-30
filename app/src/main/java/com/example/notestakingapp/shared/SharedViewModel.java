@@ -1,4 +1,6 @@
 package com.example.notestakingapp.shared;
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -72,5 +74,65 @@ public class SharedViewModel extends ViewModel {
 
     public void notifyDataChanged() {
         dataChanged.setValue(true);
+    }
+
+    private final MutableLiveData<Boolean> isTodoChange = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getNoteEditChangeInsertAudio() {
+        return noteEditChangeInsertAudio;
+    }
+    public void setNoteEditChangeInsertAudio(boolean t) {
+        noteEditChangeInsertAudio.setValue(t);
+    }
+
+    private final MutableLiveData<Boolean> noteEditChangeInsertAudio = new MutableLiveData<>();
+
+    public LiveData<Boolean> getIsTodoChange() {
+        return isTodoChange;
+    }
+
+    public void setIsTodoChange(boolean i) {
+        isTodoChange.setValue(i);
+    }
+
+    private int AudioId = -1;
+    private byte[] audioDate = null;
+
+    public byte[] getAudioDate() {
+        return audioDate;
+    }
+
+    public void setAudioDate(byte[] audioDate) {
+        this.audioDate = audioDate;
+    }
+
+    public int getAudioId() {
+        return AudioId;
+    }
+
+    public void setAudioId(int audioId) {
+        AudioId = audioId;
+    }
+
+
+    private final MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(true);
+
+    public MutableLiveData<Boolean> isPlaying() {
+        return isPlaying;
+    }
+
+    public void setPlaying(boolean playing) {
+        Log.d("audioDuyTest", "set lai playing" + playing);
+        isPlaying.setValue(playing);
+    }
+
+    private MutableLiveData<Integer> playingPosition = new MutableLiveData<>();
+
+    public LiveData<Integer> getPlayingPosition() {
+        return playingPosition;
+    }
+
+    public void setPlayingPosition(int position) {
+        playingPosition.setValue(position);
     }
 }

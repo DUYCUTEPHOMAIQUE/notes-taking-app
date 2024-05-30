@@ -1,5 +1,7 @@
 package com.example.notestakingapp;
 
+import static com.example.notestakingapp.adapter.NoteDetailsAdapter.mStartPlaying;
+
 import android.Manifest;
 import android.content.ContextWrapper;
 import android.content.Intent;
@@ -11,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,6 +44,8 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -52,25 +57,30 @@ import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.ui.BottomDialog;
+import com.example.notestakingapp.ui.VoiceDiaLog;
 import com.example.notestakingapp.utils.AudioUtils;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.ImageUtils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteEditActivity extends AppCompatActivity {
     public static final int REQ_CODE_MICRO = 99;
-    private ImageView backImage, voiceImage, imageImage, scribbleImage, cameraImage, shirtImage;
+    private ImageView backImage, voiceImage, imageImage, scribbleImage, cameraImage, shirtImage, saveImage;
     private LinearLayout layoutBack;
     private TextView textBack;
     private RecyclerView recyclerViewDetails;
     private NoteDetailsAdapter noteDetailsAdapter;
+    public SharedViewModel sharedViewModel;
     private List<Item> mItemList;
+    private MediaPlayer player = null;
     private static final String IMAGE_PROP = "image";
     private static final String VOICE_PROP = "voice";
 
@@ -92,6 +102,7 @@ public class NoteEditActivity extends AppCompatActivity {
     String noteColor = "#FFFFFF";
     private SharedFunc sharedFunc;
 
+
     public void setSharedFunc(SharedFunc sharedFunc) {
         this.sharedFunc = sharedFunc;
     }
@@ -101,6 +112,7 @@ public class NoteEditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_note_edit);
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -145,7 +157,7 @@ public class NoteEditActivity extends AppCompatActivity {
         //todo: phai gan lai gia tri cho textSegmentId va noteId
 
         //xu li recycler view
-        noteDetailsAdapter = new NoteDetailsAdapter(NoteEditActivity.this);
+        noteDetailsAdapter = new NoteDetailsAdapter(NoteEditActivity.this, this);
         mItemList = new ArrayList<>();
         //tao Item ui
 
@@ -161,6 +173,7 @@ public class NoteEditActivity extends AppCompatActivity {
             ArrayList<Component> list = databaseHandler.getAllComponentByCreateAt(this, noteId, "ASC");
             mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE,note.getTitle(), noteId));
             mItemList.addAll(convertComponentToItem(convertComponentToProps(list)));
+            Log.d("updateDuynote", String.valueOf(mItemList.get(mItemList.size()-1).getType()));
         }
 
         //ui
@@ -187,6 +200,30 @@ public class NoteEditActivity extends AppCompatActivity {
                     databaseHandler.updateTextSegment(NoteEditActivity.this, textSegmentId, text);
                 }
 
+            }
+        });
+        noteDetailsAdapter.setAudioListener(new NoteDetailsAdapter.AudioListener() {
+            @Override
+            public void onPlayBtnClick(int position) {
+                Item audioItem = mItemList.get(position);
+                boolean fixTempTest = true;
+                byte[] audioData = audioItem.getAudioData();
+                Log.d("audioDuyT", "isPlaying="+sharedViewModel.isPlaying().getValue());
+                if(sharedViewModel.isPlaying().getValue() && audioData!= null) {
+                    startPlaying(audioData);
+                    sharedViewModel.setPlaying(false);
+                }
+                else {
+                    stopPlaying();
+                }
+            }
+
+            @Override
+            public void onTrashClick(int position) {
+                Log.d("audioDuyT", "clicked");
+                databaseHandler.deleteAudio(NoteEditActivity.this, mItemList.get(position).getVoiceId());
+                mItemList.remove(position);
+                noteDetailsAdapter.notifyItemRemoved(position);
             }
         });
 
@@ -217,6 +254,14 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
 
+        saveImage.setOnClickListener(v -> {
+            if (!deleteNoteIsEmpty(noteId)) {
+                titleText = NoteDetailsAdapter.title;
+
+                databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, noteColor);
+            }
+            finish();
+        });
         cameraImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -250,7 +295,7 @@ public class NoteEditActivity extends AppCompatActivity {
                     //hide keyboard
                     HideKeyBoard.hideKeyboard(NoteEditActivity.this);
 //                    btnRecordPressed();
-                    BottomDialog.showVoiceDialog(NoteEditActivity.this);
+                    VoiceDiaLog.showVoiceDialog(NoteEditActivity.this, noteId, sharedViewModel);
 
                 } else {
                     getMicroPermission();
@@ -258,8 +303,16 @@ public class NoteEditActivity extends AppCompatActivity {
             }
         });
 
+        sharedViewModel.getNoteEditChangeInsertAudio().observe(this, aBoolean -> {
+            //ui
+            int audioId = sharedViewModel.getAudioId();
+            mItemList.add(new Item(Item.TYPE_VOICE_VIEW, databaseHandler.getAudioByAudioId(NoteEditActivity.this, audioId).getAudioData(), audioId ));
+            //todo: db --OK su dung Item temp
+            noteDetailsAdapter.notifyItemInserted(mItemList.size()-1);
+        });
+
         //xu li su kien khi back quay ve activity truoc cua dien thoai
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+        getOnBackPressedDispatcher().addCallback(NoteEditActivity.this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (!deleteNoteIsEmpty(noteId)) {
@@ -272,21 +325,40 @@ public class NoteEditActivity extends AppCompatActivity {
         });
     }
 
+//    https://developer.android.com/media/platform/mediarecorder#java
+    private void startPlaying(byte[] audioData) {
+        player = new MediaPlayer();
+        try {
+            Log.d("audioFix", String.valueOf(audioData.length));
+            player.setDataSource(AudioUtils.byteToFile(NoteEditActivity.this, audioData).getPath());
+            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mediaPlayer) {
+                    sharedViewModel.setPlaying(true);
+                }
+            });
+            player.prepare();
+            player.start();
+        } catch (IOException e) {
+            Log.e("loi o noteedit player", "prepare() failed");
+        }
+    }
+
+    private void stopPlaying() {
+        sharedViewModel.setPlaying(true);
+        if(player == null) return;
+        player.release();
+        player = null;
+    }
+
     private void btnRecordPressed() {
         mediaRecorder = new MediaRecorder();
 
     }
 
-    public String createFileMp3Path(int audioId) {
-        ContextWrapper contextWrapper = new ContextWrapper(getApplicationContext());
-        File musicDirectory = contextWrapper.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-        File file = new File(musicDirectory, String.valueOf(audioId) + ".mp3");
-        return file.getPath();
-    }
-
 
     private void initUi() {
-
+        saveImage =findViewById(R.id.image_save);
         shirtImage = findViewById(R.id.image_shirt);
         layoutBack = findViewById(R.id.layout_back);
         backImage = findViewById(R.id.image_back);
@@ -404,6 +476,10 @@ public class NoteEditActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         titleText = NoteDetailsAdapter.title;
+        if(player!=null) {
+            player.release();
+            player = null;
+        }
         super.onDestroy();
     }
 
@@ -451,10 +527,14 @@ public class NoteEditActivity extends AppCompatActivity {
                 output.add(new Item(Item.TYPE_EDIT_TEXT, ((TextSegment) i).getText(), ((TextSegment) i).getTextId()));
             } else if (aClass.equals(Image.class)) {
                 output.add(new Item(Item.TYPE_IMAGE_VIEW, "", ImageUtils.byteToBitmap(((Image) i).getImageData()), ((Image) i).getImageId(), IMAGE_PROP));
-            } else if (aClass.equals(Audio.class)) {//todo: chưa check lai
-                output.add(new Item(Item.TYPE_VOICE_VIEW, "", AudioUtils.byteToBitmap(((Audio) i).getAudioData()), ((Audio) i).getAudioId(), "audio"));
+            } else if (aClass.equals(Audio.class)) {//todo: chưa check lai --check OK
+                output.add(new Item(Item.TYPE_VOICE_VIEW, ((Audio) i).getAudioData(), ((Audio) i).getAudioId()));
             }
         }
+
+//        for(Item i: output) {
+//            Log.d("updateDuy++", "type="+i.getType());
+//        }
         return output;
     }
     interface SharedFunc {

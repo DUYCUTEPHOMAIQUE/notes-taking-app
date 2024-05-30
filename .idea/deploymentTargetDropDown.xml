@@ -9,7 +9,21 @@
         <State />
       </entry>
       <entry key="app">
-        <State />
+<State>
+  <runningDeviceTargetSelectedWithDropDown>
+    <Target>
+      <type value="RUNNING_DEVICE_TARGET" />
+      <deviceKey>
+        <Key>
+          <type value="VIRTUAL_DEVICE_PATH" />
+          <value value="C:\Users\dauhu\.android\avd\Medium_Phone_API_31.avd" />
+        </Key>
+      </deviceKey>
+    </Target>
+  </runningDeviceTargetSelectedWithDropDown>
+  <timeTargetWasSelectedWithDropDown value="2024-05-29T21:38:06.936397600Z" />
+</State>
+
       </entry>
     </value>
   </component>

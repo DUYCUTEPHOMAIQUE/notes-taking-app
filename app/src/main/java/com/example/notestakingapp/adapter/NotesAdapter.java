@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +26,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notestakingapp.R;
+import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
@@ -39,8 +43,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.zip.Inflater;
 
-public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
+public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> implements Filterable {
     private List<NoteDetailsComponent> noteDetailsComponentList;
+    private Context mContext;
+
+    public NotesAdapter(Context context) {
+        this.mContext = context;
+    }
+
+    private List<NoteDetailsComponent> oldList;
     private NoteListener noteListener;
     private int currentPosition = -1;
     private boolean isChecked = false;
@@ -72,6 +83,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public void setNotes(List<NoteDetailsComponent> noteDetailsComponentList) {
         this.noteDetailsComponentList = noteDetailsComponentList;
+        this.oldList = noteDetailsComponentList;
         notifyDataSetChanged();
     }
 
@@ -93,6 +105,48 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note_main, parent, false);
         return new NoteViewHolder(view);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String query = constraint.toString().trim();
+                List<NoteDetailsComponent> list = new ArrayList<>();
+                if (query == null || query.isEmpty()) {
+                    list = oldList;
+                } else {
+
+                    for (NoteDetailsComponent i : oldList) {
+                        if (i.getNote().getTitle().toLowerCase().contains(query.toLowerCase())) {
+                            list.add(i);
+                        }else {
+                            String allText = "";
+                            List<TextSegment> mListTextSegment = DatabaseHandler.getTextSegmentByNoteId(mContext, i.getNote().getNoteId());
+                            List<String> temp = new ArrayList<>();
+                            if (!mListTextSegment.isEmpty()) {
+                                for (TextSegment textSegment : mListTextSegment) {
+                                    allText += " " + textSegment.getText().toLowerCase().trim();
+                                }
+                            }
+                            if (allText.toLowerCase().contains(query.toLowerCase())) {
+                                list.add(i);
+                            }
+                        }
+                    }
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = list;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                noteDetailsComponentList = (List<NoteDetailsComponent>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public interface NoteListener {

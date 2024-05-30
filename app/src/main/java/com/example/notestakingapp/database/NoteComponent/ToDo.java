@@ -3,6 +3,8 @@ package com.example.notestakingapp.database.NoteComponent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.airbnb.lottie.L;
+
 public class ToDo {
     private int todoId;
     private String content;
@@ -10,7 +12,7 @@ public class ToDo {
     private long duration;
     private boolean isCompleted;
 
-    public ToDo(int todoId, String content, long createAt, long duration, boolean isCompleted) {
+    public ToDo(int todoId, String content, long createAt,@Nullable long duration, boolean isCompleted) {
         this.todoId = todoId;
         this.content = content;
         this.createAt = createAt;
@@ -42,7 +44,7 @@ public class ToDo {
         this.createAt = createAt;
     }
 
-    public long getDuration() {
+    public Long getDuration() {
         return duration;
     }
 

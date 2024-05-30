@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="todo content"
+            android:maxLines="2"
             android:textSize="@dimen/_14ssp"
             android:fontFamily="@font/bold"
             android:textColor="@color/colorBlack"
@@ -42,6 +43,7 @@
             app:layout_constraintStart_toStartOf="@+id/todo_content"
             />
         <TextView
+            android:id="@+id/text_expired"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/expired"
@@ -49,6 +51,7 @@
             android:fontFamily="@font/medium"
             android:layout_marginStart="@dimen/_4sdp"
             android:textColor="@color/colorBlack"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/text_todo_date"
             app:layout_constraintTop_toBottomOf="@+id/todo_content"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
