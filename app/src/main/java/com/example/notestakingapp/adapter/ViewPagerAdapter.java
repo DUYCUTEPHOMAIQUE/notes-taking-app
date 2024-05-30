@@ -7,8 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.notestakingapp.NotesFragment;
-import com.example.notestakingapp.TodoFragment;
+import com.example.notestakingapp.ui.NotesFragment;
+import com.example.notestakingapp.ui.TodoFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
     public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {

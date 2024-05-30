@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryBackground"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <TextView
         android:id="@+id/text_my_notes"
@@ -113,7 +113,7 @@
         android:padding="@dimen/_8sdp"
         android:src="@drawable/round_add_24"
         android:translationZ="100dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/layout_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -153,13 +153,15 @@
                 android:layout_marginStart="@dimen/_12sdp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:gravity="center"
+                android:padding="@dimen/_4sdp"
+                android:background="@drawable/bg_btn_in_delete"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/x_icon_main_image"
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
                     android:src="@drawable/x_icon"
                     android:layout_gravity="center_vertical"
                     app:tint="@color/colorBlack"
@@ -171,7 +173,7 @@
                     android:text="@string/back"
                     android:textColor="@color/colorBlack"
                     android:fontFamily="@font/regular"
-                    android:textSize="@dimen/_20ssp"
+                    android:textSize="@dimen/_16ssp"
                     android:layout_marginStart="@dimen/_12sdp"
                     />
 
@@ -181,12 +183,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_12sdp"
-                android:gravity="right"
+                android:gravity="center"
+                android:padding="@dimen/_4sdp"
+                android:background="@drawable/bg_btn_in_delete"
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/delete_some_note"
-                    android:layout_width="@dimen/_24sdp"
-                    android:layout_height="@dimen/_24sdp"
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
                     android:src="@drawable/trash"
                     android:layout_gravity="center_vertical"
                     app:tint="@color/colorError" />
@@ -197,7 +201,7 @@
                     android:text="@string/delete"
                     android:textColor="@color/colorError"
                     android:fontFamily="@font/regular"
-                    android:textSize="@dimen/_20ssp"
+                    android:textSize="@dimen/_16ssp"
                     android:layout_marginStart="@dimen/_12sdp"
                     />
             </LinearLayout>

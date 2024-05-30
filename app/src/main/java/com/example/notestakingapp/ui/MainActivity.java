@@ -1,41 +1,35 @@
-package com.example.notestakingapp;
+package com.example.notestakingapp.ui;
 
+import com.example.notestakingapp.shared.Item;
+import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.NoteComponent.Note;
-import com.example.notestakingapp.database.TempDatabaseHelper;
 
 
 import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Component;
 import com.example.notestakingapp.database.NoteComponent.Image;
-import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 
-import com.example.notestakingapp.firebase.FirebaseHandler;
-
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
-import static com.example.notestakingapp.database.NoteTakingDatabaseHelper.DB_NAME;
 
 import com.example.notestakingapp.R.id;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -56,18 +50,13 @@ import com.example.notestakingapp.adapter.ViewPagerAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
-import com.example.notestakingapp.ui.BottomDialog;
-import com.example.notestakingapp.ui.DrawingView;
 
 import com.example.notestakingapp.utils.NoteDetailsComponent;
 
-import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -159,12 +148,35 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         mBottomNavigationView.getMenu().findItem(R.id.home_main).setChecked(true);
                         inputSearch.setHint("Search Notes..");
+                        inputSearch.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    String query = s.toString().trim();
+                                    searchNotes(query);
+                            }
+                            @Override
+                            public void afterTextChanged(Editable s) {}
+                        });
                         break;
                     case 1:
                         mBottomNavigationView.getMenu().findItem(R.id.todo_main).setChecked(true);
                         inputSearch.setHint("Search To do..");
-                        break;
+                        inputSearch.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                    String query = s.toString().trim();
+                                    Log.d("todoFrg", query);
+                                    searchToDo(query);
+                            }
+                            @Override
+                            public void afterTextChanged(Editable s) {}
+                        });
+                        break;
                 }
             }
 
@@ -174,6 +186,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        inputSearch.setOnFocusChangeListener((v, hasFocus) -> {
+            if(hasFocus) {
+                sharedViewModel.setInputFocus(hasFocus);
+            }else {
+                sharedViewModel.setInputFocus(hasFocus);
+            }
+        });
         //su kien item in menu thay doi
         mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
@@ -231,10 +251,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+    }
+
+    private void searchToDo(String query) {
+        TodoFragment.performSearch(query);
+    }
+
+    private void searchNotes(String query) {
+        NotesFragment.performSearch(query);
     }
 
     private void routeToTodoEdit() {
-        DatabaseHandler databaseHandler = new DatabaseHandler();
         BottomDialog.showToDoDiaLog(MainActivity.this, null);
     }
 

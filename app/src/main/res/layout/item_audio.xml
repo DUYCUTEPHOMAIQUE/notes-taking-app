@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:layout_marginStart="@dimen/_12sdp"
+    android:padding="8dp"
+    android:layout_marginTop="@dimen/_4sdp"
+    android:layout_marginBottom="@dimen/_4sdp"
+    android:layout_marginEnd="@dimen/_12sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_audio_round">
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/play_button_item"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_30sdp"
+        app:lottie_colorFilter="@color/colorAccent"
+        app:lottie_fileName="play_button.json" />
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_weight="1"
+        android:id="@+id/playing_bar_item"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_30sdp"
+        app:lottie_fileName="playing_bar.json"
+        app:lottie_colorFilter="@color/colorAccent"/>
+    <ImageView
+        android:id="@+id/image_trash_audio"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        app:tint="@color/colorAccent"
+        android:src="@drawable/trash_audio"
+        android:layout_marginEnd="@dimen/_12sdp"
+        />
+
+</LinearLayout>

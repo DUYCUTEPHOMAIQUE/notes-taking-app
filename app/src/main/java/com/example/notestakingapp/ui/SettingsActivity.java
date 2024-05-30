@@ -1,4 +1,4 @@
-package com.example.notestakingapp;
+package com.example.notestakingapp.ui;
 
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 
@@ -33,6 +33,8 @@ import com.example.notestakingapp.shared.SharedViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
+
+import com.example.notestakingapp.R;
 
 public class SettingsActivity extends AppCompatActivity {
     TextView backButton;

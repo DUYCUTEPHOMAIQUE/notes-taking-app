@@ -1,4 +1,4 @@
-package com.example.notestakingapp;
+package com.example.notestakingapp.shared;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,6 +19,15 @@ public class Item {
     private int textSegmentId;
     private int voiceId;
     private int imageId;
+    private byte[] audioData;
+
+    public byte[] getAudioData() {
+        return audioData;
+    }
+
+    public void setAudioData(byte[] audioData) {
+        this.audioData = audioData;
+    }
 
     private Bitmap imageBitmap;
     private Bitmap voiceBitmap;
@@ -52,6 +61,11 @@ public class Item {
             this.voiceBitmap = propBitmap;
             this.voiceId = propId;
         }
+    }
+    public Item(int type, byte[] audioData, int audioId) {
+        this.type = type;
+        this.audioData = audioData;
+        this.voiceId = audioId;
     }
 
 

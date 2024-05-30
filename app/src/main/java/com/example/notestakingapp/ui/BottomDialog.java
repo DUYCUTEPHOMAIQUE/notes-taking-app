@@ -1,29 +1,21 @@
 package com.example.notestakingapp.ui;
 
-import static androidx.core.content.ContextCompat.startActivity;
-
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.transition.Fade;
-import android.transition.Visibility;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -31,36 +23,35 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.notestakingapp.MainActivity;
-import com.example.notestakingapp.NoteEditActivity;
 import com.example.notestakingapp.R;
-import com.example.notestakingapp.TodoFragment;
 import com.example.notestakingapp.database.DatabaseHandler;
+import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
+import com.example.notestakingapp.utils.WaitFunc;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class BottomDialog {
@@ -330,18 +321,18 @@ public class BottomDialog {
                 NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
                 db = noteTakingDatabaseHelper.getReadableDatabase();
                 databaseHandler = new DatabaseHandler();
-                if (context instanceof MainActivity  ) {
-                    if(  listNoteIdChecked!=null && !listNoteIdChecked.isEmpty()) {
-                        for (int i: listNoteIdChecked) {
+                if (context instanceof MainActivity) {
+                    if (listNoteIdChecked != null && !listNoteIdChecked.isEmpty()) {
+                        for (int i : listNoteIdChecked) {
                             databaseHandler.deleteNote(context, i);
-                            if (finalSharedViewModel !=null) {
+                            if (finalSharedViewModel != null) {
                                 finalSharedViewModel.setItemLongPressed(false);
                                 finalSharedViewModel.triggerClearUiEvent();
                                 finalSharedViewModel.notifyDataChanged();
                             }
                             dialog.dismiss();
                         }
-                    }else {
+                    } else {
                         Toast.makeText(context, "No Item Selected!", Toast.LENGTH_SHORT).show();
                     }
 
@@ -358,7 +349,7 @@ public class BottomDialog {
         linearLayoutXButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(context instanceof MainActivity)
+                if (context instanceof MainActivity)
                     listNoteIdChecked.clear();
                 dialog.dismiss();
             }
@@ -367,34 +358,36 @@ public class BottomDialog {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if(context instanceof MainActivity && listNoteIdChecked!=null)
+                if (context instanceof MainActivity && listNoteIdChecked != null)
                     listNoteIdChecked.clear();
             }
         });
     }
 
-    public static void showVoiceDialog(Context context) {
-        Log.d("duy123456", "clicked");
+    //test
+    public static void showAwaitDiaLog(Context context) {
         final Dialog dialog = new Dialog(context);
+
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.layout_voice_press);
+        dialog.setContentView(R.layout.layout_await_dialog);
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-        LinearLayout linearLayoutXButton = dialog.findViewById(R.id.layout_x_button);
-        linearLayoutXButton.setOnClickListener(new View.OnClickListener() {
+        dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            public void onDismiss(DialogInterface dialog) {
+
             }
         });
     }
 
-    public static void showToDoDiaLog(Context context, @Nullable ToDoTest todo) {
+
+    public static void showToDoDiaLog(Context context, @Nullable ToDo todo) {
+        SharedViewModel sharedViewModel = new ViewModelProvider((FragmentActivity) context).get(SharedViewModel.class);
         SQLiteDatabase db;
         DatabaseHandler databaseHandler;
         NoteTakingDatabaseHelper noteTakingDatabaseHelper;
@@ -424,11 +417,20 @@ public class BottomDialog {
         dialog.setContentView(R.layout.layout_to_do_edit);
         EditText editText = dialog.findViewById(R.id.edittext_todo);
         TextView textViewDone = dialog.findViewById(R.id.textview_done);
+        TextView textViewDate = dialog.findViewById(R.id.text_view_date_edit);
 
-        if(todo != null) {
+        if (todo != null) {
             editText.setText(todo.getContent());
             textViewDone.setTextColor(colorAccent);
-            miLiSecond[0] = todo.getDuration();
+            if(todo.getDuration()!=null)  miLiSecond[0] = todo.getDuration();
+            if(todo.getDuration()!=null && miLiSecond[0] != -1) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                String dateOK = sdf.format(new Date(todo.getDuration()));
+                textViewDate.setVisibility(View.VISIBLE);
+                textViewDate.setText(String.valueOf(dateOK.substring(0, 16)));
+            } else {
+                textViewDate.setVisibility(View.GONE);
+            }
         }
         editText.requestFocus();
         editText.postDelayed(new Runnable() {
@@ -461,7 +463,7 @@ public class BottomDialog {
                         }
                     }
 
-                    editText.setText(spannableString); // Đặt văn bản đã định dạng trở lại EditText
+                    editText.setText(spannableString);
                 }
             }
         });
@@ -484,19 +486,22 @@ public class BottomDialog {
                     textViewDone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (todo!= null) {
+                            if (todo != null) {
                                 //todo: update todo
-                            }
-                            else {
+                                databaseHandler.updateTodo(context, todo.getId(), editText.getText().toString().trim(), miLiSecond[0], false);
+                                dialog.dismiss();
+                            } else {
                                 //todo: add toDo
-                                if(miLiSecond[0] != -1) {
-                                    DatabaseHandler.insertTodo(context, content[0],miLiSecond[0]);
-                                }else {
-                                    DatabaseHandler.insertTodo(context, content[0],  null);
+                                if (miLiSecond[0] != -1) {
+                                    DatabaseHandler.insertTodo(context, content[0], miLiSecond[0]);
+                                } else {
+                                    DatabaseHandler.insertTodo(context, content[0], null);
                                 }
                                 dialog.dismiss();
+
                                 Toast.makeText(context, "add task test", Toast.LENGTH_SHORT).show();
                             }
+                            sharedViewModel.setIsTodoChange(true);
                         }
                     });
                 }
@@ -583,7 +588,11 @@ public class BottomDialog {
                             calendar.set(Calendar.MILLISECOND, 0);
                             miLiSecond[0] = calendar.getTimeInMillis();
                             Log.d("timePickDuy", String.valueOf(miLiSecond[0]));
-                            Log.d("timePickDuy",  String.valueOf(System.currentTimeMillis())+ "system" );
+                            Log.d("timePickDuy", String.valueOf(System.currentTimeMillis()) + "system");
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                            String dateOK = sdf.format(new Date(miLiSecond[0]));
+                            textViewDate.setText(String.valueOf(dateOK.substring(0, 16)));
                             //todo: add OK cho duong lam ham
                         });
 

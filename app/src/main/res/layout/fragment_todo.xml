@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/colorNoteVariant3"
-    tools:context=".TodoFragment">
+    android:background="@color/colorPrimaryBackground"
+    tools:context=".ui.TodoFragment">
 
     <com.factor.bouncy.BouncyNestedScrollView
         android:layout_width="match_parent"
@@ -20,17 +20,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:ignore="MissingConstraints" />
-            <TextView
-                android:id="@+id/text_task"
+            <LinearLayout
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_width="wrap_content"
+                android:gravity="center_vertical"
+                android:id="@+id/text_task"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/regular"
-                android:textSize="@dimen/_13ssp"
-                android:textColor="@color/colorBlack"
-                android:text="@string/complete_task"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/task_recycler"/>
+                app:layout_constraintTop_toBottomOf="@id/task_recycler"
+                android:layout_marginStart="@dimen/_12sdp"
+                android:orientation="horizontal">
+                <TextView
+                    android:includeFontPadding="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/regular"
+                    android:textSize="@dimen/_13ssp"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/complete_task"
+                    />
+                <ImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/arrow_down_icon"/>
+            </LinearLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_marginTop="@dimen/_8sdp"
                 android:layout_width="match_parent"

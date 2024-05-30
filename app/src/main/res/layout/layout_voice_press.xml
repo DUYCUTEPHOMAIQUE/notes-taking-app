@@ -27,12 +27,14 @@
         android:id="@+id/playing_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_80sdp"
+        app:lottie_colorFilter="@color/colorAccent"
         app:lottie_fileName="playing_bar.json" />
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/play_button"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_80sdp"
+        app:lottie_colorFilter="@color/colorAccent"
         app:lottie_fileName="play_button.json" />
 
 

@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:maxHeight="@dimen/_500sdp"
     android:layout_marginStart="@dimen/_12sdp"
     android:padding="8dp"
     android:layout_marginTop="@dimen/_4sdp"
@@ -16,6 +17,7 @@
         app:riv_corner_radius="8dp"
         android:layout_height="wrap_content"
         android:scaleType="centerCrop"
+        android:maxHeight="@dimen/_500sdp"
         android:contentDescription="@string/app_name" />
 
 
