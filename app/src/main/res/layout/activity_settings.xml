@@ -51,7 +51,7 @@
             android:id="@+id/avatar"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_40sdp"
-            android:src="@drawable/google_icon"
+            android:src="@drawable/user_outline"
             android:layout_marginTop="@dimen/_6sdp"
             android:layout_marginBottom="@dimen/_6sdp"
             tools:ignore="ContentDescription"/>
@@ -100,7 +100,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/google_icon"
+            android:src="@drawable/edit_outline"
             app:tint="@color/text_color_state_black"
             android:layout_marginEnd="@dimen/_6sdp"/>
         <TextView
@@ -144,7 +144,7 @@
         <ImageView
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/google_icon"
+            android:src="@drawable/notification_outline"
             app:tint="@color/text_color_state_black"
             android:layout_marginEnd="@dimen/_10sdp"
             tools:ignore="ContentDescription"/>
@@ -173,7 +173,7 @@
         <ImageView
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/google_icon"
+            android:src="@drawable/sign_in_outline"
             app:tint="@color/text_color_state_black"
             android:layout_marginEnd="@dimen/_10sdp"
             tools:ignore="ContentDescription"/>
@@ -202,7 +202,7 @@
         <ImageView
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/google_icon"
+            android:src="@drawable/user_add_outline"
             app:tint="@color/text_color_state_black"
             android:layout_marginEnd="@dimen/_10sdp"
             tools:ignore="ContentDescription"/>
@@ -232,7 +232,7 @@
         <ImageView
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/google_icon"
+            android:src="@drawable/lock_closed_outline"
             app:tint="@color/text_color_state_black"
             android:layout_marginEnd="@dimen/_10sdp"
             tools:ignore="ContentDescription"/>
@@ -268,15 +268,15 @@
         <ImageView
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"
-            android:src="@drawable/google_icon"
-            app:tint="@color/text_color_state_black"
+            android:src="@drawable/sign_out_outline"
+            app:tint="@color/colorError"
             android:layout_marginEnd="@dimen/_10sdp"
             tools:ignore="ContentDescription"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/sign_out"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorError"
             android:textSize="@dimen/_14sdp"/>
     </LinearLayout>
 

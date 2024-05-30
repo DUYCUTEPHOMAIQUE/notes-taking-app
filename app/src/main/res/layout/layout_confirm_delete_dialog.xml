@@ -54,8 +54,8 @@
         android:id="@+id/layout_confirm_delete_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_16sdp"
-        android:layout_marginTop="@dimen/_16sdp">
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp">
 
         <ImageView
             android:layout_width="@dimen/_18sdp"

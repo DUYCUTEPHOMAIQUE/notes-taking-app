@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -20,14 +21,16 @@ import androidx.core.view.WindowInsetsCompat;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 import com.example.notestakingapp.firebase.*;
 
 public class SignInActivity extends AppCompatActivity {
-    EditText email, password;
+    EditText emailEditText, passwordEditText;
     TextView backButton, forgotPassButton, signInButton, signUpText, googleButton;
-    private static final int SIGN_IN_REQUEST_CODE = 1;
+    private FirebaseAuthHandler authHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +44,9 @@ public class SignInActivity extends AppCompatActivity {
 
         initUI(); // initiate UI components
         setupUI(findViewById(R.id.sign_in)); // hide software keyboard
+
+        // Initialize FirebaseAuthHandler
+        authHandler = new FirebaseAuthHandler();
 
         // funcs for buttons
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -56,8 +62,24 @@ public class SignInActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    signInAttempt();
+                }
 
-            }
+                private void signInAttempt() {
+                    String email = emailEditText.getText().toString().trim();
+                    String password = passwordEditText.getText().toString().trim();
+
+                    if (!email.isEmpty() && !password.isEmpty()) {
+                        if (validateInput(email, password)) {
+                            signIn(email, password);
+                            Toast.makeText(SignInActivity.this, "Sign in successful!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Toast.makeText(SignInActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+                    }
+                }
         });
         signUpText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +94,19 @@ public class SignInActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean validateInput(String email, String password) {
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(SignInActivity.this, "Please enter a valid email address.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
+
+    private void signIn(String email, String password) {
+        authHandler.signIn(email, password, this);
     }
 
     // hide software keyboard
@@ -110,12 +145,11 @@ public class SignInActivity extends AppCompatActivity {
 
     private void initUI() {
         backButton = findViewById(R.id.back_button);
-        email = findViewById(R.id.input_email);
-        password = findViewById(R.id.input_password);
+        emailEditText = findViewById(R.id.input_email);
+        passwordEditText = findViewById(R.id.input_password);
         forgotPassButton = findViewById(R.id.text_forgot_password);
         signInButton = findViewById(R.id.sign_in_button);
         signUpText = findViewById(R.id.sign_up_text);
         googleButton = findViewById(R.id.google_button);
     }
-
 }

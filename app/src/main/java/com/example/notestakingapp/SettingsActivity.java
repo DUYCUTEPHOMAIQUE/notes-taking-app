@@ -1,11 +1,22 @@
 package com.example.notestakingapp;
 
+import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,11 +24,20 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.example.notestakingapp.database.DatabaseHandler;
+import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.firebase.FirebaseAuthHandler;
+import com.example.notestakingapp.shared.SharedViewModel;
+
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
     TextView backButton;
     RelativeLayout profile;
     LinearLayout editProfileButton, notificationsButton, signInButton, signUpButton, changePasswordButton, signOutButton;
+    private static FirebaseAuthHandler authHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +49,10 @@ public class SettingsActivity extends AppCompatActivity {
             return insets;
         });
         initUI(); // initiate UI components
+
+        // Initialize FirebaseAuthHandler
+        authHandler = new FirebaseAuthHandler();
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -76,7 +100,48 @@ public class SettingsActivity extends AppCompatActivity {
         signOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showConfirmSignOut(SettingsActivity.this);
+            }
+        });
+    }
+    public void showConfirmSignOut(Context context) {
+        final Dialog dialog = new Dialog(context);
+        SharedViewModel sharedViewModel = new SharedViewModel();
+        if (context instanceof MainActivity) {
+            ViewModelProvider viewModelProvider = new ViewModelProvider((MainActivity) context);
+            sharedViewModel = viewModelProvider.get(SharedViewModel.class);
+        }
 
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_confirm_sign_out);
+
+        dialog.show();
+        Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        LinearLayout backButton = dialog.findViewById(R.id.sign_out_back_button);
+        LinearLayout confirmSignOutButton = dialog.findViewById(R.id.confirm_sign_out_button);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        confirmSignOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                authHandler.signOut();
+
+            }
+        });
+
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if(context instanceof MainActivity && listNoteIdChecked != null)
+                    listNoteIdChecked.clear();
             }
         });
     }

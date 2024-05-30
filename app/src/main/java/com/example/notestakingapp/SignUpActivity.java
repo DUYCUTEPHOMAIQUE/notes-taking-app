@@ -111,6 +111,10 @@ public class SignUpActivity extends AppCompatActivity {
         return true;
     }
 
+    private void signUp(String email, String password) {
+        authHandler.signUp(email, password, this);
+    }
+
     // hide software keyboard
     // https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
     public static void hideSoftKeyboard(Activity activity) {
@@ -144,9 +148,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    private void signUp(String email, String password) {
-        authHandler.signUp(email, password, this);
-    }
     private void initUI() {
         backButton = findViewById(R.id.back_button);
         emailEditText = findViewById(R.id.input_email);
