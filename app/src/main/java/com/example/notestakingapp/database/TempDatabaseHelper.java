@@ -40,10 +40,10 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				String todoContent = cursor.getString(1);
 				Long todoCreateAt = cursor.getLong(2);
 				Long todoDuration = cursor.getLong(3);
-				int todoComplete = cursor.getInt(4);
+				boolean todoComplete = cursor.getInt(4) == 1;
 				//check _todo exist by content
-				if (checkTodoExistByContent(context, todoContent)) {
-					
+				if (checkTodoExistByContent(context, todoContent) == false) {
+					DatabaseHandler.insertTodo(context, todoContent, todoDuration, todoComplete);
 				}
 			}
 		} catch (SQLiteException e) {

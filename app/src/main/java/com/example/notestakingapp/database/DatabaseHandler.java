@@ -776,6 +776,20 @@ public class DatabaseHandler {
         return db.insert(TODO_TABLE, null, ct);
     }
 
+	public static long insertTodo(Context context, String content, Long duration, boolean complete) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+		ContentValues ct = new ContentValues();
+
+		ct.put(COLUMN_TODO_CONTENT, content);
+		ct.put(COLUMN_TODO_CREATEAT, System.currentTimeMillis());
+		ct.put(COLUMN_TODO_DURATION, duration);
+		ct.put(COLUMN_TODO_COMPLETE, complete);
+
+		return db.insert(TODO_TABLE, null, ct);
+	}
+
     //todo: public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull String createAt,@Nullable String duration)
     public int updateTodo(Context context, int todoId, Long duration) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
