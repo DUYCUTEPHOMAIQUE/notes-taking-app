@@ -26,7 +26,8 @@
         <activity
             android:name=".ui.DrawingActivity"
             android:exported="false"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:parentActivityName=".ui.NoteEditActivity"/>
         <activity
             android:name=".ui.NoteEditActivity"
             android:exported="false"

@@ -101,6 +101,8 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void setImageId(int imageId) {
+        Log.d("testDDDD", "test setImaged");
+
         this.imageId = imageId;
     }
 
@@ -170,6 +172,7 @@ public class SharedViewModel extends ViewModel {
         return test;
     }
     public void setTest(boolean t) {
+        Log.d("testDDDD", "test");
         test.setValue(t);
     }
 

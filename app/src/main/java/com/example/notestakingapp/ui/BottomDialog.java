@@ -42,6 +42,7 @@ import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
+import com.example.notestakingapp.utils.WaitFunc;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -357,6 +358,27 @@ public class BottomDialog {
             public void onDismiss(DialogInterface dialog) {
                 if (context instanceof MainActivity && listNoteIdChecked != null)
                     listNoteIdChecked.clear();
+            }
+        });
+    }
+
+    //test
+    public static void showAwaitDiaLog(Context context) {
+        final Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_await_dialog);
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
             }
         });
     }
