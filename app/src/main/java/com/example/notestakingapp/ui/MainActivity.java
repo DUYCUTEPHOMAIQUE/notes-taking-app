@@ -1,5 +1,6 @@
 package com.example.notestakingapp.ui;
 
+import com.example.notestakingapp.firebase.FirebaseHandler;
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.NoteComponent.Note;
@@ -235,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 BottomDialog.showConfirmDeleteNote(MainActivity.this);
             }
-            //todo: chinh sua lai de xoa note va cap nhat giao dien -- OK
         });
         imageSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,9 +244,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+//		huyTesting();
     }
-
+	private void huyTesting() {
+		FirebaseHandler.syncToFirebase(this);
+	}
     private void searchToDo(String query) {
         TodoFragment.performSearch(query);
     }

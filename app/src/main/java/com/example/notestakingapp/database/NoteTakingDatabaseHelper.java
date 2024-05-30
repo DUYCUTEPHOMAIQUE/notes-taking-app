@@ -168,26 +168,6 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
             );
         }
 
-//        if (oldVersion < 3){
-//
-//            db.execSQL("CREATE TABLE TEMP_TODO(" +
-//                        COLUMN_TODO_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-//                        COLUMN_TODO_CONTENT + " TEXT," +
-//                        COLUMN_TODO_CREATEAT + "INTEGER, " +
-//                        COLUMN_TODO_DURATION + "INTEGER )"
-//                    );
-//
-//            db.execSQL("INSERT INTO TEMP_TODO "  +
-//                        "SELECT " + COLUMN_TODO_ID + ", " + COLUMN_TODO_CONTENT + ", " +
-//                            "CAST( " + COLUMN_TODO_CREATEAT + " AS INTEGER )" + ", " +
-//                            "CAST( " + COLUMN_TODO_DURATION + " AS INTEGER )" +
-//                    "FROM TODO"
-//                    );
-//
-//            db.execSQL("DROP TABLE TODO");
-//
-//            db.execSQL("ALTER TABLE TODO_TEMP RENAME TO TODO");
-//        }
         if (oldVersion < 3){
             db.execSQL("ALTER TABLE " + TODO_TABLE + " ADD COLUMN " + COLUMN_TODO_COMPLETE + " NUMERIC;");
         }
