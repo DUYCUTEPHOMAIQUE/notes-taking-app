@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sign_out"
     android:background="@drawable/background_tool_dialog"
     android:clipToPadding="false"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/layout_x_button"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginTop="@dimen/_16sdp"
-        android:layout_marginBottom="@dimen/_8sdp"
-        android:background="@drawable/bg_x_dialog"
-        android:clipToPadding="false">
+        android:layout_marginTop="@dimen/_15sdp"
+        android:layout_gravity="center"
+        android:text="Sign out"
+        android:textStyle="bold"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/_20sdp"/>
 
-        <ImageView
-            android:layout_width="@dimen/_12sdp"
-            android:layout_height="@dimen/_12sdp"
-            android:src="@drawable/x_icon" />
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:text="Are you sure you want to sign out\n from the application?"
+        android:textColor="@color/colorBlack"
+        android:textSize="@dimen/_14sdp" />
 
     <LinearLayout
-        android:id="@+id/layout_restore_note"
+        android:id="@+id/sign_out_back_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_15sdp"
         android:layout_marginBottom="@dimen/_8sdp">
 
         <ImageView
@@ -40,37 +46,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_8sdp"
-            android:fontFamily="@font/medium"
-            android:text="Restore Note"
+            android:text="@string/back"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_14sdp" />
     </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/_1sdp"
-        android:background="@color/colorTextHint" />
+        android:background="@color/colorTextHint"/>
 
     <LinearLayout
-        android:id="@+id/layout_confirm_delete_note"
+        android:id="@+id/confirm_sign_out_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_8sdp"
-        android:layout_marginTop="@dimen/_8sdp">
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp">
 
         <ImageView
             android:layout_width="@dimen/_18sdp"
             android:layout_height="@dimen/_18sdp"
-            android:src="@drawable/trash"
-            app:tint="@color/colorError" />
+            android:src="@drawable/sign_out_outline"
+            app:tint="@color/colorError"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/_8sdp"
-            android:fontFamily="@font/medium"
-            android:text="@string/confirm_delete_note"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:text="@string/sign_out"
             android:textColor="@color/colorError"
-            android:textSize="@dimen/_12ssp" />
+            android:textSize="@dimen/_14sdp"/>
     </LinearLayout>
-
 </LinearLayout>

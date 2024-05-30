@@ -28,4 +28,28 @@
     <string name="delete">Delete</string>
     <string name="complete_task">Complete Task</string>
     <string name="expired">Expired</string>
+    <!-- Sign in strings -->
+    <string name="sign_in">Sign in</string>
+    <string name="email">Email</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="password">Password</string>
+    <string name="enter_your_password">Enter your password</string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="dont_have_an_account">Don"'"t have an account?</string>
+    <string name="sign_up">Sign up</string>
+    <string name="or_sign_in_with">Or sign in with</string>
+    <string name="google">Google</string>
+    <!-- Sign up strings -->
+    <string name="confirm_password">Confirm password</string>
+    <string name="or_sign_up_with">Or sign up with</string>
+    <string name="reenter_your_password">Re-enter your password</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <!-- Settings strings -->
+    <string name="settings">Settings</string>
+    <string name="example_email">example@mail.com</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="app_settings">App settings</string>
+    <string name="notifications">Notifications</string>
+    <string name="change_password">Change password</string>
+    <string name="sign_out">Sign out</string>
 </resources>

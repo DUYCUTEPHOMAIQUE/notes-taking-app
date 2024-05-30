@@ -24,6 +24,12 @@
             android:name=".ui.SettingsActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.SignInActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".ui.SignUpActivity"
+            android:exported="true"/>
+        <activity
             android:name=".ui.DrawingActivity"
             android:exported="false"
             android:screenOrientation="portrait"

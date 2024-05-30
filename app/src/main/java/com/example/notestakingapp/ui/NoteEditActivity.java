@@ -276,7 +276,7 @@ public class NoteEditActivity extends AppCompatActivity {
                 //hide keyboard
                 HideKeyBoard.hideKeyboard(NoteEditActivity.this);
 //                    btnRecordPressed();
-                VoiceDiaLog.showVoiceDialog(NoteEditActivity.this, noteId, sharedViewModel);
+                VoiceDialog.showVoiceDialog(NoteEditActivity.this, noteId, sharedViewModel);
 
             } else {
                 getMicroPermission();

@@ -25,7 +25,7 @@ import com.example.notestakingapp.utils.AudioUtils;
 
 import java.io.IOException;
 
-public class VoiceDiaLog {
+public class VoiceDialog {
     public static LottieAnimationView playBtn;
     public static LottieAnimationView playingBar;
     private static MediaPlayer player = null;
