@@ -13,7 +13,7 @@ import com.example.notestakingapp.database.NoteComponent.Note;
 
 public class TempDatabaseHelper extends SQLiteOpenHelper {
 	public static final String DB_NAME = "test";
-	public static final int DB_VERSION = 2;
+	public static final int DB_VERSION = 4;
 
 	public TempDatabaseHelper(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
@@ -47,7 +47,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				}
 			}
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "MERGE TODO Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -60,6 +60,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 			String query = "SELECT * FROM " + DatabaseHandler.NOTE_TABLE;
 			Cursor cursor = tempDb.rawQuery(query, null);
 			while (cursor.moveToNext()) {
+//				Log.d("ALO", "ALO");
 				Note note = new Note(cursor.getInt(0),  //noteId
 						cursor.getString(1),            //title
 						cursor.getLong(2),              //createAt
@@ -92,7 +93,8 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				}
 			}
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Log.e("HUY EXCEPTION", "EXCEPTION", e);
+			Toast.makeText(context, "MERGE NOTE Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -106,7 +108,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				DatabaseHandler.insertTextSegment(context, (int) newInsertedNoteId, cursor.getString(2));
 			}
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "TEXT SEGMENT Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 
 	}
@@ -123,7 +125,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				DatabaseHandler.insertAudio(context, (int) newInsertedNoteId, cursor.getBlob(cursor.getColumnIndex(DatabaseHandler.COLUMN_AUDIO_DATA)));
 			}
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "AUDIO Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -138,7 +140,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				DatabaseHandler.insertImage(context, (int) newInsertedNoteId, cursor.getBlob(1));
 			}
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "TODO Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -153,7 +155,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 			Log.d("CREATED AT CHECK", Integer.toString(cursor.getCount()));
 			return cursor.getCount() >= 1;
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "NOTE CREATE AT Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 		return false;
 	}
@@ -171,7 +173,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				return cursor.getString(cursor.getColumnIndex(DatabaseHandler.COLUMN_TAG_NAME));
 			}
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "GET TEMP TAG ID Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 		return "TAG ID NOT FOUND";
 	}
@@ -193,7 +195,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				return cursor.getInt(0); //tag id
 			}
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "TAG CHECK Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 		return -1;
 	}
@@ -231,7 +233,7 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 			}
 			cursor.close();
 		} catch (SQLiteException e) {
-			Toast.makeText(context, "Cannot connect to Database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "TODO CHECK Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 		return false;
 	}

@@ -43,6 +43,7 @@ import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.database.TempDatabaseHelper;
 import com.example.notestakingapp.firebase.FirebaseHandler;
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.shared.SharedViewModel;
@@ -249,7 +250,10 @@ public class MainActivity extends AppCompatActivity {
 
 	private void huyTesting() {
 //		FirebaseHandler.syncToFirebase(this);
-		DatabaseHandler.insertTodo(this, "Buôn ma tuý", 0l, false);
+//		DatabaseHandler.insertTodo(this, "Buôn ma tuý", 0l, false);
+//		DatabaseHandler.deleteAllTodo(this);
+		FirebaseHandler.syncFromFirebase(this);
+//		TempDatabaseHelper.mergeTodoTable(this);
 	}
 
 	private void searchToDo(String query) {
