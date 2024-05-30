@@ -101,6 +101,8 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void setImageId(int imageId) {
+        Log.d("testDDDD", "test setImaged");
+
         this.imageId = imageId;
     }
 
@@ -170,10 +172,23 @@ public class SharedViewModel extends ViewModel {
         return test;
     }
     public void setTest(boolean t) {
+        Log.d("testDDDD", "test");
         test.setValue(t);
     }
 
     public void setTest(MutableLiveData<Boolean> test) {
         this.test = test;
+    }
+
+    public MutableLiveData<Boolean> getIsInputFocus() {
+        return isInputFocus;
+    }
+
+    private MutableLiveData<Boolean> isInputFocus = new MutableLiveData<>();
+
+
+
+    public void setInputFocus(boolean inputFocus) {
+        isInputFocus.setValue(inputFocus);
     }
 }

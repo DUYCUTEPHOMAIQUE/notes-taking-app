@@ -69,7 +69,7 @@ public class NoteEditActivity extends AppCompatActivity {
     private TextView textBack;
     private RecyclerView recyclerViewDetails;
     private NoteDetailsAdapter noteDetailsAdapter;
-    public SharedViewModel sharedViewModel;
+    public static SharedViewModel sharedViewModel;
     private List<Item> mItemList;
     private MediaPlayer player = null;
     private static final String IMAGE_PROP = "image";
@@ -167,15 +167,15 @@ public class NoteEditActivity extends AppCompatActivity {
             Log.d("duyColor111", String.valueOf(relativeLayout));
             relativeLayout.setBackground(gradientDrawable);
             ArrayList<Component> list = databaseHandler.getAllComponentByCreateAt(this, noteId, "ASC");
-            mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE,note.getTitle(), noteId));
+            mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE, note.getTitle(), noteId));
             mItemList.addAll(convertComponentToItem(convertComponentToProps(list)));
-            if(mItemList.get(mItemList.size()-1).getType()!=Item.TYPE_EDIT_TEXT) {
+            if (mItemList.get(mItemList.size() - 1).getType() != Item.TYPE_EDIT_TEXT) {
                 //ui
                 mItemList.add(new Item(Item.TYPE_EDIT_TEXT, noteId));
                 //db
                 databaseHandler.insertTextSegment(this, noteId, "");
             }
-            Log.d("updateDuynote", String.valueOf(mItemList.get(mItemList.size()-1).getType()));
+            Log.d("updateDuynote", String.valueOf(mItemList.get(mItemList.size() - 1).getType()));
         }
 
         //ui
@@ -210,12 +210,11 @@ public class NoteEditActivity extends AppCompatActivity {
                 Item audioItem = mItemList.get(position);
                 boolean fixTempTest = true;
                 byte[] audioData = audioItem.getAudioData();
-                Log.d("audioDuyT", "isPlaying="+sharedViewModel.isPlaying().getValue());
-                if(sharedViewModel.isPlaying().getValue() && audioData!= null) {
+                Log.d("audioDuyT", "isPlaying=" + sharedViewModel.isPlaying().getValue());
+                if (sharedViewModel.isPlaying().getValue() && audioData != null) {
                     startPlaying(audioData);
                     sharedViewModel.setPlaying(false);
-                }
-                else {
+                } else {
                     stopPlaying();
                 }
             }
@@ -244,16 +243,11 @@ public class NoteEditActivity extends AppCompatActivity {
         });
 
         //back button
-        layoutBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                Animation animation = AnimationUtils.loadAnimation(MainActivity.this, R.anim.scale_animation);
-//                imageViewAdd.startAnimation(animation);
-                Animation animation = AnimationUtils.loadAnimation(NoteEditActivity.this, R.anim.fade_out);
-                backImage.startAnimation(animation);
-                textBack.setAnimation(animation);
-                getOnBackPressedDispatcher().onBackPressed();
-            }
+        layoutBack.setOnClickListener(v -> {
+            Animation animation = AnimationUtils.loadAnimation(NoteEditActivity.this, R.anim.fade_out);
+            backImage.startAnimation(animation);
+            textBack.setAnimation(animation);
+            getOnBackPressedDispatcher().onBackPressed();
         });
 
         saveImage.setOnClickListener(v -> {
@@ -262,62 +256,46 @@ public class NoteEditActivity extends AppCompatActivity {
 
                 databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, noteColor);
             }
+            Log.d("testDUY", String.valueOf(sharedViewModel.getNoteEditChangeInsertDraw().getValue()));
             finish();
         });
-        cameraImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOpenCamera();
-            }
-        });
+        cameraImage.setOnClickListener(v -> onOpenCamera());
 
-        shirtImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        shirtImage.setOnClickListener(v -> {
 //                showToolDialog();
-                HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+            HideKeyBoard.hideKeyboard(NoteEditActivity.this);
 
-                BottomDialog.showToolDialog(NoteEditActivity.this);
-            }
+            BottomDialog.showToolDialog(NoteEditActivity.this);
         });
 
-        imageImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onOpenGallery();
-            }
-        });
-        voiceImage.setOnClickListener(new View.OnClickListener() {
-
-            //            https://www.youtube.com/watch?v=3ffs2VbJ9JY
+        imageImage.setOnClickListener(v -> onOpenGallery());
+        //            https://www.youtube.com/watch?v=3ffs2VbJ9JY
 //            https://github.com/MoamenHassaballah/PlayPauseAnimationTutorial
-            @Override
-            public void onClick(View v) {
-                if (!getMicroPermission()) {
-                    //hide keyboard
-                    HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+        voiceImage.setOnClickListener(v -> {
+            if (!getMicroPermission()) {
+                //hide keyboard
+                HideKeyBoard.hideKeyboard(NoteEditActivity.this);
 //                    btnRecordPressed();
-                    VoiceDiaLog.showVoiceDialog(NoteEditActivity.this, noteId, sharedViewModel);
+                VoiceDiaLog.showVoiceDialog(NoteEditActivity.this, noteId, sharedViewModel);
 
-                } else {
-                    getMicroPermission();
-                }
+            } else {
+                getMicroPermission();
             }
         });
 
         sharedViewModel.getNoteEditChangeInsertAudio().observe(this, aBoolean -> {
             //ui
             int audioId = sharedViewModel.getAudioId();
-            mItemList.add(new Item(Item.TYPE_VOICE_VIEW, databaseHandler.getAudioByAudioId(NoteEditActivity.this, audioId).getAudioData(), audioId ));
+            mItemList.add(new Item(Item.TYPE_VOICE_VIEW, databaseHandler.getAudioByAudioId(NoteEditActivity.this, audioId).getAudioData(), audioId));
             //todo: db --OK su dung Item temp
-            noteDetailsAdapter.notifyItemInserted(mItemList.size()-1);
+            noteDetailsAdapter.notifyItemInserted(mItemList.size() - 1);
         });
 
         sharedViewModel.getTest().observe(this, aBoolean -> {
             //ui
-            Log.d("aaccc", "ok");
+            Log.d("testDDDD", "ok");
 
-            mItemList.add(new Item(Item.TYPE_IMAGE_VIEW,"", ImageUtils.byteToBitmap(sharedViewModel.getImageData()), imageId, IMAGE_PROP));
+            mItemList.add(new Item(Item.TYPE_IMAGE_VIEW, "", ImageUtils.byteToBitmap(sharedViewModel.getImageData()), imageId, IMAGE_PROP));
             textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
             mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
             noteDetailsAdapter.setData(mItemList);
@@ -355,7 +333,7 @@ public class NoteEditActivity extends AppCompatActivity {
         });
     }
 
-//    https://developer.android.com/media/platform/mediarecorder#java
+    //    https://developer.android.com/media/platform/mediarecorder#java
     private void startPlaying(byte[] audioData) {
         player = new MediaPlayer();
         try {
@@ -376,7 +354,7 @@ public class NoteEditActivity extends AppCompatActivity {
 
     private void stopPlaying() {
         sharedViewModel.setPlaying(true);
-        if(player == null) return;
+        if (player == null) return;
         player.release();
         player = null;
     }
@@ -388,7 +366,7 @@ public class NoteEditActivity extends AppCompatActivity {
 
 
     private void initUi() {
-        saveImage =findViewById(R.id.image_save);
+        saveImage = findViewById(R.id.image_save);
         shirtImage = findViewById(R.id.image_shirt);
         layoutBack = findViewById(R.id.layout_back);
         backImage = findViewById(R.id.image_back);
@@ -405,19 +383,19 @@ public class NoteEditActivity extends AppCompatActivity {
 
     private boolean deleteNoteIsEmpty(int noteId) {
         titleText = NoteDetailsAdapter.title;
-        if(mItemList.size()>2) {
+        if (mItemList.size() > 2) {
             Log.d("update!!", String.valueOf(mItemList.size()));
             return false;
         }
-        if(!mItemList.get(0).getText().isEmpty() ) {
+        if (!mItemList.get(0).getText().isEmpty()) {
             Log.d("update!!", String.valueOf(mItemList.get(0).getText()));
             return false;
         }
         if (!mItemList.get(1).getText().isEmpty()) {
-            Log.d("update!!", String.valueOf(mItemList.get(1).getText().isEmpty() ));
+            Log.d("update!!", String.valueOf(mItemList.get(1).getText().isEmpty()));
             return false;
         }
-        if(!titleText.isEmpty()) {
+        if (!titleText.isEmpty()) {
             return false;
         }
         if (mItemList.size() == 2 && mItemList.get(0).getText().isEmpty() && mItemList.get(1).getText().isEmpty() && titleText.isEmpty()) {
@@ -506,7 +484,7 @@ public class NoteEditActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         titleText = NoteDetailsAdapter.title;
-        if(player!=null) {
+        if (player != null) {
             player.release();
             player = null;
         }
@@ -567,6 +545,7 @@ public class NoteEditActivity extends AppCompatActivity {
 //        }
         return output;
     }
+
     interface SharedFunc {
         void deleteNote();
     }

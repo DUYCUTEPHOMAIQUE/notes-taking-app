@@ -4,18 +4,23 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.notestakingapp.R;
+import com.example.notestakingapp.adapter.NoteDetailsAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.ui.DrawingView;
+import com.example.notestakingapp.utils.WaitFunc;
 
 import java.io.ByteArrayOutputStream;
 
@@ -24,7 +29,9 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class DrawingActivity extends AppCompatActivity {
     public DrawingView dv;
     private int noteId;
-    SharedViewModel sharedViewModel;
+    SharedViewModel sharedViewModelDraw;
+    LinearLayout layoutBack;
+    ImageView imageChooseColor, saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +46,18 @@ public class DrawingActivity extends AppCompatActivity {
         dv = (DrawingView) findViewById(R.id.drawing_view);
         dv.mDefaultColor = 0;
         noteId = getIntent().getIntExtra("note_id", -1);
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        sharedViewModelDraw = NoteEditActivity.sharedViewModel;
+        initUi();
+        layoutBack.setOnClickListener(v-> {
+            saveImage();
+            getOnBackPressedDispatcher().onBackPressed();
+        });
+        saveButton.setOnClickListener(mv -> {
+            saveImage();
+        });
+        imageChooseColor.setOnClickListener(v-> {
+            onClickChooseColor(v);
+        });
     }
 
     @Override
@@ -50,7 +68,11 @@ public class DrawingActivity extends AppCompatActivity {
     public void onClickSave(View v) {
         saveImage();
     }
-
+    private void initUi() {
+        saveButton = findViewById(R.id.image_save);
+        layoutBack = findViewById(R.id.layout_back);
+        imageChooseColor = findViewById(R.id.image_choose_color);
+    }
     public void onClickChooseColor(View v) {
         openColorPickerDialogue();
     }
@@ -81,10 +103,13 @@ public class DrawingActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         int imageId = (int) DatabaseHandler.insertImage(this, noteId, byteArray);
-        sharedViewModel.setTest(true);
-        sharedViewModel.setImageId(imageId);
-        sharedViewModel.setImageData(byteArray);
+        sharedViewModelDraw.setTest(true);
+        sharedViewModelDraw.setImageId(imageId);
+        sharedViewModelDraw.setImageData(byteArray);
         Log.d("aaccc", "ok1");
+        BottomDialog.showAwaitDiaLog(DrawingActivity.this);
+        WaitFunc.showMessageWithDelay(this, 5000);
         finish();
     }
+
 }

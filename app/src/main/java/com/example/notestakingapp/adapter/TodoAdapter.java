@@ -14,13 +14,16 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.utils.AnimUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder> implements Filterable {
@@ -82,8 +85,8 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                 if (query == null || query.isEmpty()) {
                     list = oldList;
                 } else {
-                    for(ToDo i: oldList) {
-                        if(i.getContent().toLowerCase().contains(query.toLowerCase())) {
+                    for (ToDo i : oldList) {
+                        if (i.getContent().toLowerCase().contains(query.toLowerCase())) {
                             list.add(i);
                         }
                     }
@@ -123,12 +126,21 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                 //todo: setcheckbox nx
                 todoContent.setText(todo.getContent());
                 checkBox.setChecked(todo.isCompleted());
-                if (todo.getDuration() != null && todo.getDuration()!=0) {
-                    Log.d("duyTodoT","id="+todo.getId()+"dur: "+todo.getDuration() + "bool:"+String.valueOf(todo.getDuration()> System.currentTimeMillis()));
-                    todoExpired.setVisibility(todo.getDuration() > System.currentTimeMillis() ? View.GONE : View.VISIBLE);
+                if (todo.getDuration() != null && todo.getDuration() != 0) {
+                    Log.d("duyTodoT", "id=" + todo.getId() + "dur: " + todo.getDuration() + "bool:" + String.valueOf(todo.getDuration() > System.currentTimeMillis()));
+                    todoExpired.setVisibility(todo.getDuration() > System.currentTimeMillis() || todo.isCompleted() ? View.GONE : View.VISIBLE);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                    String dateOK = sdf.format(new Date(todo.getDuration()));
+                    String currentDate = sdf.format(new Date());
+                    if (dateOK.substring(0, 10).equals(currentDate.substring(0, 10))) {
+                        todoDate.setText("Today " + dateOK.substring(11, 16));
+                    } else {
+                        todoDate.setText(dateOK.substring(0, 10));
+                    }
                 } else {
                     todoExpired.setVisibility(View.GONE);
                 }
+
 
                 //su kien o checkbox
                 checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

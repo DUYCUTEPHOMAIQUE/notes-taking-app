@@ -42,13 +42,16 @@ import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
+import com.example.notestakingapp.utils.WaitFunc;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class BottomDialog {
@@ -361,6 +364,27 @@ public class BottomDialog {
         });
     }
 
+    //test
+    public static void showAwaitDiaLog(Context context) {
+        final Dialog dialog = new Dialog(context);
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_await_dialog);
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+            }
+        });
+    }
+
 
     public static void showToDoDiaLog(Context context, @Nullable ToDo todo) {
         SharedViewModel sharedViewModel = new ViewModelProvider((FragmentActivity) context).get(SharedViewModel.class);
@@ -393,11 +417,20 @@ public class BottomDialog {
         dialog.setContentView(R.layout.layout_to_do_edit);
         EditText editText = dialog.findViewById(R.id.edittext_todo);
         TextView textViewDone = dialog.findViewById(R.id.textview_done);
+        TextView textViewDate = dialog.findViewById(R.id.text_view_date_edit);
 
         if (todo != null) {
             editText.setText(todo.getContent());
             textViewDone.setTextColor(colorAccent);
-            miLiSecond[0] = todo.getDuration();
+            if(todo.getDuration()!=null)  miLiSecond[0] = todo.getDuration();
+            if(todo.getDuration()!=null && miLiSecond[0] != -1) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                String dateOK = sdf.format(new Date(todo.getDuration()));
+                textViewDate.setVisibility(View.VISIBLE);
+                textViewDate.setText(String.valueOf(dateOK.substring(0, 16)));
+            } else {
+                textViewDate.setVisibility(View.GONE);
+            }
         }
         editText.requestFocus();
         editText.postDelayed(new Runnable() {
@@ -556,6 +589,10 @@ public class BottomDialog {
                             miLiSecond[0] = calendar.getTimeInMillis();
                             Log.d("timePickDuy", String.valueOf(miLiSecond[0]));
                             Log.d("timePickDuy", String.valueOf(System.currentTimeMillis()) + "system");
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                            String dateOK = sdf.format(new Date(miLiSecond[0]));
+                            textViewDate.setText(String.valueOf(dateOK.substring(0, 16)));
                             //todo: add OK cho duong lam ham
                         });
 
