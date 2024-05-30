@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
                             public void afterTextChanged(Editable s) {}
                         });
                         break;
-
                 }
             }
 
