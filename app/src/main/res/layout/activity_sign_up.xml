@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:layout_constraintTop_toTopOf="parent"
-    tools:context=".SignInActivity">
+    tools:context=".ui.SignInActivity">
 
     <TextView
         android:id="@+id/back_button"

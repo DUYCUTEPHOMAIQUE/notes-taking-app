@@ -1,4 +1,4 @@
-package com.example.notestakingapp;
+package com.example.notestakingapp.ui;
 
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 import static com.example.notestakingapp.adapter.NotesAdapter.showCheckboxes;
@@ -6,9 +6,6 @@ import static com.example.notestakingapp.adapter.NotesAdapter.showCheckboxes;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -21,6 +18,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.example.notestakingapp.shared.Item;
+import com.example.notestakingapp.R;
 import com.example.notestakingapp.adapter.NotesAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.Audio;
@@ -57,7 +61,7 @@ public class NotesFragment extends Fragment {
     public List<NoteDetailsComponent> list;
     private String mParam2;
     public BouncyRecyclerView recyclerView;
-    public NotesAdapter notesAdapter;
+    public static NotesAdapter notesAdapter;
     private SQLiteDatabase db;
     private DatabaseHandler databaseHandler;
     private NoteTakingDatabaseHelper noteTakingDatabaseHelper;
@@ -134,7 +138,7 @@ public class NotesFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_notes);
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        notesAdapter = new NotesAdapter();
+        notesAdapter = new NotesAdapter(getActivity());
 
         notesAdapter.setNoteListener(new NotesAdapter.NoteListener() {
             @Override
@@ -188,6 +192,11 @@ public class NotesFragment extends Fragment {
                 updateView();
             }
         });
+    }
+
+    public static void performSearch(String query) {
+        Log.d("filterDuy", "query = " + query);
+        notesAdapter.getFilter().filter(query);
     }
 
     public void updateView() {
