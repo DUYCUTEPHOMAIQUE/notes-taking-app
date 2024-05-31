@@ -1,8 +1,6 @@
 package com.example.notestakingapp.adapter;
 
 
-import static com.example.notestakingapp.ui.VoiceDialog.stopAnim;
-
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.text.Editable;
