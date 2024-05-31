@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.SettingsActivity">
+    tools:context=".authentication.SettingsActivity">
 
     <TextView
         android:id="@+id/back_button"
@@ -22,7 +22,8 @@
         android:textSize="20sp"
         android:textColor="@color/text_color_state_accent"
         app:drawableStartCompat="@drawable/round_arrow_back_ios_24"
-        app:drawableTint="@color/colorAccent"/>
+        app:drawableTint="@color/colorAccent"
+        android:fontFamily="@font/medium"/>
 
     <TextView
         android:id="@+id/text_settings"
@@ -33,10 +34,10 @@
         android:layout_marginTop="@dimen/_20sdp"
         android:text="@string/settings"
         android:textColor="@color/colorBlack"
-        android:textStyle="bold"
         android:textSize="@dimen/_25sdp"
+        android:fontFamily="@font/bold"
         app:layout_constraintTop_toTopOf="parent"
-        android:gravity="center"/>
+        android:gravity="center" />
 
     <RelativeLayout
         android:id="@+id/profile"
@@ -63,9 +64,9 @@
             android:layout_marginTop="@dimen/_6sdp"
             android:layout_toEndOf="@id/avatar"
             android:text="Your Name"
-            android:textStyle="bold"
             android:textColor="@color/colorBlack"
-            android:textSize="@dimen/_20sdp"/>
+            android:textSize="@dimen/_20sdp"
+            android:fontFamily="@font/bold"/>
         <TextView
             android:id="@+id/subtext_email"
             android:layout_width="wrap_content"
@@ -77,7 +78,8 @@
             android:text="@string/example_email"
             android:textStyle="normal"
             android:textColor="@color/colorGrayDark"
-            android:textSize="@dimen/_10sdp"/>
+            android:textSize="@dimen/_10sdp"
+            android:fontFamily="@font/regular"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -110,7 +112,7 @@
             android:text="@string/edit_profile"
             android:textColor="@color/text_color_state_black"
             android:textSize="@dimen/_12sdp"
-            android:textStyle="bold"/>
+            android:fontFamily="@font/bold"/>
     </LinearLayout>
 
     <View
@@ -125,6 +127,7 @@
         android:layout_height="wrap_content"
         android:text="@string/app_settings"
         android:textAllCaps="true"
+        android:fontFamily="@font/medium"
         android:layout_marginStart="@dimen/_12sdp"
         android:layout_marginTop="@dimen/_12sdp"/>
     <LinearLayout
@@ -153,7 +156,8 @@
             android:layout_height="wrap_content"
             android:text="@string/notifications"
             android:textColor="@color/text_color_state_black"
-            android:textSize="@dimen/_14sdp"/>
+            android:textSize="@dimen/_15sdp"
+            android:fontFamily="@font/medium"/>
     </LinearLayout>
 
     <LinearLayout
@@ -182,7 +186,8 @@
             android:layout_height="wrap_content"
             android:text="@string/sign_in"
             android:textColor="@color/text_color_state_black"
-            android:textSize="@dimen/_14sdp"/>
+            android:textSize="@dimen/_15sdp"
+            android:fontFamily="@font/medium"/>
     </LinearLayout>
 
     <LinearLayout
@@ -211,7 +216,8 @@
             android:layout_height="wrap_content"
             android:text="@string/sign_up"
             android:textColor="@color/text_color_state_black"
-            android:textSize="@dimen/_14sdp"/>
+            android:textSize="@dimen/_15sdp"
+            android:fontFamily="@font/medium"/>
     </LinearLayout>
 
     <LinearLayout
@@ -241,7 +247,8 @@
             android:layout_height="wrap_content"
             android:text="@string/change_password"
             android:textColor="@color/text_color_state_black"
-            android:textSize="@dimen/_14sdp"/>
+            android:textSize="@dimen/_15sdp"
+            android:fontFamily="@font/medium"/>
     </LinearLayout>
 
     <View
@@ -277,7 +284,8 @@
             android:layout_height="wrap_content"
             android:text="@string/sign_out"
             android:textColor="@color/colorError"
-            android:textSize="@dimen/_14sdp"/>
+            android:textSize="@dimen/_15sdp"
+            android:fontFamily="@font/medium"/>
     </LinearLayout>
 
 </LinearLayout>

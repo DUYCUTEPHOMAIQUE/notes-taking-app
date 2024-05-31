@@ -1,5 +1,6 @@
 package com.example.notestakingapp.ui;
 
+import com.example.notestakingapp.authentication.SettingsActivity;
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.NoteComponent.Note;

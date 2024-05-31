@@ -1,4 +1,4 @@
-package com.example.notestakingapp.ui;
+package com.example.notestakingapp.authentication;
 
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 
@@ -21,16 +21,14 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.notestakingapp.database.DatabaseHandler;
-import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.firebase.FirebaseAuthHandler;
 import com.example.notestakingapp.shared.SharedViewModel;
+import com.example.notestakingapp.ui.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -58,11 +56,10 @@ public class SettingsActivity extends AppCompatActivity {
         TextView textProfileName = findViewById(R.id.text_profile_name);
         textProfileName.setText(userEmail);
 
-        initUI(); // initiate UI components
+        initUI(); // initialize UI components
+        authHandler = new FirebaseAuthHandler(); // initialize FirebaseAuthHandler
 
-        // Initialize FirebaseAuthHandler
-        authHandler = new FirebaseAuthHandler();
-
+        // methods for buttons
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,7 +101,8 @@ public class SettingsActivity extends AppCompatActivity {
         changePasswordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(SettingsActivity.this, ChangePasswordActivity.class);
+                startActivity(intent);
             }
         });
         signOutButton.setOnClickListener(new View.OnClickListener() {
