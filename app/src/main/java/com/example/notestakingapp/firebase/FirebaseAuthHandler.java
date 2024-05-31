@@ -56,6 +56,10 @@ public class FirebaseAuthHandler {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
+                        SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.putString("userEmail", email);
+                        editor.apply();
                         updateUI(user, context);
                     } else {
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -68,8 +72,8 @@ public class FirebaseAuthHandler {
     }
     public void signOut(Context context) {
         mAuth.signOut();
-        SharedPreferences preferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
+        SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
         editor.clear();
         editor.apply();
         Toast.makeText(context, "Signed Out", Toast.LENGTH_SHORT).show();
@@ -119,12 +123,15 @@ public class FirebaseAuthHandler {
     public void updateUI(FirebaseUser user, Context context) {
         if (user != null) {
             // Save user info in shared preferences
-            SharedPreferences preferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+            SharedPreferences preferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("user_id", user.getUid());
             editor.putString("user_email", user.getEmail());
             editor.apply();
             Toast.makeText(context, "Welcome, " + user.getEmail(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
         } else {
             Toast.makeText(context, "User not signed in", Toast.LENGTH_SHORT).show();
         }
