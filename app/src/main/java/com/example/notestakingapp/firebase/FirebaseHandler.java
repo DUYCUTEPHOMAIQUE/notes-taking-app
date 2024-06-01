@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 
 public class FirebaseHandler {
 
+
 	public static void syncFromFirebase(Context context) {
 		String userId = FirebaseAuthHandler.getUserId();
 		FirebaseStorage storage = FirebaseStorage.getInstance("gs://androidtest-c883b.appspot.com");
