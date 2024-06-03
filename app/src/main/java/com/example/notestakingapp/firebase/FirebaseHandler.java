@@ -21,7 +21,7 @@ import java.io.FileOutputStream;
 
 public class FirebaseHandler {
 
-	public static void syncFromFirebase(Context context) {
+	public void syncFromFirebase(Context context) {
 		String userId = FirebaseAuthHandler.getUserId();
 		FirebaseStorage storage = FirebaseStorage.getInstance("gs://androidtest-c883b.appspot.com");
 		StorageReference storageRef = storage.getReference();
@@ -46,7 +46,7 @@ public class FirebaseHandler {
 		}).addOnFailureListener(new OnFailureListener() {
 			@Override
 			public void onFailure(@NonNull Exception exception) {
-				// Handle any errors
+				// handle any errors
 			}
 		});
 	}

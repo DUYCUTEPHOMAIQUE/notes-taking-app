@@ -14,6 +14,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -37,15 +42,15 @@ import com.example.notestakingapp.R;
 
 public class SettingsActivity extends AppCompatActivity {
     TextView backButton;
-    RelativeLayout profile;
-    LinearLayout editProfileButton, notificationsButton, signInButton, signUpButton, changePasswordButton, signOutButton;
+    RelativeLayout profile, editProfileButton, signInButton, signUpButton, changePasswordButton, signOutButton;
+    SwitchCompat notificationsSwitch;
     private FirebaseAuthHandler authHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_settings);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -78,7 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
-        notificationsButton.setOnClickListener(new View.OnClickListener() {
+        notificationsSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -112,6 +117,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+
     public void showConfirmSignOut(Context context) {
         final Dialog dialog = new Dialog(context);
         SharedViewModel sharedViewModel = new SharedViewModel();
@@ -170,7 +176,7 @@ public class SettingsActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         profile = findViewById(R.id.profile);
         editProfileButton = findViewById(R.id.edit_profile_button);
-        notificationsButton = findViewById(R.id.notifications_button);
+        notificationsSwitch = findViewById(R.id.notifications_switch);
         signInButton = findViewById(R.id.sign_in_button);
         signUpButton = findViewById(R.id.sign_up_button);
         changePasswordButton = findViewById(R.id.change_password_button);

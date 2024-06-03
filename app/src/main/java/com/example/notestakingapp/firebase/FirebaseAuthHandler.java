@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.notestakingapp.authentication.SignInActivity;
 import com.example.notestakingapp.ui.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -15,14 +16,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+
 import java.util.Objects;
 
 public class FirebaseAuthHandler {
     public static final String TAG = "EmailPassword";
-    private FirebaseAuth mAuth;
-
+    private final FirebaseAuth mAuth;
     public static String userId;
-
+    FirebaseHandler firebaseHandler;
 
     public FirebaseAuthHandler() {
         mAuth = FirebaseAuth.getInstance();
@@ -60,6 +61,10 @@ public class FirebaseAuthHandler {
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.putString("userEmail", email);
                         editor.apply();
+                        if (user != null) {
+                            // Call syncFromFirebase after successful sign-in
+                            firebaseHandler.syncFromFirebase(context);
+                        }
                         updateUI(user, context);
                     } else {
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
