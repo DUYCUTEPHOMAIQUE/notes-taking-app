@@ -7,8 +7,10 @@
     <color name="colorGrayDark">#827D89</color>
     <color name="colorPrimaryBase">#6A3EA1</color>
     <color name="colorPrimaryBaseDark">#3A2258</color>
-    <color  name="colorAccent">#F8C715</color>
-<!--    color note-->
+    <color name="colorAccent">#F8C715</color>
+    <color name="colorLightGray">#999999</color>
+
+    <!-- color note-->
     <color name="colorNoteDefault">#FFFFFF</color>
     <color name="colorNoteVariant1">#F7F6D4</color>
     <color name="colorNoteVariant2">#FDEBAB</color>
@@ -23,4 +25,5 @@
     <color name="colorTextDateTime">#575758</color>
     <color name="colorTextSegment">#232323</color>
     <color name="colorAudioBg">#FFF5D2</color>
+
 </resources>
