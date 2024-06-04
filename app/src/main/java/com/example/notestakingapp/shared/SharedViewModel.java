@@ -73,6 +73,7 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void notifyDataChanged() {
+        Log.d("duyngu", "flag");
         dataChanged.setValue(true);
     }
 

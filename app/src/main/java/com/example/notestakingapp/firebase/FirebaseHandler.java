@@ -1,5 +1,7 @@
 package com.example.notestakingapp.firebase;
 
+import static com.example.notestakingapp.ui.NotesFragment.sharedViewModel;
+
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -7,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.TempDatabaseHelper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,7 +24,8 @@ import java.io.FileOutputStream;
 
 public class FirebaseHandler {
 
-	public void syncFromFirebase(Context context) {
+
+	public static void syncFromFirebase(Context context) {
 		String userId = FirebaseAuthHandler.getUserId();
 		FirebaseStorage storage = FirebaseStorage.getInstance("gs://androidtest-c883b.appspot.com");
 		StorageReference storageRef = storage.getReference();
@@ -39,6 +43,8 @@ public class FirebaseHandler {
 
 					TempDatabaseHelper.mergeNoteTable(context);
 					TempDatabaseHelper.mergeTodoTable(context);
+					Log.d("duyngu", "huychay");
+					sharedViewModel.notifyDataChanged();
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
@@ -46,7 +52,7 @@ public class FirebaseHandler {
 		}).addOnFailureListener(new OnFailureListener() {
 			@Override
 			public void onFailure(@NonNull Exception exception) {
-				// handle any errors
+				// Handle any errors
 			}
 		});
 	}
@@ -82,6 +88,9 @@ public class FirebaseHandler {
 		}).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 			@Override
 			public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+				DatabaseHandler.deleteAllNote(context);
+				DatabaseHandler.deleteAllImage(context);
+				sharedViewModel.notifyDataChanged();
 				Toast.makeText(context, "Upload successfully", Toast.LENGTH_SHORT).show();
 			}
 		});

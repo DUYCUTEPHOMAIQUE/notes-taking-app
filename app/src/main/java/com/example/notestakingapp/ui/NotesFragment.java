@@ -65,7 +65,7 @@ public class NotesFragment extends Fragment {
     private SQLiteDatabase db;
     private DatabaseHandler databaseHandler;
     private NoteTakingDatabaseHelper noteTakingDatabaseHelper;
-    private SharedViewModel sharedViewModel;
+    public static SharedViewModel sharedViewModel;
     private List<Integer> listNoteIDChecked;
     public static ActivityResultLauncher<Intent> noteEditLauncher;
     FloatingActionButton exitButton;
@@ -153,7 +153,6 @@ public class NotesFragment extends Fragment {
                 // Cập nhật shared view model
                 if (listNoteIdChecked != null) {
 
-
                 }
                 sharedViewModel.setItemLongPressed(true);
             }
@@ -167,15 +166,12 @@ public class NotesFragment extends Fragment {
                 notesAdapter.notifyDataSetChanged();
             }
         });
-        sharedViewModel.getDataChanged().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isDataChanged) {
-                try {
-                    notesAdapter.notifyDataSetChanged();
-                    updateView();
-                } catch (Exception e) {
+        sharedViewModel.getDataChanged().observe(getViewLifecycleOwner(), isDataChanged -> {
+            try {
+                notesAdapter.notifyDataSetChanged();
+                updateView();
+            } catch (Exception e) {
 
-                }
             }
         });
         sharedViewModel.getIsDelete().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
@@ -200,9 +196,12 @@ public class NotesFragment extends Fragment {
     }
 
     public void updateView() {
-        List<Note> noteList = databaseHandler.getNoteByCreateAt(getActivity(), "desc");
+        Log.d("duyngu", "okkkkk1111111");
+
+        List<Note> noteList = DatabaseHandler.getNoteByCreateAt(getActivity(), "desc");
         LinkedHashMap<Integer, ArrayList<Component>> hashMap = new LinkedHashMap<>();
         if (noteList != null) {
+            Log.d("duyngu", noteList.toString());
             for (Note note : noteList) {
                 hashMap.put(note.getNoteId(), databaseHandler.getAllComponent(getActivity(), note.getNoteId()));
             }
