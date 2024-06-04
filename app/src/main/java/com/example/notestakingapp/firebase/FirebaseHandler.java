@@ -1,5 +1,7 @@
 package com.example.notestakingapp.firebase;
 
+import static com.example.notestakingapp.ui.NotesFragment.sharedViewModel;
+
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -7,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.TempDatabaseHelper;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,6 +43,8 @@ public class FirebaseHandler {
 
 					TempDatabaseHelper.mergeNoteTable(context);
 					TempDatabaseHelper.mergeTodoTable(context);
+					Log.d("duyngu", "huychay");
+					sharedViewModel.notifyDataChanged();
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
@@ -83,6 +88,9 @@ public class FirebaseHandler {
 		}).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 			@Override
 			public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+				DatabaseHandler.deleteAllNote(context);
+				DatabaseHandler.deleteAllImage(context);
+				sharedViewModel.notifyDataChanged();
 				Toast.makeText(context, "Upload successfully", Toast.LENGTH_SHORT).show();
 			}
 		});

@@ -1,5 +1,7 @@
 package com.example.notestakingapp.firebase;
 
+import static com.example.notestakingapp.ui.NotesFragment.sharedViewModel;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.ui.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -72,6 +75,7 @@ public class FirebaseAuthHandler {
                             editor.apply();
                             updateUI(user, context);
                             FirebaseHandler.syncFromFirebase(context);
+
                         } else {
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(context, "Sign In failed: " + task.getException().getMessage(),
@@ -84,9 +88,10 @@ public class FirebaseAuthHandler {
     public void signOut(Context context) {
         String userId = FirebaseAuthHandler.getUserId();
         if (userId != null) {
+            FirebaseHandler.syncToFirebase(context);
             File dbFile = context.getDatabasePath("note.db");
             if (dbFile.exists()) {
-                dbFile.delete(); // Xóa file local
+
                 Log.d(TAG, "Local database file deleted");
             }
 

@@ -160,6 +160,12 @@ public class DatabaseHandler {
         db.execSQL("DELETE FROM " + NOTE_TABLE);
     }
 
+    public static void deleteAllImage(Context context) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM " + IMAGE_TABLE);
+    }
+
     //todo: public Note getNoteById(Context context, int noteId)
     // Trả về 1 đối tượng Note thông qua noteId
     public Note getNoteById(Context context, int noteId) {
@@ -292,7 +298,7 @@ public class DatabaseHandler {
     }
 
     //todo: public ArrayList<Note> getNoteByCreateAt(Context context, String order)
-    public ArrayList<Note> getNoteByCreateAt(Context context, String order) {    //truyền giá trị biến order là  "desc" hoặc "asc"
+    public static ArrayList<Note> getNoteByCreateAt(Context context, String order) {    //truyền giá trị biến order là  "desc" hoặc "asc"
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
@@ -310,7 +316,7 @@ public class DatabaseHandler {
             } while (cursor.moveToNext());
             return listNote;
         } else {
-            return null;
+            return new ArrayList<>();
         }
     }
 
