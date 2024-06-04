@@ -1,4 +1,4 @@
-package com.example.notestakingapp.ui;
+package com.example.notestakingapp.authentication;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -6,77 +6,78 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.MotionEvent;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Objects;
 
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.firebase.*;
 
-public class SignUpActivity extends AppCompatActivity {
-    EditText emailEditText, passwordEditText, reenteredPassword;
-    TextView backButton, signUpButton, signInText, googleButton;
+public class SignInActivity extends AppCompatActivity {
+    EditText emailEditText, passwordEditText;
+    TextView backButton, forgotPassButton, signInButton, signUpText, googleButton;
     private FirebaseAuthHandler authHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_sign_up);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.sign_up), (v, insets) -> {
+        setContentView(R.layout.activity_sign_in);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.sign_in), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        initUI(); // initiate UI components
-        setupUI(findViewById(R.id.sign_up)); // hide software keyboard
 
-        // Initialize FirebaseAuthHandler
-        authHandler = new FirebaseAuthHandler();
+        initUI(); // initialize UI components
+        setupUI(findViewById(R.id.sign_in)); // hide software keyboard
+        authHandler = new FirebaseAuthHandler(); // initialize FirebaseAuthHandler
 
         // methods for buttons
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                finish();
-            }
+            public void onClick(View v) { finish(); }
         });
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                signUpAttempt();
-            }
-
-            private void signUpAttempt() {
-                String email = emailEditText.getText().toString().trim();
-                String password = passwordEditText.getText().toString().trim();
-                String rePassword = reenteredPassword.getText().toString().trim();
-
-                if (!email.isEmpty() && !password.isEmpty()) {
-                    if (validateInput(email, password, rePassword)) {
-                        signUp(email, password);
-                        Toast.makeText(SignUpActivity.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                        startActivity(intent);
-                    }
-                } else {
-                    Toast.makeText(SignUpActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        signInText.setOnClickListener(new View.OnClickListener() {
+        forgotPassButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
+
+            }
+        });
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    signInAttempt();
+                }
+
+                private void signInAttempt() {
+                    String email = emailEditText.getText().toString().trim();
+                    String password = passwordEditText.getText().toString().trim();
+
+                    if (!email.isEmpty() && !password.isEmpty()) {
+                        if (validateInput(email, password)) {
+                            signIn(email, password);
+                        }
+                    } else {
+                        Toast.makeText(SignInActivity.this, "Please enter email and password", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        });
+        signUpText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SignInActivity.this, SignUpActivity.class);
                 startActivity(intent);
             }
         });
@@ -88,27 +89,17 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private boolean validateInput(String email, String password, String rePassword) {
+    private boolean validateInput(String email, String password) {
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(SignUpActivity.this, "Please enter a valid email address.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (password.isEmpty() || password.length() < 6) {
-            Toast.makeText(SignUpActivity.this, "Password must be at least 6 characters long.", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (!password.equals(rePassword)) {
-            Toast.makeText(SignUpActivity.this, "Passwords do not match.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(SignInActivity.this, "Please enter a valid email address.", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         return true;
     }
 
-    private void signUp(String email, String password) {
-        authHandler.signUp(email, password, this);
+    private void signIn(String email, String password) {
+        authHandler.signIn(email, password, this);
     }
 
     // hide software keyboard
@@ -119,7 +110,8 @@ public class SignUpActivity extends AppCompatActivity {
                         Activity.INPUT_METHOD_SERVICE);
         if(inputMethodManager.isAcceptingText()){
             inputMethodManager.hideSoftInputFromWindow(
-                    Objects.requireNonNull(activity.getCurrentFocus()).getWindowToken(), 0
+                    Objects.requireNonNull(activity.getCurrentFocus()).getWindowToken(),
+                    0
             );
         }
     }
@@ -130,7 +122,7 @@ public class SignUpActivity extends AppCompatActivity {
             view.setOnTouchListener(new View.OnTouchListener() {
                 @SuppressLint("ClickableViewAccessibility")
                 public boolean onTouch(View v, MotionEvent event) {
-                    hideSoftKeyboard(SignUpActivity.this);
+                    hideSoftKeyboard(SignInActivity.this);
                     return false;
                 }
             });
@@ -148,9 +140,9 @@ public class SignUpActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         emailEditText = findViewById(R.id.input_email);
         passwordEditText = findViewById(R.id.input_password);
-        reenteredPassword = findViewById(R.id.input_reentered_password);
-        signUpButton = findViewById(R.id.sign_up_button);
-        signInText = findViewById(R.id.sign_in_text);
+        forgotPassButton = findViewById(R.id.text_forgot_password);
+        signInButton = findViewById(R.id.sign_in_button);
+        signUpText = findViewById(R.id.sign_up_text);
         googleButton = findViewById(R.id.google_button);
     }
 }
