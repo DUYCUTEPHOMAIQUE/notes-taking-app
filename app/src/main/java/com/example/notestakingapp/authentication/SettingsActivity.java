@@ -43,7 +43,7 @@ import com.example.notestakingapp.R;
 public class SettingsActivity extends AppCompatActivity {
     TextView backButton;
     RelativeLayout profile, editProfileButton, signInButton, signUpButton, changePasswordButton, signOutButton;
-    SwitchCompat notificationsSwitch;
+    SwitchCompat darkModeSwitch, notificationsSwitch;
     private FirebaseAuthHandler authHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,12 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
         editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        darkModeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -176,6 +182,7 @@ public class SettingsActivity extends AppCompatActivity {
         backButton = findViewById(R.id.back_button);
         profile = findViewById(R.id.profile);
         editProfileButton = findViewById(R.id.edit_profile_button);
+        darkModeSwitch = findViewById(R.id.dark_mode_switch);
         notificationsSwitch = findViewById(R.id.notifications_switch);
         signInButton = findViewById(R.id.sign_in_button);
         signUpButton = findViewById(R.id.sign_up_button);
