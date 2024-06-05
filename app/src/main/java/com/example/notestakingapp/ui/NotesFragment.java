@@ -196,12 +196,10 @@ public class NotesFragment extends Fragment {
     }
 
     public void updateView() {
-        Log.d("duyngu", "okkkkk1111111");
 
         List<Note> noteList = DatabaseHandler.getNoteByCreateAt(getActivity(), "desc");
         LinkedHashMap<Integer, ArrayList<Component>> hashMap = new LinkedHashMap<>();
         if (noteList != null) {
-            Log.d("duyngu", noteList.toString());
             for (Note note : noteList) {
                 hashMap.put(note.getNoteId(), databaseHandler.getAllComponent(getActivity(), note.getNoteId()));
             }
