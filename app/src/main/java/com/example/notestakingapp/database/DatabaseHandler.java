@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -182,6 +183,7 @@ public class DatabaseHandler {
                     cursor.getLong(2),          //createAt
                     cursor.getString(3));       //color
         } else {
+            Log.d("NOTE", "is null");
             return null;
         }
     }
@@ -810,6 +812,7 @@ public class DatabaseHandler {
                     cursor.getLong(3),      //Duration
                     cursor.getInt(4) > 0);             // complete
         } else {
+            Log.d("TODO", "is null");
             return null;
         }
     }

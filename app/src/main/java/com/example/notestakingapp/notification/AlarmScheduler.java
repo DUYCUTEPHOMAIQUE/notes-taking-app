@@ -11,15 +11,21 @@ import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.notification.AlarmReceiver;
 import com.example.notestakingapp.database.DatabaseHandler;
+
+import java.util.Objects;
+
 public class AlarmScheduler {
+
+    public final static boolean IS_TODO = false;
+    public final static boolean IS_NOTE = true;
 
     @SuppressLint("ScheduleExactAlarm")
     public static void scheduleTaskAlarm(Context context, int Id, long duration, boolean check) {
         Object task = null;
        // ToDo task = DatabaseHandler.getToDoById(context, todoId);
-        if (!check){ // if check = 0 task = todo else task = note
+        if (check == IS_TODO){ // if check = 0 task = todo else task = note
             task = DatabaseHandler.getToDoById(context, Id);
-        } else {
+        } else if(check == IS_NOTE)  {
             task = DatabaseHandler.getNoteById(context, Id);
         }
         // Tạo Intent để gửi tới TaskAlarmReceiver
@@ -77,5 +83,6 @@ public class AlarmScheduler {
         } else {
             Log.e("AlarmScheduler", "AlarmManager is null, cannot cancel alarm.");
         }
+        Log.d("TODO", "TODO DELETED");
     }
 }

@@ -258,7 +258,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+//        DuongTestingFunction();
+    }
 
+    private void DuongTestingFunction() {
+        DatabaseHandler.deleteAllTodo(this);
     }
 
     private void searchToDo(String query) {

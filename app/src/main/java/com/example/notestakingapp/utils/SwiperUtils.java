@@ -17,6 +17,7 @@ import com.example.notestakingapp.R;
 import com.example.notestakingapp.adapter.TodoAdapter;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
+import com.example.notestakingapp.notification.AlarmScheduler;
 import com.example.notestakingapp.shared.Item;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -54,8 +55,11 @@ public class SwiperUtils {
                     public void onDismissed(Snackbar snackbar, int event) {
                         if (event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
                             // Perform the deletion from the database after the Snackbar is dismissed and not due to an "Undo" action
+                            //delete to-do alarm
+                            AlarmScheduler.cancelTaskAlarm(context, task.getId());
                             //todo: db --OK
                             DatabaseHandler.deleteTodo(context, task.getId());
+
                         }
                     }
                 });

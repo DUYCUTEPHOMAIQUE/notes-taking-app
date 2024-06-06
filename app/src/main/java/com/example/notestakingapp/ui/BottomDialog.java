@@ -56,12 +56,14 @@ import java.util.Date;
 import java.util.List;
 
 public class BottomDialog {
+
+    public static int noteId;
     private static SQLiteDatabase db;
     static DatabaseHandler databaseHandler;
 
     public static String selectedNoteColor = "#FFFFFF";
 
-public static boolean IS_TODO = false;
+    public static boolean IS_TODO = false;
     private static Context mContext;
 
     public static void setColor(String color) {
@@ -71,7 +73,8 @@ public static boolean IS_TODO = false;
         }
     }
 
-    public static void showToolDialog(Context context) {
+    public static void showToolDialog(Context context, int _noteId) {
+        noteId = _noteId;
         mContext = context;
         Log.d("duyColor", String.valueOf(mContext instanceof NoteEditActivity));
         final Dialog dialog = new Dialog(context);
@@ -111,12 +114,7 @@ public static boolean IS_TODO = false;
 
             @Override
             public void onClick(View v) {
-                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder
-                        .datePicker()
-                        .setTheme(R.style.ThemeOverlay_App_MaterialCalendar)
-                        .setTitleText("Select date bae")
-                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                        .build();
+                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTheme(R.style.ThemeOverlay_App_MaterialCalendar).setTitleText("Select date bae").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Date");
                 datePicker.addOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -136,25 +134,27 @@ public static boolean IS_TODO = false;
                     public void onPositiveButtonClick(Long aLong) {
                         calendar.setTimeInMillis(aLong);
                         MaterialTimePicker.Builder builder = new MaterialTimePicker.Builder();
-                        builder.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                                .setTimeFormat(TimeFormat.CLOCK_24H)
-                                .setHour(currentHour)
-                                .setMinute(currentMinutes)
-                                .setTitleText("Select Time Bae");
+                        builder.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK).setTimeFormat(TimeFormat.CLOCK_24H).setHour(currentHour).setMinute(currentMinutes).setTitleText("Select Time Bae");
                         MaterialTimePicker timePicker = builder.build();
 
 //                        https://github.com/material-components/material-components-android/blob/master/catalog/java/io/material/catalog/timepicker/TimePickerMainDemoFragment.java
                         timePicker.addOnPositiveButtonClickListener(dialog -> {
 
-                            //todo: add setTime date todo task
                             int selectedHour = timePicker.getHour();
                             int selectedMinute = timePicker.getMinute();
-                            Toast.makeText(context, "Date: " +
-                                    calendar.get(Calendar.YEAR) + "-"
-                                    + (calendar.get(Calendar.MONTH) + 1) + "-" +
-                                    calendar.get(Calendar.DAY_OF_MONTH) +
-                                    " Time: " + selectedHour + ":" +
-                                    selectedMinute, Toast.LENGTH_SHORT).show();
+
+
+                            // Set time in calendar
+                            calendar.set(Calendar.HOUR_OF_DAY, selectedHour);
+                            calendar.set(Calendar.MINUTE, selectedMinute);
+                            calendar.set(Calendar.SECOND, 0);
+                            calendar.set(Calendar.MILLISECOND, 0);
+                            long miLiSecond;
+                            miLiSecond = calendar.getTimeInMillis();
+                            AlarmScheduler.scheduleTaskAlarm(context, noteId, miLiSecond, AlarmScheduler.IS_NOTE);
+                            //todo: add setTime date todo task
+                            Toast.makeText(context, "Date: " + calendar.get(Calendar.YEAR) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.DAY_OF_MONTH) + " Time: " + selectedHour + ":" + selectedMinute, Toast.LENGTH_SHORT).show();
+
                         });
 
                         timePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
@@ -314,7 +314,7 @@ public static boolean IS_TODO = false;
                     dialog.dismiss();
                 } else {
                     dialog.dismiss();
-                    showToolDialog(context);
+                    showToolDialog(context, noteId);
                 }
             }
         });
@@ -352,8 +352,7 @@ public static boolean IS_TODO = false;
         linearLayoutXButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (context instanceof MainActivity)
-                    listNoteIdChecked.clear();
+                if (context instanceof MainActivity) listNoteIdChecked.clear();
                 dialog.dismiss();
             }
         });
@@ -425,8 +424,8 @@ public static boolean IS_TODO = false;
         if (todo != null) {
             editText.setText(todo.getContent());
             textViewDone.setTextColor(colorAccent);
-            if(todo.getDuration()!=null)  miLiSecond[0] = todo.getDuration();
-            if(todo.getDuration()!=null && miLiSecond[0] != -1) {
+            if (todo.getDuration() != null) miLiSecond[0] = todo.getDuration();
+            if (todo.getDuration() != null && miLiSecond[0] != -1) {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
                 String dateOK = sdf.format(new Date(todo.getDuration()));
                 textViewDate.setVisibility(View.VISIBLE);
@@ -493,14 +492,15 @@ public static boolean IS_TODO = false;
                                 //todo: update todo
                                 databaseHandler.updateTodo(context, todo.getId(), editText.getText().toString().trim(), miLiSecond[0], false);
                                 AlarmScheduler.cancelTaskAlarm(context, todo.getId());
-                                if(miLiSecond[0] != -1) AlarmScheduler.scheduleTaskAlarm(context, todo.getId(), miLiSecond[0], IS_TODO);
+                                if (miLiSecond[0] != -1)
+                                    AlarmScheduler.scheduleTaskAlarm(context, todo.getId(), miLiSecond[0], IS_TODO);
                                 dialog.dismiss();
 
                             } else {
                                 //todo: add toDo
                                 if (miLiSecond[0] != -1) {
                                     long id = DatabaseHandler.insertTodo(context, content[0], miLiSecond[0]);
-                                    AlarmScheduler.scheduleTaskAlarm(context, (int)id, miLiSecond[0], IS_TODO);
+                                    AlarmScheduler.scheduleTaskAlarm(context, (int) id, miLiSecond[0], IS_TODO);
                                 } else {
                                     DatabaseHandler.insertTodo(context, content[0], null);
 
@@ -549,12 +549,7 @@ public static boolean IS_TODO = false;
             public void onClick(View v) {
                 editText.clearFocus();
                 HideKeyBoard.hideKeyboard((Activity) context);
-                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder
-                        .datePicker()
-                        .setTheme(R.style.ThemeOverlay_App_MaterialCalendar)
-                        .setTitleText("Select date bae")
-                        .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                        .build();
+                MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker().setTheme(R.style.ThemeOverlay_App_MaterialCalendar).setTitleText("Select date bae").setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build();
 
                 datePicker.show(((AppCompatActivity) context).getSupportFragmentManager(), "Date");
 
@@ -575,11 +570,7 @@ public static boolean IS_TODO = false;
                     public void onPositiveButtonClick(Long aLong) {
                         calendar.setTimeInMillis(aLong);
                         MaterialTimePicker.Builder builder = new MaterialTimePicker.Builder();
-                        builder.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK)
-                                .setTimeFormat(TimeFormat.CLOCK_24H)
-                                .setHour(currentHour)
-                                .setMinute(currentMinutes)
-                                .setTitleText("Select Time Bae");
+                        builder.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK).setTimeFormat(TimeFormat.CLOCK_24H).setHour(currentHour).setMinute(currentMinutes).setTitleText("Select Time Bae");
                         MaterialTimePicker timePicker = builder.build();
 
 //                        https://github.com/material-components/material-components-android/blob/master/catalog/java/io/material/catalog/timepicker/TimePickerMainDemoFragment.java
