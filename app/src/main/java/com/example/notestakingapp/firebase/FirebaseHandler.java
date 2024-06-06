@@ -43,7 +43,7 @@ public class FirebaseHandler {
 
 					TempDatabaseHelper.mergeNoteTable(context);
 					TempDatabaseHelper.mergeTodoTable(context);
-					Log.d("duyngu", "huychay");
+
 					sharedViewModel.notifyDataChanged();
 				} catch (Exception e) {
 					throw new RuntimeException(e);
@@ -93,35 +93,6 @@ public class FirebaseHandler {
 				Toast.makeText(context, "Upload successfully", Toast.LENGTH_SHORT).show();
 			}
 		});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 	}

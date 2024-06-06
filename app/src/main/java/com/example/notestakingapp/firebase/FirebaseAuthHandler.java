@@ -132,12 +132,13 @@ public class FirebaseAuthHandler {
 		}
 	}
 
+	public static final String LOCAL_USER = "LOCAL_USER";
 	public static String getUserId() {
 		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 		if (user != null) {
 			userId = user.getUid();
 		} else {
-			userId = null;
+			userId = LOCAL_USER;
 		}
 		return userId;
 	}
