@@ -39,6 +39,7 @@ import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
+import com.example.notestakingapp.notification.AlarmScheduler;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
@@ -59,6 +60,8 @@ public class BottomDialog {
     static DatabaseHandler databaseHandler;
 
     public static String selectedNoteColor = "#FFFFFF";
+
+public static boolean IS_TODO = false;
     private static Context mContext;
 
     public static void setColor(String color) {
@@ -489,13 +492,18 @@ public class BottomDialog {
                             if (todo != null) {
                                 //todo: update todo
                                 databaseHandler.updateTodo(context, todo.getId(), editText.getText().toString().trim(), miLiSecond[0], false);
+                                AlarmScheduler.cancelTaskAlarm(context, todo.getId());
+                                if(miLiSecond[0] != -1) AlarmScheduler.scheduleTaskAlarm(context, todo.getId(), miLiSecond[0], IS_TODO);
                                 dialog.dismiss();
+
                             } else {
                                 //todo: add toDo
                                 if (miLiSecond[0] != -1) {
-                                    DatabaseHandler.insertTodo(context, content[0], miLiSecond[0]);
+                                    long id = DatabaseHandler.insertTodo(context, content[0], miLiSecond[0]);
+                                    AlarmScheduler.scheduleTaskAlarm(context, (int)id, miLiSecond[0], IS_TODO);
                                 } else {
                                     DatabaseHandler.insertTodo(context, content[0], null);
+
                                 }
                                 dialog.dismiss();
 

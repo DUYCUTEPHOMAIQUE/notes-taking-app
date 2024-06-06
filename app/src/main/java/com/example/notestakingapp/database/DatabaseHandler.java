@@ -168,7 +168,7 @@ public class DatabaseHandler {
 
     //todo: public Note getNoteById(Context context, int noteId)
     // Trả về 1 đối tượng Note thông qua noteId
-    public Note getNoteById(Context context, int noteId) {
+    public static Note getNoteById(Context context, int noteId) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
@@ -795,7 +795,24 @@ public class DatabaseHandler {
 
 		return db.insert(TODO_TABLE, null, ct);
 	}
+    public static ToDo getToDoById(Context context, int todoId) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
+        String query = "SELECT * FROM " + TODO_TABLE + " WHERE " + COLUMN_TODO_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(todoId)});
+
+        if (cursor.moveToFirst()) {
+            return new ToDo(cursor.getInt(0),  //todoId
+                    cursor.getString(1),       //content
+                    cursor.getLong(2),          //createAt
+                    cursor.getLong(3),      //Duration
+                    cursor.getInt(4) > 0);             // complete
+        } else {
+            return null;
+        }
+    }
     //todo: public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull String createAt,@Nullable String duration)
     public int updateTodo(Context context, int todoId, Long duration) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);

@@ -16,8 +16,11 @@ import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 import com.example.notestakingapp.R.id;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -99,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
         db = noteTakingDatabaseHelper.getReadableDatabase();
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
+
+        // Kiểm tra và tạo kênh thông báo
+        createNotificationChannel();
 
 //        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
 
@@ -370,5 +376,22 @@ public class MainActivity extends AppCompatActivity {
         }
         return noteDetailsComponentList;
     }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    getString(R.string.app_name),
+                    "Task Notifications",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Channel for task notifications");
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                Log.d("notiDuy", "createChannel");
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
 
 }
