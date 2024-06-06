@@ -866,7 +866,7 @@ public class DatabaseHandler {
 
 
     //todo: public int deleteTodo(Context context, int todoId)
-    public int deleteTodo(Context context, int todoId) {
+    public static int deleteTodo(Context context, int todoId) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
