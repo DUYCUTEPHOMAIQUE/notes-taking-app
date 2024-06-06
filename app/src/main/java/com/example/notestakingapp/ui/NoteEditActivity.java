@@ -265,7 +265,7 @@ public class NoteEditActivity extends AppCompatActivity {
 //                showToolDialog();
             HideKeyBoard.hideKeyboard(NoteEditActivity.this);
 
-            BottomDialog.showToolDialog(NoteEditActivity.this);
+            BottomDialog.showToolDialog(NoteEditActivity.this, noteId);
         });
 
         imageImage.setOnClickListener(v -> onOpenGallery());
