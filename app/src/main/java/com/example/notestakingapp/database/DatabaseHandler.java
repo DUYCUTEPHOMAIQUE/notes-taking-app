@@ -883,7 +883,7 @@ public class DatabaseHandler {
 
 
     //todo: public int deleteTodo(Context context, int todoId)
-    public int deleteTodo(Context context, int todoId) {
+    public static int deleteTodo(Context context, int todoId) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -934,7 +934,7 @@ public class DatabaseHandler {
             } while (cursor.moveToNext());
             return listToDo;
         } else {
-            return new ArrayList<>();
+            return new ArrayList<ToDo>();
         }
     }
 
@@ -1132,5 +1132,29 @@ public class DatabaseHandler {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
         db.execSQL("DELETE FROM SQLITE_SEQUENCE");
+    }
+
+    public static void deleteAllData (Context context){
+        deleteAllNote(context);
+        deleteAllImage(context);
+        deleteAllTextSegment(context);
+        deleteAllAudio(context);
+        deleteAllNoteTag(context);
+        deleteAllTag(context);
+        deleteAllTodo(context);
+        deleteAllComponent(context);
+    }
+
+
+    public static void deleteAllAudio(Context context) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM " + AUDIO_TABLE);
+    }
+
+    public static void deleteAllComponent(Context context) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM " + COMPONENT_TABLE);
     }
 }
