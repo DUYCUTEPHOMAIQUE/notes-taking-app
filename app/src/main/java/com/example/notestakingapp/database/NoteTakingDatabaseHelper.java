@@ -10,14 +10,15 @@ import androidx.annotation.Nullable;
 
 public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
     public static final String DB_NAME = "note.db";
-    public static final int DB_VERSION = 4;
+    public static final int DB_VERSION = 5;
 
     //NOTE
     public static final String COLUMN_NOTE_TITLE = "NOTE_TITLE";
-
     public static final String COLUMN_NOTE_ID = "NOTE_ID";
     public static final String COLUMN_NOTE_CREATEAT = "CREATE_AT";
     public static final String COLUMN_NOTE_COLOR = "COLOR";
+	//user_id == 0 means local user
+	public static final String COLUMN_USER_ID = "USER_ID";
 
 
     //TEXT SEGMENT
@@ -178,6 +179,12 @@ public class NoteTakingDatabaseHelper extends SQLiteOpenHelper {
 
             db.update(TODO_TABLE,ct, COLUMN_TODO_COMPLETE + " IS NULL", null);
         }
+		if (oldVersion < 5) {
+			db.execSQL("ALTER TABLE " + NOTE_TABLE +
+					" ADD COLUMN " + COLUMN_USER_ID + " TEXT");
+			db.execSQL("ALTER TABLE " + TODO_TABLE +
+					" ADD COLUMN " + COLUMN_USER_ID + " TEXT");
+		}
     }
 
 }
