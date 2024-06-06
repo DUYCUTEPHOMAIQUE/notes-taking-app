@@ -76,13 +76,8 @@ public class FirebaseAuthHandler {
 
 	public void signOut(Context context) {
 		String userId = FirebaseAuthHandler.getUserId();
-		if (userId != null) {
+		if (userId != LOCAL_USER) {
 			FirebaseHandler.syncToFirebase(context);
-			File dbFile = context.getDatabasePath("note.db");
-			if (dbFile.exists()) {
-
-				Log.d(TAG, "Local database file deleted");
-			}
 
 			// Xóa SharedPreferences
 			SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
@@ -103,30 +98,28 @@ public class FirebaseAuthHandler {
 	public void changePassword(String oldPassword, final String newPassword, final Context context) {
 		FirebaseUser user = mAuth.getCurrentUser();
 		if (user != null) {
-			mAuth.signInWithEmailAndPassword(Objects.requireNonNull(user.getEmail()), oldPassword)
-					.addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-						@Override
-						public void onComplete(@NonNull Task<AuthResult> task) {
-							if (task.isSuccessful()) {
-								FirebaseUser currentUser = mAuth.getCurrentUser();
-								if (currentUser != null) {
-									currentUser.updatePassword(newPassword)
-											.addOnCompleteListener(new OnCompleteListener<Void>() {
-												@Override
-												public void onComplete(@NonNull Task<Void> task) {
-													if (task.isSuccessful()) {
-														Toast.makeText(context, "Password updated successfully", Toast.LENGTH_SHORT).show();
-													} else {
-														Toast.makeText(context, "Failed to update password: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-													}
-												}
-											});
+			mAuth.signInWithEmailAndPassword(Objects.requireNonNull(user.getEmail()), oldPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+				@Override
+				public void onComplete(@NonNull Task<AuthResult> task) {
+					if (task.isSuccessful()) {
+						FirebaseUser currentUser = mAuth.getCurrentUser();
+						if (currentUser != null) {
+							currentUser.updatePassword(newPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
+								@Override
+								public void onComplete(@NonNull Task<Void> task) {
+									if (task.isSuccessful()) {
+										Toast.makeText(context, "Password updated successfully", Toast.LENGTH_SHORT).show();
+									} else {
+										Toast.makeText(context, "Failed to update password: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+									}
 								}
-							} else {
-								Toast.makeText(context, "Authentication failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-							}
+							});
 						}
-					});
+					} else {
+						Toast.makeText(context, "Authentication failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
 		} else {
 			Toast.makeText(context, "User not signed in", Toast.LENGTH_SHORT).show();
 		}

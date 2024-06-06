@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.firebase.FirebaseAuthHandler;
 
 public class TempDatabaseHelper extends SQLiteOpenHelper {
 	public static final String DB_NAME = "test";
@@ -28,14 +29,12 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 	}
-
-	//Merge Todo Table
 	public static void mergeTodoTable(Context context) {
 		try {
 			SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
 			SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
-			String query = "SELECT * FROM " + DatabaseHandler.TODO_TABLE;
-			Cursor cursor = tempDb.rawQuery(query, null);
+			String query = "SELECT * FROM " + DatabaseHandler.TODO_TABLE + " WHERE " + DatabaseHandler.COLUMN_USER_ID + " = ?";
+			Cursor cursor = tempDb.rawQuery(query, new String[]{FirebaseAuthHandler.getUserId()});
 			while (cursor.moveToNext()) {
 				String todoContent = cursor.getString(1);
 				Long todoCreateAt = cursor.getLong(2);
@@ -48,17 +47,14 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 			Toast.makeText(context, "MERGE TODO Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 	}
-
-	//Merge Note Table
 	public static void mergeNoteTable(Context context) {
 		try {
 			SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
 			SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
 			//get all records from test's db note table
-			String query = "SELECT * FROM " + DatabaseHandler.NOTE_TABLE;
-			Cursor cursor = tempDb.rawQuery(query, null);
+			String query = "SELECT * FROM " + DatabaseHandler.NOTE_TABLE + " WHERE " + DatabaseHandler.COLUMN_USER_ID + " = ?";
+			Cursor cursor = tempDb.rawQuery(query, new String[]{FirebaseAuthHandler.getUserId()});
 			while (cursor.moveToNext()) {
-//				Log.d("ALO", "ALO");
 				Note note = new Note(cursor.getInt(0),  //noteId
 						cursor.getString(1),            //title
 						cursor.getLong(2),              //createAt
@@ -74,7 +70,6 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 				Log.d("TAG ID", Integer.toString((int) tagId));
 
 				if (tagId != 0) {
-					//					//get firebase tag name
 					String tagName = getTempTagById(context, tagId);
 
 					int dbTagId = checkTagExistByName(context, tagName);

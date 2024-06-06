@@ -1128,15 +1128,26 @@ public class DatabaseHandler {
 		db.execSQL("DELETE FROM SQLITE_SEQUENCE");
 	}
 
-	public static void deleteAllData(Context context) {
-		deleteAllNote(context);
-		deleteAllImage(context);
-		deleteAllTextSegment(context);
-		deleteAllAudio(context);
-		deleteAllNoteTag(context);
-		deleteAllTag(context);
-		deleteAllTodo(context);
-		deleteAllComponent(context);
+	public static void deleteAllFirebaseData(Context context) {
+		deleteAllFirebaseNote(context);
+//		deleteAllImage(context);
+//		deleteAllTextSegment(context);
+//		deleteAllAudio(context);
+//		deleteAllNoteTag(context);
+//		deleteAllTag(context);
+		deleteAllFirebaseTodo(context);
+//		deleteAllComponent(context);
+	}
+
+	public static void deleteAllFirebaseNote(Context context) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+		db.delete(NOTE_TABLE, COLUMN_USER_ID + " != ?", new String[] {FirebaseAuthHandler.LOCAL_USER});
+	}
+	public static void deleteAllFirebaseTodo(Context context) {
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+		db.delete(TODO_TABLE, COLUMN_USER_ID + " != ?", new String[] {FirebaseAuthHandler.LOCAL_USER});
 	}
 
 
@@ -1151,4 +1162,5 @@ public class DatabaseHandler {
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 		db.execSQL("DELETE FROM " + COMPONENT_TABLE);
 	}
+
 }

@@ -88,7 +88,7 @@ public class FirebaseHandler {
 		}).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 			@Override
 			public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-				DatabaseHandler.deleteAllData(context);
+				DatabaseHandler.deleteAllFirebaseData(context);
 				sharedViewModel.notifyDataChanged();
 				Toast.makeText(context, "Upload successfully", Toast.LENGTH_SHORT).show();
 			}

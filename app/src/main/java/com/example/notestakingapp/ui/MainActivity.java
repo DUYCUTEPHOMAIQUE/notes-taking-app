@@ -93,9 +93,6 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//	    Intent drawingIntent = new Intent(MainActivity.this, DrawingActivity.class);
-//	    drawingIntent.putExtra("imageId", 0);
-//	    startActivity(drawingIntent);
 
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
 
@@ -105,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Kiểm tra và tạo kênh thông báo
         createNotificationChannel();
-
-//        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
 
         //khoi chay ui
         initUi();
@@ -118,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 updateNotes();
             }
         });
-        //anim popup hehehe T_T
         animButton(imageViewAdd);
 
         //xu li click button
