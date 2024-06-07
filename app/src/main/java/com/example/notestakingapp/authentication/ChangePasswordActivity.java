@@ -37,7 +37,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
         initUI(); // initialize UI components
         setupUI(findViewById(R.id.change_password)); // hide software keyboard
-        authHandler = new FirebaseAuthHandler(); // initialize FirebaseAuthHandler
+        authHandler = new FirebaseAuthHandler(this); // initialize FirebaseAuthHandler
 
         // methods for buttons
         backButton.setOnClickListener(new View.OnClickListener() {

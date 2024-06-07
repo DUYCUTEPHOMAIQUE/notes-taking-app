@@ -41,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
         initUI(); // initialize UI components
         setupUI(findViewById(R.id.sign_up)); // hide software keyboard
-        authHandler = new FirebaseAuthHandler(); // initialize FirebaseAuthHandler
+        authHandler = new FirebaseAuthHandler(this); // initialize FirebaseAuthHandler
 
         // methods for buttons
         backButton.setOnClickListener(new View.OnClickListener() {

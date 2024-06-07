@@ -57,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
         textProfileName.setText(userEmail);
 
         initUI(); // initialize UI components
-        authHandler = new FirebaseAuthHandler(); // initialize FirebaseAuthHandler
+        authHandler = new FirebaseAuthHandler(this); // initialize FirebaseAuthHandler
 
         // methods for buttons
         backButton.setOnClickListener(new View.OnClickListener() {
