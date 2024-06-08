@@ -35,9 +35,9 @@
 
     <style name="ThemeOverlay.PChart.Material3TimePicker" parent="ThemeOverlay.Material3.MaterialTimePicker">
         <item name="colorSurface">@color/colorNoteVariant5</item>
-        <item name="colorOnSurfaceVariant">@color/colorGrayDark</item>
+        <item name="colorOnSurfaceVariant">@color/colorDarkGray</item>
         <item name="colorOnSurface">@color/colorError</item>
-        <item name="colorPrimary">@color/colorGrayDark</item>
+        <item name="colorPrimary">@color/colorDarkGray</item>
         <item name="colorOnPrimaryContainer">@color/colorWhite</item>
         <item name="colorPrimaryContainer">@color/colorBlack</item>
     </style>
