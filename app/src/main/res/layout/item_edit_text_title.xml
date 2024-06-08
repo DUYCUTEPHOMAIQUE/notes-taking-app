@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_only_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_12sdp"
     android:layout_marginEnd="@dimen/_12sdp"
-    android:id="@+id/layout_only_title"
     android:orientation="vertical">
     <EditText
         android:id="@+id/edit_text_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="start|top"
+        android:layout_marginTop="@dimen/_4sdp"
         android:background="@null"
         android:hint="@string/note_title"
         android:fontFamily="@font/bold"
-        android:textSize="@dimen/_16ssp"
+        android:textSize="@dimen/title_size"
         android:textColorHint="@color/colorTextHint"
         android:importantForAutofill="no"
-        android:layout_marginBottom="@dimen/_4sdp"
-        android:layout_marginTop="@dimen/_4sdp"/>
+        tools:ignore="TextFields"/>
     <TextView
+        android:id="@+id/textview_current_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorTextDateTime"
-        android:id="@+id/textview_current_time"
-        android:text="ngay thang nam"/>
+        android:layout_marginTop="@dimen/_4sdp"
+        android:text="ngay thang nam"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/colorDarkGray"
+        tools:ignore="HardcodedText"/>
 </LinearLayout>

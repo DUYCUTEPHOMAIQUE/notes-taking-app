@@ -27,11 +27,6 @@ import com.google.firebase.storage.UploadTask;
 import java.io.File;
 import java.util.Objects;
 
-
-
-
-
-
 public class FirebaseAuthHandler {
     public static final String TAG = "EmailPassword";
     private FirebaseAuth mAuth;

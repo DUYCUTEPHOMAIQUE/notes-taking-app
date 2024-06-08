@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -8,68 +9,51 @@
     android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/layout_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-		android:layout_marginTop="@dimen/_20sdp">
-
-        <ImageView
-            android:id="@+id/image_back"
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:src="@drawable/round_arrow_back_ios_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:tint="@color/colorAccent" />
-
-        <TextView
-            android:id="@+id/text_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_12sdp"
-            android:fontFamily="@font/medium"
-            android:includeFontPadding="false"
-            android:text="@string/back"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/_16sdp" />
-    </LinearLayout>
-
-    <ImageView
+    <RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/_20sdp"
-        android:id="@+id/image_save"
-        android:layout_width="@dimen/_24sdp"
-        android:layout_height="@dimen/_24sdp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="@dimen/_6sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:src="@drawable/round_done_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/colorBlack" />
-
-	<ImageView
-		android:layout_marginTop="@dimen/_20sdp"
-		android:id="@+id/image_choose_color"
-		android:layout_width="@dimen/_24sdp"
-		android:layout_height="@dimen/_24sdp"
-		android:layout_alignParentEnd="true"
-		android:layout_marginStart="@dimen/_6sdp"
-		android:layout_marginEnd="@dimen/_12sdp"
-		android:src="@drawable/pen_icon"
-		app:layout_constraintEnd_toStartOf="@+id/image_save"
-		app:layout_constraintTop_toTopOf="parent"
-		app:tint="@color/colorBlack" />
-
+		android:layout_marginStart="@dimen/back_button_margin_start"
+		android:layout_marginEnd="@dimen/_6sdp">
+		<TextView
+			android:id="@+id/back_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:clickable="true"
+			android:focusable="true"
+			android:text="@string/back"
+			android:textSize="@dimen/back_button_size"
+			android:textColor="@color/color_state_accent"
+			app:drawableStartCompat="@drawable/round_arrow_back_ios_24"
+			app:drawableTint="@color/color_state_accent"
+			tools:ignore="RelativeOverlap"/>
+		<ImageView
+			android:id="@+id/image_choose_color"
+			android:layout_width="@dimen/_24sdp"
+			android:layout_height="@dimen/_24sdp"
+			android:layout_marginEnd="@dimen/_6sdp"
+			android:layout_toStartOf="@id/image_save"
+			android:layout_centerVertical="true"
+			android:src="@drawable/pen_icon"
+			app:tint="@color/colorBlack"
+			tools:ignore="ContentDescription"/>
+		<ImageView
+			android:id="@+id/image_save"
+			android:layout_width="@dimen/_24sdp"
+			android:layout_height="@dimen/_24sdp"
+			android:layout_marginEnd="@dimen/_6sdp"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:src="@drawable/round_done_24"
+			app:tint="@color/colorBlack"
+			tools:ignore="ContentDescription"/>
+	</RelativeLayout>
 
 	<com.example.notestakingapp.ui.DrawingView
 		android:id="@+id/drawing_view"
-		android:layout_marginTop="@dimen/_12sdp"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		app:layout_constraintTop_toBottomOf="@+id/layout_back"
-		tools:layout_editor_absoluteX="-46dp" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+		tools:layout_editor_absoluteX="-46dp"/>
+</LinearLayout>

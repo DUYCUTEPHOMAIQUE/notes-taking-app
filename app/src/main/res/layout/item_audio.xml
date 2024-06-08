@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:layout_marginStart="@dimen/_12sdp"
-    android:padding="8dp"
     android:layout_marginTop="@dimen/_4sdp"
     android:layout_marginBottom="@dimen/_4sdp"
+    android:layout_marginStart="@dimen/_12sdp"
     android:layout_marginEnd="@dimen/_12sdp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center_horizontal"
+    android:padding="8dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
     android:background="@drawable/bg_audio_round">
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/play_button_item"
         android:layout_width="@dimen/_40sdp"
         android:layout_height="@dimen/_30sdp"
+        android:layout_toLeftOf="@id/playing_bar_item"
+        android:layout_centerVertical="true"
         app:lottie_colorFilter="@color/colorAccent"
-        app:lottie_fileName="play_button.json" />
+        app:lottie_fileName="play_button.json"/>
     <com.airbnb.lottie.LottieAnimationView
-        android:layout_weight="1"
         android:id="@+id/playing_bar_item"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/_30sdp"
+        android:layout_centerInParent="true"
         app:lottie_fileName="playing_bar.json"
         app:lottie_colorFilter="@color/colorAccent"/>
     <ImageView
         android:id="@+id/image_trash_audio"
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_20sdp"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_26sdp"
+        android:layout_toEndOf="@id/playing_bar_item"
+        android:layout_centerVertical="true"
         app:tint="@color/colorAccent"
         android:src="@drawable/trash_audio"
         android:layout_marginEnd="@dimen/_12sdp"
-        />
-
-</LinearLayout>
+        tools:ignore="ContentDescription" />
+</RelativeLayout>

@@ -26,6 +26,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,7 +44,6 @@ import com.example.notestakingapp.notification.AlarmScheduler;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
-import com.example.notestakingapp.utils.WaitFunc;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -87,8 +87,8 @@ public class BottomDialog {
         dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         LinearLayout linearLayoutXButton = dialog.findViewById(R.id.layout_x_button);
-        LinearLayout linearLayoutFinishedNote = dialog.findViewById(R.id.layout_mask_as_finished);
-        LinearLayout linearLayoutDeleteNote = dialog.findViewById(R.id.layout_delete_note);
+        RelativeLayout relativeLayoutFinishedNote = dialog.findViewById(R.id.layout_mark_as_finished);
+        RelativeLayout relativeLayoutDeleteNote = dialog.findViewById(R.id.layout_delete_note);
 
         final ImageView colorNoteDefault = dialog.findViewById(R.id.color_note_default);
         final ImageView colorNoteVariant1 = dialog.findViewById(R.id.color_note_1);
@@ -96,9 +96,9 @@ public class BottomDialog {
         final ImageView colorNoteVariant3 = dialog.findViewById(R.id.color_note_3);
         final ImageView colorNoteVariant4 = dialog.findViewById(R.id.color_note_4);
         final ImageView colorNoteVariant5 = dialog.findViewById(R.id.color_note_5);
-        LinearLayout linearLayoutSetRemind = dialog.findViewById(R.id.tool_set_remind);
+        RelativeLayout relativeLayoutSetRemind = dialog.findViewById(R.id.tool_set_remind);
 
-        linearLayoutSetRemind.setOnClickListener(new View.OnClickListener() {
+        relativeLayoutSetRemind.setOnClickListener(new View.OnClickListener() {
             final int[] yearPicker = {-1};
             final int[] monthPicker = {-1};
             final int[] dayPicker = {-1};
@@ -257,7 +257,7 @@ public class BottomDialog {
             }
         });
 
-        linearLayoutFinishedNote.setOnClickListener(new View.OnClickListener() {
+        relativeLayoutFinishedNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //todo: them note vao db
@@ -267,7 +267,7 @@ public class BottomDialog {
 
             }
         });
-        linearLayoutDeleteNote.setOnClickListener(new View.OnClickListener() {
+        relativeLayoutDeleteNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
@@ -300,12 +300,12 @@ public class BottomDialog {
         dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         LinearLayout linearLayoutXButton = dialog.findViewById(R.id.layout_x_button);
-        LinearLayout linearLayoutRestore = dialog.findViewById(R.id.layout_restore_note);
-        LinearLayout linearLayoutConfirmDelete = dialog.findViewById(R.id.layout_confirm_delete_note);
+        RelativeLayout relativeLayoutRestore = dialog.findViewById(R.id.layout_restore_note);
+        RelativeLayout relativeLayoutConfirmDelete = dialog.findViewById(R.id.layout_confirm_delete_note);
 
         SharedViewModel finalSharedViewModel = sharedViewModel;
 
-        linearLayoutRestore.setOnClickListener(new View.OnClickListener() {
+        relativeLayoutRestore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (context instanceof MainActivity) {
@@ -318,7 +318,7 @@ public class BottomDialog {
                 }
             }
         });
-        linearLayoutConfirmDelete.setOnClickListener(new View.OnClickListener() {
+        relativeLayoutConfirmDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -543,8 +543,8 @@ public class BottomDialog {
         layoutParams.y = dpToPx(context, 20); // Chuyển đổi dp thành px
         dialog.getWindow().setAttributes(layoutParams);
 
-        LinearLayout linearLayoutSetRemind = dialog.findViewById(R.id.layout_set_remind);
-        linearLayoutSetRemind.setOnClickListener(new View.OnClickListener() {
+        TextView textViewSetRemind = dialog.findViewById(R.id.button_set_remind);
+        textViewSetRemind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editText.clearFocus();
@@ -573,7 +573,7 @@ public class BottomDialog {
                         builder.setInputMode(MaterialTimePicker.INPUT_MODE_CLOCK).setTimeFormat(TimeFormat.CLOCK_24H).setHour(currentHour).setMinute(currentMinutes).setTitleText("Select Time Bae");
                         MaterialTimePicker timePicker = builder.build();
 
-//                        https://github.com/material-components/material-components-android/blob/master/catalog/java/io/material/catalog/timepicker/TimePickerMainDemoFragment.java
+                        // https://github.com/material-components/material-components-android/blob/master/catalog/java/io/material/catalog/timepicker/TimePickerMainDemoFragment.java
                         timePicker.addOnPositiveButtonClickListener(dialog -> {
 
                             //todo: add setTime date todo task
