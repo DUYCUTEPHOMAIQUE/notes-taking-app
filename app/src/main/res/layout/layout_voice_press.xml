@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/background_tool_dialog"
     android:clipToPadding="false"
     android:orientation="vertical">
-
     <LinearLayout
         android:id="@+id/layout_x_button"
         android:layout_width="wrap_content"
@@ -16,27 +17,26 @@
         android:layout_marginBottom="@dimen/_8sdp"
         android:background="@drawable/bg_x_dialog"
         android:clipToPadding="false">
-
         <ImageView
             android:layout_width="@dimen/_12sdp"
             android:layout_height="@dimen/_12sdp"
-            android:src="@drawable/x_icon" />
+            android:src="@drawable/x_icon"
+            app:tint="@color/colorWhite"
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
-
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/playing_bar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_80sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_gravity="center"
         app:lottie_colorFilter="@color/colorAccent"
         app:lottie_fileName="playing_bar.json" />
-
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/play_button"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_80sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_60sdp"
+        android:layout_gravity="center"
+        android:paddingBottom="@dimen/_6sdp"
         app:lottie_colorFilter="@color/colorAccent"
-        app:lottie_fileName="play_button.json" />
-
-
-
+        app:lottie_fileName="play_button.json"/>
 </LinearLayout>

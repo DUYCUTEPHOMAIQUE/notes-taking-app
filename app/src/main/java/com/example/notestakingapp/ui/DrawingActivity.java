@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +31,7 @@ public class DrawingActivity extends AppCompatActivity {
     public DrawingView dv;
     private int noteId;
     SharedViewModel sharedViewModelDraw;
-    LinearLayout layoutBack;
+    TextView backButton;
     ImageView imageChooseColor, saveButton;
 
     @Override
@@ -48,7 +49,7 @@ public class DrawingActivity extends AppCompatActivity {
         noteId = getIntent().getIntExtra("note_id", -1);
         sharedViewModelDraw = NoteEditActivity.sharedViewModel;
         initUi();
-        layoutBack.setOnClickListener(v-> {
+        backButton.setOnClickListener(v-> {
             saveImage();
             getOnBackPressedDispatcher().onBackPressed();
         });
@@ -70,7 +71,7 @@ public class DrawingActivity extends AppCompatActivity {
     }
     private void initUi() {
         saveButton = findViewById(R.id.image_save);
-        layoutBack = findViewById(R.id.layout_back);
+        backButton = findViewById(R.id.back_button);
         imageChooseColor = findViewById(R.id.image_choose_color);
     }
     public void onClickChooseColor(View v) {

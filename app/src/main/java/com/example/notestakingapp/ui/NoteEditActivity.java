@@ -65,7 +65,7 @@ import java.util.List;
 public class NoteEditActivity extends AppCompatActivity {
     public static final int REQ_CODE_MICRO = 99;
     private ImageView backImage, voiceImage, imageImage, scribbleImage, cameraImage, shirtImage, saveImage;
-    private LinearLayout layoutBack;
+    private TextView backButton;
     private TextView textBack;
     private RecyclerView recyclerViewDetails;
     private NoteDetailsAdapter noteDetailsAdapter;
@@ -244,10 +244,7 @@ public class NoteEditActivity extends AppCompatActivity {
         });
 
         //back button
-        layoutBack.setOnClickListener(v -> {
-            Animation animation = AnimationUtils.loadAnimation(NoteEditActivity.this, R.anim.fade_out);
-            backImage.startAnimation(animation);
-            textBack.setAnimation(animation);
+        backButton.setOnClickListener(v -> {
             getOnBackPressedDispatcher().onBackPressed();
         });
 
@@ -369,9 +366,7 @@ public class NoteEditActivity extends AppCompatActivity {
     private void initUi() {
         saveImage = findViewById(R.id.image_save);
         shirtImage = findViewById(R.id.image_shirt);
-        layoutBack = findViewById(R.id.layout_back);
-        backImage = findViewById(R.id.image_back);
-        textBack = findViewById(R.id.text_back);
+        backButton = findViewById(R.id.back_button);
         voiceImage = findViewById(R.id.image_voice);
         imageImage = findViewById(R.id.image_image);
         scribbleImage = findViewById(R.id.image_scribble);

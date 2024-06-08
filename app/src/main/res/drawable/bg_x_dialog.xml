@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape android:shape="oval" xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/colorTextHint"/>
-    <padding android:right="8dp"
-        android:left="8dp"
+<shape
+    android:shape="oval"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/color_state_accent"/>
+    <padding
         android:top="8dp"
-        android:bottom="8dp"/>
+        android:bottom="8dp"
+        android:left="8dp"
+        android:right="8dp"/>
 </shape>

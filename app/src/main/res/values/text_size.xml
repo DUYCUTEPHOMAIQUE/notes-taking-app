@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_size">@dimen/_24sdp</dimen>
+    <dimen name="back_button_size">@dimen/_14sdp</dimen>
+    <dimen name="icon_size">@dimen/_22sdp</dimen>
+    <dimen name="back_button_margin_start">@dimen/_8sdp</dimen>
+</resources>

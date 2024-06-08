@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:icon="@drawable/voice_icon" android:title="@string/voice" android:id="@+id/voice_icon"/>
-    <item android:icon="@drawable/image_icon" android:title="@string/image" android:id="@+id/image_icon"/>
-    <item android:icon="@drawable/scribble_icon" android:title="@string/scribble" android:id="@+id/scribble_icon"/>
-
+    <item
+        android:icon="@drawable/voice_icon"
+        android:title="@string/voice"
+        android:id="@+id/voice_icon"/>
+    <item
+        android:icon="@drawable/image_icon"
+        android:title="@string/image"
+        android:id="@+id/image_icon"/>
+    <item
+        android:icon="@drawable/scribble_icon"
+        android:title="@string/scribble"
+        android:id="@+id/scribble_icon"/>
 </menu>

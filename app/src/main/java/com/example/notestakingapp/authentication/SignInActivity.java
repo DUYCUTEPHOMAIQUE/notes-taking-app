@@ -84,7 +84,7 @@ public class SignInActivity extends AppCompatActivity {
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // add google authentication method
             }
         });
     }

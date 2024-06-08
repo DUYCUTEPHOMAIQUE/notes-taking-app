@@ -4,5 +4,5 @@
     <solid android:color="@color/colorNoteVariant2" />
     <stroke
         android:width="@dimen/_2sdp"
-        android:color="@color/colorGrayDark" />
+        android:color="@color/colorDarkGray" />
 </shape>
