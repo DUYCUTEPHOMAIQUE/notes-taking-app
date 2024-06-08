@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -168,7 +169,7 @@ public class DatabaseHandler {
 
     //todo: public Note getNoteById(Context context, int noteId)
     // Trả về 1 đối tượng Note thông qua noteId
-    public Note getNoteById(Context context, int noteId) {
+    public static Note getNoteById(Context context, int noteId) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
@@ -182,6 +183,7 @@ public class DatabaseHandler {
                     cursor.getLong(2),          //createAt
                     cursor.getString(3));       //color
         } else {
+            Log.d("NOTE", "is null");
             return null;
         }
     }
@@ -795,7 +797,25 @@ public class DatabaseHandler {
 
 		return db.insert(TODO_TABLE, null, ct);
 	}
+    public static ToDo getToDoById(Context context, int todoId) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
+        String query = "SELECT * FROM " + TODO_TABLE + " WHERE " + COLUMN_TODO_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(todoId)});
+
+        if (cursor.moveToFirst()) {
+            return new ToDo(cursor.getInt(0),  //todoId
+                    cursor.getString(1),       //content
+                    cursor.getLong(2),          //createAt
+                    cursor.getLong(3),      //Duration
+                    cursor.getInt(4) > 0);             // complete
+        } else {
+            Log.d("TODO", "is null");
+            return null;
+        }
+    }
     //todo: public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull String createAt,@Nullable String duration)
     public int updateTodo(Context context, int todoId, Long duration) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -866,7 +886,7 @@ public class DatabaseHandler {
 
 
     //todo: public int deleteTodo(Context context, int todoId)
-    public int deleteTodo(Context context, int todoId) {
+    public static int deleteTodo(Context context, int todoId) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -917,7 +937,7 @@ public class DatabaseHandler {
             } while (cursor.moveToNext());
             return listToDo;
         } else {
-            return new ArrayList<>();
+            return new ArrayList<ToDo>();
         }
     }
 
@@ -1115,5 +1135,29 @@ public class DatabaseHandler {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
         db.execSQL("DELETE FROM SQLITE_SEQUENCE");
+    }
+
+    public static void deleteAllData (Context context){
+        deleteAllNote(context);
+        deleteAllImage(context);
+        deleteAllTextSegment(context);
+        deleteAllAudio(context);
+        deleteAllNoteTag(context);
+        deleteAllTag(context);
+        deleteAllTodo(context);
+        deleteAllComponent(context);
+    }
+
+
+    public static void deleteAllAudio(Context context) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM " + AUDIO_TABLE);
+    }
+
+    public static void deleteAllComponent(Context context) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+        db.execSQL("DELETE FROM " + COMPONENT_TABLE);
     }
 }
