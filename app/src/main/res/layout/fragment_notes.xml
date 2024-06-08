@@ -32,6 +32,27 @@
             android:id="@+id/recycler_view_notes"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+        <LinearLayout
+            android:id="@+id/layout_notes_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_100sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/notes_empty"/>
+            <TextView
+                android:padding="@dimen/_4sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/_12ssp"
+                android:fontFamily="@font/bold"
+                android:textColor="@color/colorTextHint"
+                android:text="@string/there_are_no_notes_here"/>
+        </LinearLayout>
 
     </androidx.cardview.widget.CardView>
 

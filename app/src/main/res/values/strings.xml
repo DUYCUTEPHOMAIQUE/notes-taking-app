@@ -59,4 +59,6 @@
     <string name="enter_your_new_password">Enter your new password</string>
     <string name="confirm_new_password">Confirm new password</string>
     <string name="reenter_your_new_password">Re-enter your new password</string>
+    <string name="there_are_no_notes_here">There are no notes here</string>
+    <string name="there_are_no_tasks_there">There are no tasks there</string>
 </resources>

@@ -328,6 +328,7 @@ public class BottomDialog {
                     if (listNoteIdChecked != null && !listNoteIdChecked.isEmpty()) {
                         for (int i : listNoteIdChecked) {
                             databaseHandler.deleteNote(context, i);
+                            NotesFragment.sharedViewModel.notifyDataChanged();
                             if (finalSharedViewModel != null) {
                                 finalSharedViewModel.setItemLongPressed(false);
                                 finalSharedViewModel.triggerClearUiEvent();
@@ -506,10 +507,9 @@ public class BottomDialog {
 
                                 }
                                 dialog.dismiss();
-
-                                Toast.makeText(context, "add task test", Toast.LENGTH_SHORT).show();
                             }
-                            sharedViewModel.setIsTodoChange(true);
+                            TodoFragment.sharedViewModel.notifyDataChanged();
+
                         }
                     });
                 }

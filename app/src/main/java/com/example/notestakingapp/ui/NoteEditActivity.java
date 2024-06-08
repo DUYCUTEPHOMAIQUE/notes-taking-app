@@ -153,6 +153,7 @@ public class NoteEditActivity extends AppCompatActivity {
 
         if (noteId == -1) {
             noteId = (int) databaseHandler.insertNote(NoteEditActivity.this, "", "#FFFFFF");
+            NotesFragment.sharedViewModel.notifyDataChanged();
             textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
             //ui
             mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE, noteId));
@@ -401,6 +402,7 @@ public class NoteEditActivity extends AppCompatActivity {
         if (mItemList.size() == 2 && mItemList.get(0).getText().isEmpty() && mItemList.get(1).getText().isEmpty() && titleText.isEmpty()) {
             //todo: xoa note neu note do la empty cho nay xu li hoi ngu
             databaseHandler.deleteNote(this, noteId);
+            NotesFragment.sharedViewModel.notifyDataChanged();
             Log.d("update!!", String.valueOf(mItemList.get(1).getText()));
             return true;
         }
