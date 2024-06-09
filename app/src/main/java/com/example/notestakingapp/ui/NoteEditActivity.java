@@ -346,10 +346,7 @@ public class NoteEditActivity extends AppCompatActivity {
             Log.d("testDDDD", "ok");
 
             mItemList.add(new Item(Item.TYPE_IMAGE_VIEW, "", ImageUtils.byteToBitmap(sharedViewModel.getImageData()), imageId, IMAGE_PROP));
-            textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
-            mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
-            noteDetailsAdapter.setData(mItemList);
-            noteDetailsAdapter.notifyDataSetChanged();
+            noteDetailsAdapter.notifyItemInserted(mItemList.size()-1);
         });
 
         sharedViewModel.getNoteEditChangeInsertDraw().observe(this, new Observer<Boolean>() {
