@@ -114,6 +114,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             protected FilterResults performFiltering(CharSequence constraint) {
                 String query = constraint.toString().trim();
                 List<NoteDetailsComponent> list = new ArrayList<>();
+                //tim theo textsegment || title
                 if (query == null || query.isEmpty()) {
                     list = oldList;
                 } else {

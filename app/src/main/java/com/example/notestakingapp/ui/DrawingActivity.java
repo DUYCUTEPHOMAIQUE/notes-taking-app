@@ -1,6 +1,7 @@
 package com.example.notestakingapp.ui;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -33,7 +34,7 @@ public class DrawingActivity extends AppCompatActivity {
     private int noteId;
     SharedViewModel sharedViewModelDraw;
     TextView backButton;
-    ImageView imageChooseColor, saveButton;
+    ImageView imageChooseColor, saveButton, eraserImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,13 @@ public class DrawingActivity extends AppCompatActivity {
         imageChooseColor.setOnClickListener(v-> {
             onClickChooseColor(v);
         });
+        eraserImage.setOnClickListener(v-> {
+            setColorWhite();
+        });
+    }
+
+    private void setColorWhite() {
+        dv.changeColor(Color.WHITE);
     }
 
     @Override
@@ -73,6 +81,7 @@ public class DrawingActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.image_save);
         backButton = findViewById(R.id.back_button);
         imageChooseColor = findViewById(R.id.image_choose_color);
+        eraserImage = findViewById(R.id.image_eraser);
     }
     public void onClickChooseColor(View v) {
         openColorPickerDialogue();
