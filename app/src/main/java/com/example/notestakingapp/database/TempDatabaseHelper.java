@@ -10,10 +10,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.firebase.FirebaseAuthHandler;
 
 public class TempDatabaseHelper extends SQLiteOpenHelper {
 	public static final String DB_NAME = "test";
-	public static final int DB_VERSION = 4;
+	public static final int DB_VERSION = 5;
 
 	public TempDatabaseHelper(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
@@ -28,72 +29,62 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 	}
-
-	//Merge Todo Table
 	public static void mergeTodoTable(Context context) {
 		try {
 			SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
 			SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
-			String query = "SELECT * FROM " + DatabaseHandler.TODO_TABLE;
-			Cursor cursor = tempDb.rawQuery(query, null);
+			String query = "SELECT * FROM " + DatabaseHandler.TODO_TABLE + " WHERE " + DatabaseHandler.COLUMN_USER_ID + " = ?";
+			Cursor cursor = tempDb.rawQuery(query, new String[]{FirebaseAuthHandler.getUserId()});
 			while (cursor.moveToNext()) {
 				String todoContent = cursor.getString(1);
 				Long todoCreateAt = cursor.getLong(2);
 				Long todoDuration = cursor.getLong(3);
 				boolean todoComplete = cursor.getInt(4) == 1;
-				//check _todo exist by content
-				if (checkTodoExistByContent(context, todoContent) == false) {
-					DatabaseHandler.insertTodo(context, todoContent, todoDuration, todoComplete);
-				}
+
+				DatabaseHandler.insertTodo(context, todoContent, todoDuration, todoComplete);
 			}
 		} catch (SQLiteException e) {
 			Toast.makeText(context, "MERGE TODO Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 	}
-
-	//Merge Note Table
 	public static void mergeNoteTable(Context context) {
 		try {
 			SQLiteOpenHelper tempDatabaseHelper = new TempDatabaseHelper(context);
 			SQLiteDatabase tempDb = tempDatabaseHelper.getReadableDatabase();
 			//get all records from test's db note table
-			String query = "SELECT * FROM " + DatabaseHandler.NOTE_TABLE;
-			Cursor cursor = tempDb.rawQuery(query, null);
+			String query = "SELECT * FROM " + DatabaseHandler.NOTE_TABLE + " WHERE " + DatabaseHandler.COLUMN_USER_ID + " = ?";
+			Cursor cursor = tempDb.rawQuery(query, new String[]{FirebaseAuthHandler.getUserId()});
 			while (cursor.moveToNext()) {
-//				Log.d("ALO", "ALO");
 				Note note = new Note(cursor.getInt(0),  //noteId
 						cursor.getString(1),            //title
 						cursor.getLong(2),              //createAt
 						cursor.getString(3));          //color
 				long firebaseNoteId = cursor.getInt(0);
-				//Note với created at này chưa tồn tại
-				if (!checkExistByCreateAt(context, DatabaseHandler.NOTE_TABLE, note.getCreateAt())) {
-					long newInsertedNoteId = DatabaseHandler.insertNote(context, note.getTitle(), note.getColor());
-					mergeTextSegmentTable(context, firebaseNoteId, newInsertedNoteId);
-					mergeAudioTable(context, firebaseNoteId, newInsertedNoteId);
-					mergeImageTable(context, firebaseNoteId, newInsertedNoteId);
 
-					long tagId = getTempNoteTagId(context, firebaseNoteId);
-					Log.d("TAG ID", Integer.toString((int) tagId));
+				long newInsertedNoteId = DatabaseHandler.insertNote(context, note.getTitle(), note.getColor());
+				mergeTextSegmentTable(context, firebaseNoteId, newInsertedNoteId);
+				mergeAudioTable(context, firebaseNoteId, newInsertedNoteId);
+				mergeImageTable(context, firebaseNoteId, newInsertedNoteId);
 
-					if (tagId != 0) {
-						//					//get firebase tag name
-						String tagName = getTempTagById(context, tagId);
+				long tagId = getTempNoteTagId(context, firebaseNoteId);
+				Log.d("TAG ID", Integer.toString((int) tagId));
 
-						int dbTagId = checkTagExistByName(context, tagName);
-						if (dbTagId == -1) {
-							//Tag name not exist in local database
-							//Insert new tag with firebase's name and get the inserted id
-							long newInsertedTadId = DatabaseHandler.createNewTag(context, tagName);
-							DatabaseHandler.setTagForNote(context, (int) newInsertedNoteId, (int) newInsertedTadId);
-						} else {
-							DatabaseHandler.setTagForNote(context, (int) newInsertedNoteId, dbTagId);
-						}
+				if (tagId != 0) {
+					String tagName = getTempTagById(context, tagId);
+
+					int dbTagId = checkTagExistByName(context, tagName);
+					if (dbTagId == -1) {
+						//Tag name not exist in local database
+						//Insert new tag with firebase's name and get the inserted id
+						long newInsertedTadId = DatabaseHandler.createNewTag(context, tagName);
+						DatabaseHandler.setTagForNote(context, (int) newInsertedNoteId, (int) newInsertedTadId);
+					} else {
+						DatabaseHandler.setTagForNote(context, (int) newInsertedNoteId, dbTagId);
 					}
 				}
 			}
+
 		} catch (SQLiteException e) {
-			Log.e("HUY EXCEPTION", "EXCEPTION", e);
 			Toast.makeText(context, "MERGE NOTE Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -142,22 +133,6 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 		} catch (SQLiteException e) {
 			Toast.makeText(context, "TODO Cannot connect to Database", Toast.LENGTH_SHORT).show();
 		}
-	}
-
-	public static boolean checkExistByCreateAt(Context context, String tableName, Long CreateAt) {
-		try {
-			SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-			SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
-
-			String query = "SELECT * FROM " + tableName + " WHERE CREATE_AT = ?";
-			Cursor cursor = db.rawQuery(query, new String[]{Long.toString(CreateAt)});
-
-			Log.d("CREATED AT CHECK", Integer.toString(cursor.getCount()));
-			return cursor.getCount() >= 1;
-		} catch (SQLiteException e) {
-			Toast.makeText(context, "NOTE CREATE AT Cannot connect to Database", Toast.LENGTH_SHORT).show();
-		}
-		return false;
 	}
 
 	@SuppressLint("Range")
@@ -220,21 +195,4 @@ public class TempDatabaseHelper extends SQLiteOpenHelper {
 		return 0;
 	}
 
-	private static boolean checkTodoExistByContent(Context context, String content) {
-		try {
-			SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-			SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
-
-			String query = "SELECT * FROM " + DatabaseHandler.TODO_TABLE + " WHERE " + DatabaseHandler.COLUMN_TODO_CONTENT + " = ?";
-			Cursor cursor = db.rawQuery(query, new String[]{content});
-			if (cursor.getCount() > 0) {
-				cursor.close();
-				return true;
-			}
-			cursor.close();
-		} catch (SQLiteException e) {
-			Toast.makeText(context, "TODO CHECK Cannot connect to Database", Toast.LENGTH_SHORT).show();
-		}
-		return false;
-	}
 }

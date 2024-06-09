@@ -103,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
         // Kiểm tra và tạo kênh thông báo
         createNotificationChannel();
 
-//        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
-
         //khoi chay ui
         initUi();
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
@@ -115,7 +113,6 @@ public class MainActivity extends AppCompatActivity {
                 updateNotes();
             }
         });
-        //anim popup hehehe T_T
         animButton(imageViewAdd);
 
         //xu li click button
