@@ -93,9 +93,6 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//	    Intent drawingIntent = new Intent(MainActivity.this, DrawingActivity.class);
-//	    drawingIntent.putExtra("imageId", 0);
-//	    startActivity(drawingIntent);
 
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
 

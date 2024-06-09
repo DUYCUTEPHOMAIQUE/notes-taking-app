@@ -140,6 +140,7 @@ public class TodoFragment extends Fragment {
                 toDo.setCompleted(isChecked);
                 databaseHandler.updateTodo(getActivity(), toDo.getId(), isChecked);
                 sharedViewModel.setIsTodoChange(true);
+                sharedViewModel.notifyDataChanged();
             }
         });
         todoAdapter.setTodoListener(new TodoAdapter.TodoListener() {
@@ -167,8 +168,6 @@ public class TodoFragment extends Fragment {
                     todoAdapter.notifyItemInserted(0);
                     Log.d("checkDuy", "UNchecked");
                 }
-                SwiperUtils.handleSwiper(getActivity(), mList, todoAdapter, recyclerView).attachToRecyclerView(recyclerView);
-                SwiperUtils.handleSwiper(getActivity(), completedMList, completedTodoAdapter, completedRecyclerView).attachToRecyclerView(completedRecyclerView);
 
             }
         });
@@ -388,9 +387,6 @@ public class TodoFragment extends Fragment {
     private void updateViewWhenInsertOrUpdate() {
         mList = databaseHandler.getToDoListCompletedOrNot(getActivity(), false, "DESC");
         completedMList = databaseHandler.getToDoListCompletedOrNot(getActivity(), true, "DESC");
-        Log.d("duycheck", "mList:"+mList.toString());
-        Log.d("duycheck", "CompletedMList:"+completedMList.toString());
-
         //todo: test
         if (mList != null) {
             todoAdapter.setTodos(mList);
@@ -409,11 +405,7 @@ public class TodoFragment extends Fragment {
             layoutToDo.setVisibility(View.GONE);
             linearLayoutTodoEmpty.setVisibility(View.VISIBLE);
         }
-        if((mList != null && (completedMList == null||completedMList.isEmpty())) || (completedMList != null && (mList == null ||mList.isEmpty()))) {
-            textTask.setVisibility(View.GONE);
-        }else {
-            textTask.setVisibility(View.VISIBLE);
-        }
+
 
     }
 

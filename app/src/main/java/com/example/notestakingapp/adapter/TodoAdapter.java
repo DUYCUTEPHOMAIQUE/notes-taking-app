@@ -149,7 +149,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                         if (todoListener != null) {
                             todoListener.onCheckBoxClick(getAdapterPosition(), todo, isChecked);
 
-                            Log.d("clickcheckbox", "@@@");
+                            Log.d("clickcheckbox:", String.valueOf(isChecked));
                         }
                     }
                 });

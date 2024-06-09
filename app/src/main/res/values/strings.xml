@@ -63,4 +63,9 @@
     <string name="reenter_your_new_password">Re-enter your new password</string>
     <string name="there_are_no_notes_here">There are no notes here</string>
     <string name="there_are_no_tasks_there">There are no tasks there</string>
+    <string name="text">Text</string>
+    <string name="camera">Camera</string>
+    <string name="add_voice">Add Voice</string>
+    <string name="add_text">Add Text</string>
+    <string name="add_image">Add Image</string>
 </resources>

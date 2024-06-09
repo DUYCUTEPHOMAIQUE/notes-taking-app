@@ -1,6 +1,7 @@
 package com.example.notestakingapp.ui;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +16,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
@@ -22,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +35,8 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -59,12 +65,14 @@ import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 public class NoteEditActivity extends AppCompatActivity {
     public static final int REQ_CODE_MICRO = 99;
-    private ImageView backImage, voiceImage, imageImage, scribbleImage, cameraImage, shirtImage, saveImage;
+    private ImageView backImage, voiceImage, imageImage, scribbleImage, cameraImage, shirtImage, saveImage, addItemImage;
     private TextView backButton;
     private TextView textBack;
     private RecyclerView recyclerViewDetails;
@@ -116,30 +124,30 @@ public class NoteEditActivity extends AppCompatActivity {
         db = noteTakingDatabaseHelper.getReadableDatabase();
         databaseHandler = new DatabaseHandler();
 
-        //check keyboard state changed
+        //check keyboard state changed --> đã loại bỏ layout add và đã thay thế
 //        https://stackoverflow.com/questions/4745988/how-do-i-detect-if-software-keyboard-is-visible-on-android-device-or-not
-        View rootView = getWindow().getDecorView().getRootView();
-        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // Determine if the keyboard is visible
-                Rect r = new Rect();
-                rootView.getWindowVisibleDisplayFrame(r);
-                int screenHeight = rootView.getHeight();
-                int keypadHeight = screenHeight - r.bottom;
-
-                // If the keypad height is greater than a threshold, assume the keyboard is visible
-                boolean isVisible = keypadHeight > screenHeight * 0.15;
-
-                if (isVisible) {
-                    // Keyboard is visible
-                    toolNavigation.setVisibility(View.VISIBLE);
-                } else {
-                    // Keyboard is not visible
-                    toolNavigation.setVisibility(View.GONE);
-                }
-            }
-        });
+//        View rootView = getWindow().getDecorView().getRootView();
+//        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//            @Override
+//            public void onGlobalLayout() {
+//                // Determine if the keyboard is visible
+//                Rect r = new Rect();
+//                rootView.getWindowVisibleDisplayFrame(r);
+//                int screenHeight = rootView.getHeight();
+//                int keypadHeight = screenHeight - r.bottom;
+//
+//                // If the keypad height is greater than a threshold, assume the keyboard is visible
+//                boolean isVisible = keypadHeight > screenHeight * 0.15;
+//
+//                if (isVisible) {
+//                    // Keyboard is visible
+//                    toolNavigation.setVisibility(View.VISIBLE);
+//                } else {
+//                    // Keyboard is not visible
+//                    toolNavigation.setVisibility(View.GONE);
+//                }
+//            }
+//        });
 
         // khoi chay ui
         initUi();
@@ -188,6 +196,29 @@ public class NoteEditActivity extends AppCompatActivity {
         //        noteId = (int) AppDatabase.getInstance(AddNoteActivity.this).noteDao().insert(new Note(""));
 
         noteDetailsAdapter.setNoteId(noteId);
+        //image handle
+        noteDetailsAdapter.setImageListener(new NoteDetailsAdapter.ImageListener() {
+            @Override
+            public void onImageClick(int position) {
+                Item image = mItemList.get(position);
+                int imageId = image.getImageId();
+                routetoViewImageFull(imageId);
+            }
+
+            @Override
+            public void onTrashClick(int position) {
+                if (mItemList.size() > 2) {
+                    Item image = mItemList.get(position);
+                    int imageId = image.getImageId();
+                    mItemList.remove(position);
+                    noteDetailsAdapter.notifyItemRemoved(position);
+                    databaseHandler.deleteImage(NoteEditActivity.this, imageId);
+                } else {
+                    Toast.makeText(NoteEditActivity.this, "Can not delete", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        //text handle
         noteDetailsAdapter.setOnEditTextChangedListener(new NoteDetailsAdapter.OnEditTextChangedListener() {
 
             @Override
@@ -203,6 +234,19 @@ public class NoteEditActivity extends AppCompatActivity {
                     databaseHandler.updateTextSegment(NoteEditActivity.this, textSegmentId, text);
                 }
 
+            }
+
+            @Override
+            public void onTrashClick(int position) {
+                //ui
+                if (mItemList.size() > 2) {
+                    Item textSegment = mItemList.remove(position);
+                    textSegmentId = textSegment.getTextSegmentId();
+                    databaseHandler.deleteTextSegment(NoteEditActivity.this, textSegmentId);
+                    noteDetailsAdapter.notifyItemRemoved(position);
+                } else {
+                    Toast.makeText(NoteEditActivity.this, "Can not delete", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         noteDetailsAdapter.setAudioListener(new NoteDetailsAdapter.AudioListener() {
@@ -222,10 +266,13 @@ public class NoteEditActivity extends AppCompatActivity {
 
             @Override
             public void onTrashClick(int position) {
-                Log.d("audioDuyT", "clicked");
-                databaseHandler.deleteAudio(NoteEditActivity.this, mItemList.get(position).getVoiceId());
-                mItemList.remove(position);
-                noteDetailsAdapter.notifyItemRemoved(position);
+                if (mItemList.size() > 2) {
+                    databaseHandler.deleteAudio(NoteEditActivity.this, mItemList.get(position).getVoiceId());
+                    mItemList.remove(position);
+                    noteDetailsAdapter.notifyItemRemoved(position);
+                } else {
+                    Toast.makeText(NoteEditActivity.this, "Can not delete", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -257,30 +304,35 @@ public class NoteEditActivity extends AppCompatActivity {
             Log.d("testDUY", String.valueOf(sharedViewModel.getNoteEditChangeInsertDraw().getValue()));
             finish();
         });
-        cameraImage.setOnClickListener(v -> onOpenCamera());
+//        cameraImage.setOnClickListener(v -> onOpenCamera());
 
-        shirtImage.setOnClickListener(v -> {
-//                showToolDialog();
-            HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+        //addItemImage
 
-            BottomDialog.showToolDialog(NoteEditActivity.this, noteId);
-        });
-
-        imageImage.setOnClickListener(v -> onOpenGallery());
+//
+//        shirtImage.setOnClickListener(v -> {
+////                showToolDialog();
+//            HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+//
+//            BottomDialog.showToolDialog(NoteEditActivity.this, noteId);
+//        });
+//
+//        imageImage.setOnClickListener(v -> onOpenGallery());
         //            https://www.youtube.com/watch?v=3ffs2VbJ9JY
 //            https://github.com/MoamenHassaballah/PlayPauseAnimationTutorial
-        voiceImage.setOnClickListener(v -> {
-            if (!getMicroPermission()) {
-                //hide keyboard
-                HideKeyBoard.hideKeyboard(NoteEditActivity.this);
-//                    btnRecordPressed();
-                VoiceDialog.showVoiceDialog(NoteEditActivity.this, noteId, sharedViewModel);
-
-            } else {
-                getMicroPermission();
-            }
+//        voiceImage.setOnClickListener(v -> {
+//            if (!getMicroPermission()) {
+//                //hide keyboard
+//                HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+////                    btnRecordPressed();
+//                VoiceDialog.showVoiceDialog(NoteEditActivity.this, noteId, sharedViewModel);
+//
+//            } else {
+//                getMicroPermission();
+//            }
+//        });
+        addItemImage.setOnClickListener(v -> {
+            showPopupMenu(v);
         });
-
         sharedViewModel.getNoteEditChangeInsertAudio().observe(this, aBoolean -> {
             //ui
             int audioId = sharedViewModel.getAudioId();
@@ -298,16 +350,6 @@ public class NoteEditActivity extends AppCompatActivity {
             mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
             noteDetailsAdapter.setData(mItemList);
             noteDetailsAdapter.notifyDataSetChanged();
-        });
-
-        //draw
-        scribbleImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(NoteEditActivity.this, DrawingActivity.class);
-                intent.putExtra("note_id", noteId);
-                startActivity(intent);
-            }
         });
 
         sharedViewModel.getNoteEditChangeInsertDraw().observe(this, new Observer<Boolean>() {
@@ -329,6 +371,86 @@ public class NoteEditActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void routetoViewImageFull(int imageId) {
+        Intent intent = new Intent(NoteEditActivity.this, ViewImageActivity.class);
+        intent.putExtra("image_id", imageId);
+        startActivity(intent);
+    }
+
+    private void onOpenDraw() {
+        Intent intent = new Intent(NoteEditActivity.this, DrawingActivity.class);
+        intent.putExtra("note_id", noteId);
+        startActivity(intent);
+    }
+
+    private void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.popup_menu_add_item, popupMenu.getMenu());
+
+        //https://stackoverflow.com/questions/20836385/popup-menu-with-icon-on-android
+        try {
+            Field[] fields = popupMenu.getClass().getDeclaredFields();
+            for (Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popupMenu);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        popupMenu.setOnMenuItemClickListener(item -> onPopupItemClick(item));
+        popupMenu.show();
+    }
+
+    //popup item click
+    private boolean onPopupItemClick(MenuItem item) {
+        int name = item.getItemId();
+        if (name == R.id.add_text_popup) {
+            onAddText();
+            Toast.makeText(this, "" + item.getTitle(), Toast.LENGTH_SHORT).show();
+        } else if (name == R.id.add_image_popup) {
+            onOpenGallery();
+            Toast.makeText(this, "" + item.getTitle(), Toast.LENGTH_SHORT).show();
+        } else if (name == R.id.add_camera_popup) {
+            onOpenCamera();
+            Toast.makeText(this, "" + item.getTitle(), Toast.LENGTH_SHORT).show();
+        } else if (name == R.id.add_draw_popup) {
+            onOpenDraw();
+            Toast.makeText(this, "" + item.getTitle(), Toast.LENGTH_SHORT).show();
+        } else if (name == R.id.add_voice_popup) {
+            opOpenVoice();
+            Toast.makeText(this, "" + item.getTitle(), Toast.LENGTH_SHORT).show();
+        }
+
+        return true;
+    }
+
+    private void opOpenVoice() {
+        if (!getMicroPermission()) {
+            //hide keyboard
+            HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+//                    btnRecordPressed();
+            VoiceDialog.showVoiceDialog(NoteEditActivity.this, noteId, sharedViewModel);
+
+        } else {
+            getMicroPermission();
+        }
+    }
+
+    private void onAddText() {
+        //db
+        textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
+        //ui
+        mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
+        noteDetailsAdapter.notifyItemInserted(mItemList.size() - 1);
     }
 
     //    https://developer.android.com/media/platform/mediarecorder#java
@@ -374,6 +496,7 @@ public class NoteEditActivity extends AppCompatActivity {
         toolNavigation = findViewById(R.id.tool_navigation);
         cameraImage = findViewById(R.id.image_camera);
         activityRootView = findViewById(R.id.main);
+        addItemImage = findViewById(R.id.image_add_item);
     }
 
 
@@ -422,29 +545,12 @@ public class NoteEditActivity extends AppCompatActivity {
                     } catch (Exception e) {
 //                        Toast.makeText(this, "Image add into db error", Toast.LENGTH_SHORT).show();
                     }
-
-
                     //hien thi hinh anh ra noteEdit
                     mItemList.add(new Item(Item.TYPE_IMAGE_VIEW, selectedImageUri, imageId, IMAGE_PROP));
-                    //xu li inputtext is empty se bi xoa di neu anh dc them vao
-                    int size = mItemList.size();
-                    if (mItemList.get(size - 2).getType() == Item.TYPE_EDIT_TEXT && mItemList.get(size - 2).getText().isEmpty()) {
-                        //xoa trong db
-                        databaseHandler.deleteTextSegment(NoteEditActivity.this, textSegmentId);
-                        //xoa o giao dien
-                        mItemList.remove(size - 2);
-                        Toast.makeText(NoteEditActivity.this, "Remove editText sucess!", Toast.LENGTH_SHORT).show();
-                    }
-                    //todo: cap nhat lai textSegmentId va them textsegment vao db
-                    textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
-                    Log.d("duytest", "tao textSegment id = " + textSegmentId + " noteId = " + noteId);
-
-                    //textSegmentId = appdb.insert();
+                    noteDetailsAdapter.notifyItemInserted(mItemList.size() - 1);
                     //todo: ... OK
                     EditText titleEditText = findViewById(R.id.edit_text_title);
                     mItemList.get(0).setText(titleEditText.getText().toString());
-                    mItemList.add(new Item(Item.TYPE_EDIT_TEXT, textSegmentId));
-                    noteDetailsAdapter.setData(mItemList);
                 } catch (Exception exception) {
                     Toast.makeText(this, "selected image error!", Toast.LENGTH_SHORT).show();
                 }

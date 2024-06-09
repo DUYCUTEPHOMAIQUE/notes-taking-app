@@ -53,4 +53,9 @@
     <string name="enter_your_new_password">Nhập mật khẩu mới của bạn</string>
     <string name="confirm_new_password">Nhập lại mật khẩu mới</string>
     <string name="reenter_your_new_password">Nhập lại mật khẩu mới của bạn</string>
+    <string name="text">Văn bản</string>
+    <string name="camera">Máy ảnh</string>
+    <string name="add_voice">Thêm Ghi âm</string>
+    <string name="add_text">Thêm Văn bản</string>
+    <string name="add_image">Thêm Hình ảnh</string>
 </resources>
