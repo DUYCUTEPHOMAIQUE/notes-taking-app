@@ -101,7 +101,7 @@ public class DrawingActivity extends AppCompatActivity {
         }
         Bitmap bitmap = dv.getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         int imageId = (int) DatabaseHandler.insertImage(this, noteId, byteArray);
         sharedViewModelDraw.setTest(true);
