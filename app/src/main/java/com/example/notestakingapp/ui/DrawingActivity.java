@@ -2,6 +2,7 @@ package com.example.notestakingapp.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -51,7 +52,6 @@ public class DrawingActivity extends AppCompatActivity {
         initUi();
         backButton.setOnClickListener(v-> {
             saveImage();
-            getOnBackPressedDispatcher().onBackPressed();
         });
         saveButton.setOnClickListener(mv -> {
             saveImage();
@@ -108,9 +108,9 @@ public class DrawingActivity extends AppCompatActivity {
         sharedViewModelDraw.setImageId(imageId);
         sharedViewModelDraw.setImageData(byteArray);
         Log.d("aaccc", "ok1");
-        BottomDialog.showAwaitDiaLog(DrawingActivity.this);
-        WaitFunc.showMessageWithDelay(this, 5000);
-        finish();
+        BottomDialog.showAwaitDiaLog(DrawingActivity.this, DrawingActivity.this);
+
+
     }
 
 }
