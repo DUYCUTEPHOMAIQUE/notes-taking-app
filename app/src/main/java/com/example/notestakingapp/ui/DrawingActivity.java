@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.notestakingapp.R;
@@ -63,10 +65,21 @@ public class DrawingActivity extends AppCompatActivity {
         eraserImage.setOnClickListener(v-> {
             setColorWhite();
         });
+        sharedViewModelDraw.getColor().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if(integer == -1) {
+                    eraserImage.setColorFilter(getColor(R.color.colorAccent));
+                } else {
+                    eraserImage.setColorFilter(Color.BLACK);
+                }
+            }
+        });
     }
 
     private void setColorWhite() {
         dv.changeColor(Color.WHITE);
+        sharedViewModelDraw.setColor(Color.WHITE);
     }
 
     @Override
@@ -98,6 +111,7 @@ public class DrawingActivity extends AppCompatActivity {
                     public void onOk(AmbilWarnaDialog dialog, int color) {
                         dv.mDefaultColor = color;
                         dv.changeColor(dv.mDefaultColor);
+                        sharedViewModelDraw.setColor(dv.mDefaultColor);
                     }
                 });
         colorPickerDialogue.show();
@@ -110,7 +124,7 @@ public class DrawingActivity extends AppCompatActivity {
         }
         Bitmap bitmap = dv.getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         int imageId = (int) DatabaseHandler.insertImage(this, noteId, byteArray);
         sharedViewModelDraw.setTest(true);
