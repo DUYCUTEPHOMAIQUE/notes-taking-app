@@ -309,12 +309,7 @@ public class NoteEditActivity extends AppCompatActivity {
         //addItemImage
 
 //
-//        shirtImage.setOnClickListener(v -> {
-////                showToolDialog();
-//            HideKeyBoard.hideKeyboard(NoteEditActivity.this);
-//
-//            BottomDialog.showToolDialog(NoteEditActivity.this, noteId);
-//        });
+
 //
 //        imageImage.setOnClickListener(v -> onOpenGallery());
         //            https://www.youtube.com/watch?v=3ffs2VbJ9JY
@@ -330,6 +325,11 @@ public class NoteEditActivity extends AppCompatActivity {
 //                getMicroPermission();
 //            }
 //        });
+        shirtImage.setOnClickListener(v -> {
+            HideKeyBoard.hideKeyboard(NoteEditActivity.this);
+
+            BottomDialog.showToolDialog(NoteEditActivity.this, noteId);
+        });
         addItemImage.setOnClickListener(v -> {
             showPopupMenu(v);
         });
@@ -493,7 +493,6 @@ public class NoteEditActivity extends AppCompatActivity {
         imageImage = findViewById(R.id.image_image);
         scribbleImage = findViewById(R.id.image_scribble);
         recyclerViewDetails = findViewById(R.id.recycler_view_details);
-        toolNavigation = findViewById(R.id.tool_navigation);
         cameraImage = findViewById(R.id.image_camera);
         activityRootView = findViewById(R.id.main);
         addItemImage = findViewById(R.id.image_add_item);
@@ -540,10 +539,9 @@ public class NoteEditActivity extends AppCompatActivity {
                     //todo: luu anh vao db nho them try catch
                     try {
                         imageId = (int) databaseHandler.insertImage(NoteEditActivity.this, noteId, ImageUtils.uriToBytes(selectedImageUri, NoteEditActivity.this));
-                        Toast.makeText(this, "Image add into db success" + imageId, Toast.LENGTH_SHORT).show();
 
                     } catch (Exception e) {
-//                        Toast.makeText(this, "Image add into db error", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Image add into db error", Toast.LENGTH_SHORT).show();
                     }
                     //hien thi hinh anh ra noteEdit
                     mItemList.add(new Item(Item.TYPE_IMAGE_VIEW, selectedImageUri, imageId, IMAGE_PROP));
