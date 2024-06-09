@@ -178,13 +178,6 @@ public class NoteEditActivity extends AppCompatActivity {
             ArrayList<Component> list = databaseHandler.getAllComponentByCreateAt(this, noteId, "ASC");
             mItemList.add(new Item(Item.TYPE_EDIT_TEXT_TITLE, note.getTitle(), noteId));
             mItemList.addAll(convertComponentToItem(convertComponentToProps(list)));
-            if (mItemList.get(mItemList.size() - 1).getType() != Item.TYPE_EDIT_TEXT) {
-                //ui
-                mItemList.add(new Item(Item.TYPE_EDIT_TEXT, noteId));
-                //db
-                databaseHandler.insertTextSegment(this, noteId, "");
-            }
-            Log.d("updateDuynote", String.valueOf(mItemList.get(mItemList.size() - 1).getType()));
         }
 
         //ui
@@ -201,8 +194,9 @@ public class NoteEditActivity extends AppCompatActivity {
             @Override
             public void onImageClick(int position) {
                 Item image = mItemList.get(position);
-                int imageId = image.getImageId();
-                routetoViewImageFull(imageId);
+                int _imageID = image.getImageId();
+                Log.d("imageID", "id="+_imageID);
+                routetoViewImageFull(_imageID);
             }
 
             @Override
@@ -343,9 +337,7 @@ public class NoteEditActivity extends AppCompatActivity {
 
         sharedViewModel.getTest().observe(this, aBoolean -> {
             //ui
-            Log.d("testDDDD", "ok");
-
-            mItemList.add(new Item(Item.TYPE_IMAGE_VIEW, "", ImageUtils.byteToBitmap(sharedViewModel.getImageData()), imageId, IMAGE_PROP));
+            mItemList.add(new Item(Item.TYPE_IMAGE_VIEW, "", ImageUtils.byteToBitmap(sharedViewModel.getImageData()), sharedViewModel.getImageId(), IMAGE_PROP));
             noteDetailsAdapter.notifyItemInserted(mItemList.size()-1);
         });
 
@@ -513,7 +505,7 @@ public class NoteEditActivity extends AppCompatActivity {
         if (!titleText.isEmpty()) {
             return false;
         }
-        if (mItemList.size() == 2 && mItemList.get(0).getText().isEmpty() && mItemList.get(1).getText().isEmpty() && titleText.isEmpty()) {
+        if (mItemList.size() == 2 && mItemList.get(1).getType()==Item.TYPE_EDIT_TEXT && mItemList.get(0).getText().isEmpty() && mItemList.get(1).getText().isEmpty() && titleText.isEmpty()) {
             //todo: xoa note neu note do la empty cho nay xu li hoi ngu
             databaseHandler.deleteNote(this, noteId);
             NotesFragment.sharedViewModel.notifyDataChanged();
