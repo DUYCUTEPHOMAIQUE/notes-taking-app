@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
@@ -69,6 +70,7 @@ public class NotesFragment extends Fragment {
     private List<Integer> listNoteIDChecked;
     public static ActivityResultLauncher<Intent> noteEditLauncher;
     FloatingActionButton exitButton;
+    LinearLayout linearLayoutNotesEmpty;
 
 
     public NotesFragment() {
@@ -136,6 +138,7 @@ public class NotesFragment extends Fragment {
         db = noteTakingDatabaseHelper.getReadableDatabase();
         databaseHandler = new DatabaseHandler();
         recyclerView = view.findViewById(R.id.recycler_view_notes);
+        linearLayoutNotesEmpty = view.findViewById(R.id.layout_notes_empty);
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         notesAdapter = new NotesAdapter(getActivity());
@@ -199,10 +202,15 @@ public class NotesFragment extends Fragment {
 
         List<Note> noteList = DatabaseHandler.getNoteByCreateAt(getActivity(), "desc");
         LinkedHashMap<Integer, ArrayList<Component>> hashMap = new LinkedHashMap<>();
-        if (noteList != null) {
+        if (noteList != null && !noteList.isEmpty()) {
+            recyclerView.setVisibility(View.VISIBLE);
+            linearLayoutNotesEmpty.setVisibility(View.GONE);
             for (Note note : noteList) {
                 hashMap.put(note.getNoteId(), databaseHandler.getAllComponent(getActivity(), note.getNoteId()));
             }
+        } else {
+            recyclerView.setVisibility(View.GONE);
+            linearLayoutNotesEmpty.setVisibility(View.VISIBLE);
         }
 
         list = componentToProps(hashMap);
@@ -211,6 +219,7 @@ public class NotesFragment extends Fragment {
     }
 
     public List<NoteDetailsComponent> componentToProps(HashMap<Integer, ArrayList<Component>> input) {
+        if (input == null) return new ArrayList<>();
         List<NoteDetailsComponent> noteDetailsComponentList = new ArrayList<>();
         LinkedHashMap<Integer, List<Object>> output = new LinkedHashMap<>();
         for (Map.Entry<Integer, ArrayList<Component>> entry : input.entrySet()) {
@@ -233,7 +242,6 @@ public class NotesFragment extends Fragment {
             }
             output.put(key, temp);
         }
-
 
         for (Map.Entry<Integer, List<Object>> entry : output.entrySet()) {
             Note note;

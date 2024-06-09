@@ -2,6 +2,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/confirm_sign_out"
@@ -14,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Sign out"
+        android:text="@string/sign_out"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/_20sdp"
         android:textStyle="normal"
@@ -23,10 +24,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_5sdp"
         android:layout_gravity="center"
         android:gravity="center_horizontal"
-        android:text="Are you sure you want to sign out\n from the application?"
+        android:text="@string/sign_out_question"
         android:textColor="@color/colorBlack"
         android:textSize="@dimen/_14sdp"
         android:fontFamily="@font/regular"/>
@@ -35,59 +35,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:baselineAligned="false">
-        <LinearLayout
-            android:id="@+id/sign_out_back_button"
-            android:layout_width="@dimen/_80sdp"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_weight="1"
-            android:background="@drawable/button_custom"
-            android:backgroundTint="#DDDDDD"
-            android:clickable="true"
-            android:focusable="true">
-
-            <ImageView
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_18sdp"
-                android:src="@drawable/reply"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:text="@string/back"
-                android:textColor="@color/colorBlack"
-                android:textSize="@dimen/_14sdp"
-                android:fontFamily="@font/medium"/>
-        </LinearLayout>
-
-        <LinearLayout
+        android:layout_marginTop="@dimen/_6sdp">
+        <RelativeLayout
             android:id="@+id/confirm_sign_out_button"
-            android:layout_width="@dimen/_80sdp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginStart="@dimen/_12sdp"
             android:layout_weight="1"
             android:background="@drawable/button_custom"
             android:backgroundTint="@color/colorNoteVariant5"
-            android:padding="@dimen/_8sdp">
-
+            android:padding="@dimen/_8sdp"
+            android:clickable="true"
+            android:focusable="true">
             <ImageView
+                android:id="@+id/icon_sign_out"
                 android:layout_width="@dimen/_18sdp"
                 android:layout_height="@dimen/_18sdp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_3sdp"
                 android:src="@drawable/sign_out_outline"
-                app:tint="@color/colorError"/>
-
+                app:tint="@color/color_state_red"
+                tools:ignore="ContentDescription"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/icon_sign_out"
+                android:layout_centerVertical="true"
                 android:text="@string/sign_out"
-                android:textColor="@color/colorError"
-                android:textSize="@dimen/_14sdp"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:fontFamily="@font/medium"/>
-        </LinearLayout>
+                android:textColor="@color/color_state_red"
+                android:textSize="@dimen/_16sdp"
+                android:layout_marginStart="@dimen/_10sdp"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/sign_out_back_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_12sdp"
+            android:background="@drawable/button_custom"
+            android:backgroundTint="@color/colorLightGray"
+            android:padding="@dimen/_8sdp"
+            android:clickable="true"
+            android:focusable="true">
+            <ImageView
+                android:id="@+id/icon_back"
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/reply"
+                app:tint="@color/color_state_black"
+                tools:ignore="ContentDescription"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/icon_back"
+                android:text="@string/back"
+                android:textColor="@color/color_state_black"
+                android:textSize="@dimen/_16sdp"/>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

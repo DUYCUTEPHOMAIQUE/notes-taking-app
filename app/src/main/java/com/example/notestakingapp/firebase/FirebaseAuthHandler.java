@@ -15,9 +15,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.io.File;
 import java.util.Objects;
-
 
 public class FirebaseAuthHandler {
 	public static final String TAG = "EmailPassword";

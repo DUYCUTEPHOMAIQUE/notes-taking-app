@@ -2,10 +2,12 @@ package com.example.notestakingapp.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,14 +32,14 @@ public class DrawingActivity extends AppCompatActivity {
     public DrawingView dv;
     private int noteId;
     SharedViewModel sharedViewModelDraw;
-    LinearLayout layoutBack;
+    TextView backButton;
     ImageView imageChooseColor, saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_drawing);
+        EdgeToEdge.enable(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -48,9 +50,8 @@ public class DrawingActivity extends AppCompatActivity {
         noteId = getIntent().getIntExtra("note_id", -1);
         sharedViewModelDraw = NoteEditActivity.sharedViewModel;
         initUi();
-        layoutBack.setOnClickListener(v-> {
+        backButton.setOnClickListener(v-> {
             saveImage();
-            getOnBackPressedDispatcher().onBackPressed();
         });
         saveButton.setOnClickListener(mv -> {
             saveImage();
@@ -70,7 +71,7 @@ public class DrawingActivity extends AppCompatActivity {
     }
     private void initUi() {
         saveButton = findViewById(R.id.image_save);
-        layoutBack = findViewById(R.id.layout_back);
+        backButton = findViewById(R.id.back_button);
         imageChooseColor = findViewById(R.id.image_choose_color);
     }
     public void onClickChooseColor(View v) {
@@ -107,9 +108,9 @@ public class DrawingActivity extends AppCompatActivity {
         sharedViewModelDraw.setImageId(imageId);
         sharedViewModelDraw.setImageData(byteArray);
         Log.d("aaccc", "ok1");
-        BottomDialog.showAwaitDiaLog(DrawingActivity.this);
-        WaitFunc.showMessageWithDelay(this, 5000);
-        finish();
+        BottomDialog.showAwaitDiaLog(DrawingActivity.this, DrawingActivity.this);
+
+
     }
 
 }

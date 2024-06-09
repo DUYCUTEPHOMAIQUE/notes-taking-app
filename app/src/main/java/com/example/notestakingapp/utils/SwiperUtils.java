@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.notification.AlarmScheduler;
 import com.example.notestakingapp.shared.Item;
+import com.example.notestakingapp.ui.TodoFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -38,8 +40,9 @@ public class SwiperUtils {
                 //ui
                 list.remove(position);
                 adapter.notifyItemRemoved(position);
+                Log.d("duycheck", list.toString());
 
-                Snackbar snackbar = Snackbar.make(recyclerView, "Task completed", Snackbar.LENGTH_LONG);
+                Snackbar snackbar = Snackbar.make(recyclerView, "Delete Task completed", Snackbar.LENGTH_LONG);
                 snackbar.setAction("Undo", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -59,7 +62,7 @@ public class SwiperUtils {
                             AlarmScheduler.cancelTaskAlarm(context, task.getId());
                             //todo: db --OK
                             DatabaseHandler.deleteTodo(context, task.getId());
-
+                            TodoFragment.sharedViewModel.notifyDataChanged();
                         }
                     }
                 });

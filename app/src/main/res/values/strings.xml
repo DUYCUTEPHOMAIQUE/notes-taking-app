@@ -3,17 +3,17 @@
     <string name="to_do">To do</string>
     <string name="notes">Notes</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="scribble">Scribble</string>
     <string name="image">Image</string>
     <string name="voice">Voice</string>
     <string name="note_title">Note Title</string>
     <string name="my_notes">My Notes</string>
-    <string name="search_notes">Search notes</string>
+    <string name="search_notes">Search notes…</string>
     <string name="back">Back</string>
-    <string name="type_note_here">Type note here..</string>
-    <string name="change_background">CHANGE BACKGROUND</string>
-    <string name="extras">EXTRAS</string>
+    <string name="type_note_here">Type note here…</string>
+    <string name="change_background">Change background</string>
+    <string name="extras">Extra</string>
     <string name="set_reminder">Set Reminder</string>
     <string name="give_tag">Give Tag</string>
     <string name="delete_note">Delete Note</string>
@@ -26,11 +26,11 @@
     <string name="none_text">No text</string>
     <string name="select_to_delete">Select to delete</string>
     <string name="delete">Delete</string>
-    <string name="complete_task">Complete Task</string>
+    <string name="completed_tasks">Completed Tasks</string>
     <string name="expired">Expired</string>
     <!-- Sign in -->
     <string name="sign_in">Sign in</string>
-    <string name="email">Email</string>
+    <string name="email" translatable="false">Email</string>
     <string name="enter_your_email">Enter your email</string>
     <string name="password">Password</string>
     <string name="enter_your_password">Enter your password</string>
@@ -38,7 +38,7 @@
     <string name="dont_have_an_account">Don"'"t have an account?</string>
     <string name="sign_up">Sign up</string>
     <string name="or_sign_in_with">Or sign in with</string>
-    <string name="google">Google</string>
+    <string name="google" translatable="false">Google</string>
     <!-- Sign up -->
     <string name="confirm_password">Confirm password</string>
     <string name="or_sign_up_with">Or sign up with</string>
@@ -46,12 +46,14 @@
     <string name="already_have_an_account">Already have an account?</string>
     <!-- Settings -->
     <string name="settings">Settings</string>
-    <string name="example_email">example@mail.com</string>
+    <string name="example_email" translatable="false">example@mail.com</string>
     <string name="edit_profile">Edit profile</string>
-    <string name="app_settings">App settings</string>
+    <string name="dark_mode">Dark mode</string>
     <string name="notifications">Notifications</string>
+    <string name="language">Language</string>
     <string name="change_password">Change password</string>
     <string name="sign_out">Sign out</string>
+    <string name="sign_out_question">Are you sure you want to sign out\n from the application?</string>
     <!-- Change password -->
     <string name="current_password">Current password</string>
     <string name="enter_your_current_password">Enter your current password</string>
@@ -59,4 +61,13 @@
     <string name="enter_your_new_password">Enter your new password</string>
     <string name="confirm_new_password">Confirm new password</string>
     <string name="reenter_your_new_password">Re-enter your new password</string>
+    <string name="there_are_no_notes_here">There are no notes here</string>
+    <string name="there_are_no_tasks_there">There are no tasks there</string>
+    <string name="text">Text</string>
+    <string name="camera">Camera</string>
+    <string name="add_voice">Add Voice</string>
+    <string name="add_text">Add Text</string>
+    <string name="add_image">Add Image</string>
+    <string name="search_todo">Search todo…</string>
+    <string name="sample_study_work">Sample: #study, #work, ...</string>
 </resources>

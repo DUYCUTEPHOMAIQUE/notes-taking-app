@@ -25,41 +25,45 @@
         android:theme="@style/Theme.NotesTakingApp"
         tools:targetApi="31">
         <activity
-            android:name=".authentication.SettingsActivity"
+            android:name=".ui.ViewImageActivity"
             android:exported="false" />
         <activity
+            android:name=".authentication.SettingsActivity"
+            android:exported="true" />
+        <activity
             android:name=".authentication.SignInActivity"
-            android:exported="false"/>
+            android:exported="true" />
         <activity
             android:name=".authentication.SignUpActivity"
-            android:exported="false"/>
+            android:exported="true" />
         <activity
             android:name=".authentication.ChangePasswordActivity"
-            android:exported="false"/>
+            android:exported="true" />
         <activity
             android:name=".ui.DrawingActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.NoteEditActivity"/>
+            android:exported="true"
+            android:parentActivityName=".ui.NoteEditActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.NoteEditActivity"
-            android:exported="false"
+            android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.AIRPLANE_MODE"/>
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".notification.AlarmReceiver"
-            android:exported="true">
-        </receiver>
+
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

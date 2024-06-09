@@ -1,300 +1,324 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_8sdp"
     android:background="@drawable/background_tool_dialog"
-    android:clipToPadding="false"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    android:clipToPadding="false">
     <LinearLayout
         android:id="@+id/layout_x_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginTop="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_12sdp"
         android:layout_marginBottom="@dimen/_8sdp"
         android:background="@drawable/bg_x_dialog"
         android:clipToPadding="false">
-
         <ImageView
             android:layout_width="@dimen/_12sdp"
             android:layout_height="@dimen/_12sdp"
-            android:src="@drawable/x_icon" />
+            android:src="@drawable/x_icon"
+            app:tint="@color/colorBlack"
+            tools:ignore="ContentDescription"/>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/choose_color_layout"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
+        android:background="@drawable/background_tool_dialog"
+        android:backgroundTint="@color/colorLightGray"
+        android:padding="@dimen/_8sdp">
         <TextView
+            android:id="@+id/text_change_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/change_background"
-            android:textColor="@color/colorGrayDark"
-            android:textSize="@dimen/_12ssp" />
-
+            android:textColor="@color/colorBlack"
+            android:textSize="@dimen/_14sdp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/_8sdp"
-            android:orientation="horizontal">
-
+            android:layout_marginTop="@dimen/_4sdp"
+            android:orientation="horizontal"
+            android:baselineAligned="false"
+            android:layout_below="@id/text_change_background">
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
-
                 <View
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:background="@drawable/bg_color_default"
-                    android:id="@+id/view_default"
-                    />
-
+                    android:id="@+id/view_default" />
                 <ImageView
                     android:id="@+id/color_note_default"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:importantForAccessibility="no"
-                    app:tint="@color/colorGrayDark" />
+                    app:tint="@color/colorDarkGray" />
             </FrameLayout>
-
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
-
                 <View
                     android:id="@+id/view_1"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
-                    android:background="@drawable/bg_color_1" />
-
+                    android:background="@drawable/bg_color_1"/>
                 <ImageView
                     android:id="@+id/color_note_1"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:contentDescription="@string/app_name"
-                    app:tint="@color/colorGrayDark" />
+                    app:tint="@color/colorDarkGray" />
             </FrameLayout>
-
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
-
                 <View
                     android:id="@+id/view_2"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:background="@drawable/bg_color_2" />
-
                 <ImageView
                     android:id="@+id/color_note_2"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:contentDescription="@string/app_name"
-                    app:tint="@color/colorGrayDark" />
+                    app:tint="@color/colorDarkGray"/>
             </FrameLayout>
-
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
-
                 <View
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:id="@+id/view_3"
-                    android:background="@drawable/bg_color_3" />
-
+                    android:background="@drawable/bg_color_3"/>
                 <ImageView
                     android:id="@+id/color_note_3"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:contentDescription="@string/app_name"
-                    app:tint="@color/colorGrayDark" />
+                    app:tint="@color/colorDarkGray"/>
             </FrameLayout>
-
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
-
                 <View
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:id="@+id/view_4"
                     android:background="@drawable/bg_color_4" />
-
                 <ImageView
                     android:id="@+id/color_note_4"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:contentDescription="@string/app_name"
-                    app:tint="@color/colorGrayDark" />
+                    app:tint="@color/colorDarkGray" />
             </FrameLayout>
-
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/_4sdp"
                 android:layout_weight="1">
-
                 <View
                     android:id="@+id/view_5"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:background="@drawable/bg_color_5" />
-
                 <ImageView
                     android:id="@+id/color_note_5"
                     android:layout_width="@dimen/_32sdp"
                     android:layout_height="@dimen/_32sdp"
                     android:contentDescription="@string/app_name"
-                    app:tint="@color/colorGrayDark" />
+                    app:tint="@color/colorDarkGray" />
             </FrameLayout>
         </LinearLayout>
+    </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@color/colorTextHint" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:id="@+id/tool_set_remind"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:paddingTop="@dimen/_6sdp"
+        android:paddingBottom="@dimen/_6sdp"
+        android:background="@drawable/background_tool_dialog"
+        android:backgroundTint="@color/colorLightGray"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:id="@+id/icon_reminder"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:src="@drawable/clock"
+            app:tint="@color/color_state_black"
+            tools:ignore="ContentDescription"/>
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:orientation="vertical">
+            android:layout_toEndOf="@id/icon_reminder"
+            android:fontFamily="@font/medium"
+            android:text="@string/set_reminder"
+            android:textColor="@color/color_state_black"
+            android:textSize="@dimen/_14sdp"/>
+    </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:text="@string/extras" />
-
-            <LinearLayout
-                android:id="@+id/tool_set_remind"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_8sdp">
-
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/clock" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:fontFamily="@font/medium"
-                    android:text="@string/set_reminder"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_12ssp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_8sdp">
-
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/pencil_alt" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:fontFamily="@font/medium"
-                    android:text="@string/change_note_type"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_12ssp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_8sdp">
-
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/tag" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:fontFamily="@font/medium"
-                    android:text="@string/give_tag"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_12ssp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/layout_mask_as_finished"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_16sdp">
-
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/round_done_24" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_8sdp"
-                    android:fontFamily="@font/medium"
-                    android:text="@string/mark_as_finished"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_12ssp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_1sdp"
-            android:background="@color/colorTextHint" />
-
-        <LinearLayout
-            android:id="@+id/layout_delete_note"
-            android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:paddingTop="@dimen/_6sdp"
+        android:paddingBottom="@dimen/_6sdp"
+        android:background="@drawable/background_tool_dialog"
+        android:backgroundTint="@color/colorLightGray"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:id="@+id/icon_change_note_type"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:src="@drawable/pencil_alt"
+            app:tint="@color/color_state_black"
+            tools:ignore="ContentDescription"/>
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_16sdp"
-            android:layout_marginBottom="@dimen/_16sdp">
+            android:layout_toEndOf="@id/icon_change_note_type"
+            android:fontFamily="@font/medium"
+            android:text="@string/change_note_type"
+            android:textColor="@color/color_state_black"
+            android:textSize="@dimen/_14sdp"/>
+    </RelativeLayout>
 
-            <ImageView
-                android:layout_width="@dimen/_18sdp"
-                android:layout_height="@dimen/_18sdp"
-                android:src="@drawable/trash"
-                app:tint="@color/colorError" />
+    <RelativeLayout
+        android:id="@+id/tag_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:paddingTop="@dimen/_6sdp"
+        android:paddingBottom="@dimen/_6sdp"
+        android:background="@drawable/background_tool_dialog"
+        android:backgroundTint="@color/colorLightGray"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:id="@+id/icon_give_tag"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:src="@drawable/tag"
+            app:tint="@color/color_state_black"
+            tools:ignore="ContentDescription"/>
+        <TextView
+            android:id="@+id/text_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/icon_give_tag"
+            android:fontFamily="@font/medium"
+            android:text="@string/give_tag"
+            android:textColor="@color/color_state_black"
+            android:textSize="@dimen/_14sdp"/>
+        <TextView
+            android:id="@+id/tag_name_tool"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/medium"
+            android:textSize="@dimen/_14ssp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:text="sample"
+            android:textColor="@color/colorDarkGray"
+            android:layout_alignParentEnd="true"
+            android:includeFontPadding="false"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"
+            />
+    </RelativeLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:fontFamily="@font/medium"
-                android:text="@string/delete_note"
-                android:textColor="@color/colorError"
-                android:textSize="@dimen/_12ssp" />
-        </LinearLayout>
-    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/layout_mark_as_finished"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:paddingTop="@dimen/_6sdp"
+        android:paddingBottom="@dimen/_6sdp"
+        android:background="@drawable/background_tool_dialog"
+        android:backgroundTint="@color/colorLightGray"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:id="@+id/icon_mark_as_finished"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:src="@drawable/round_done_24"
+            app:tint="@color/color_state_black"
+            tools:ignore="ContentDescription"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/icon_mark_as_finished"
+            android:fontFamily="@font/medium"
+            android:text="@string/mark_as_finished"
+            android:textColor="@color/color_state_black"
+            android:textSize="@dimen/_14sdp"/>
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/layout_delete_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:paddingTop="@dimen/_6sdp"
+        android:paddingBottom="@dimen/_6sdp"
+        android:background="@drawable/background_tool_dialog"
+        android:backgroundTint="@color/colorNoteVariant5"
+        android:clickable="true"
+        android:focusable="true">
+        <ImageView
+            android:id="@+id/icon_delete_note"
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:src="@drawable/trash"
+            app:tint="@color/color_state_red"
+            tools:ignore="ContentDescription"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/icon_delete_note"
+            android:fontFamily="@font/medium"
+            android:text="@string/delete_note"
+            android:textColor="@color/color_state_red"
+            android:textSize="@dimen/_14sdp"/>
+    </RelativeLayout>
 </LinearLayout>
