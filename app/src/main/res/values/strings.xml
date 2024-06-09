@@ -9,7 +9,7 @@
     <string name="voice">Voice</string>
     <string name="note_title">Note Title</string>
     <string name="my_notes">My Notes</string>
-    <string name="search_notes">Search notes</string>
+    <string name="search_notes">Search notes…</string>
     <string name="back">Back</string>
     <string name="type_note_here">Type note here…</string>
     <string name="change_background">Change background</string>
@@ -68,4 +68,5 @@
     <string name="add_voice">Add Voice</string>
     <string name="add_text">Add Text</string>
     <string name="add_image">Add Image</string>
+    <string name="search_todo">Search todo…</string>
 </resources>

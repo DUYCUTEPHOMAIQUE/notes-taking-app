@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         mBottomNavigationView.getMenu().findItem(R.id.home_main).setChecked(true);
-                        inputSearch.setHint("Search Notes...");
+                        inputSearch.setHint(getString(R.string.search_notes));
                         inputSearch.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         mBottomNavigationView.getMenu().findItem(R.id.todo_main).setChecked(true);
-                        inputSearch.setHint("Search To do...");
+                        inputSearch.setHint(getString(R.string.search_todo));
                         inputSearch.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

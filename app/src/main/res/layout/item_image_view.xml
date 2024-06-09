@@ -8,8 +8,10 @@
     android:layout_marginStart="@dimen/_6sdp"
     android:layout_marginEnd="@dimen/_6sdp"
     android:padding="8dp"
+    android:background="@drawable/border_image_rounded"
     android:orientation="vertical"
-    android:maxHeight="@dimen/_500sdp">
+    android:maxHeight="@dimen/_500sdp"
+    android:minHeight="@dimen/_100sdp">
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/image_view_details"
         android:layout_width="match_parent"
@@ -18,6 +20,7 @@
         android:scaleType="centerCrop"
         android:maxHeight="@dimen/_500sdp"/>
     <ImageView
+        android:layout_marginTop="@dimen/_4sdp"
         android:id="@+id/image_trash_image"
         android:layout_width="@dimen/_24sdp"
         android:layout_height="@dimen/_24sdp"

@@ -8,7 +8,7 @@
     <string name="voice">Ghi âm</string>
     <string name="note_title">Tiêu đề</string>
     <string name="my_notes">Ghi chú của tôi</string>
-    <string name="search_notes">Tìm kiếm</string>
+    <string name="search_notes">Tìm kiếm ghi chú...</string>
     <string name="back">Trở lại</string>
     <string name="type_note_here">Hãy ghi gì đó…</string>
     <string name="change_background">Thay đổi màu nền</string>
@@ -53,9 +53,12 @@
     <string name="enter_your_new_password">Nhập mật khẩu mới của bạn</string>
     <string name="confirm_new_password">Nhập lại mật khẩu mới</string>
     <string name="reenter_your_new_password">Nhập lại mật khẩu mới của bạn</string>
+    <string name="there_are_no_notes_here">Không có ghi chú nào ở đây</string>
+    <string name="there_are_no_tasks_there">Không có nhiệm vụ ở đây</string>
     <string name="text">Văn bản</string>
     <string name="camera">Máy ảnh</string>
     <string name="add_voice">Thêm Ghi âm</string>
     <string name="add_text">Thêm Văn bản</string>
     <string name="add_image">Thêm Hình ảnh</string>
+    <string name="search_todo">Tìm kiếm nhiệm vụ…</string>
 </resources>

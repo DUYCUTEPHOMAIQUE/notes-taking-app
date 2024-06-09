@@ -1,7 +1,9 @@
 package com.example.notestakingapp.ui;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +18,8 @@ import com.example.notestakingapp.utils.ImageUtils;
 public class ViewImageActivity extends AppCompatActivity {
     int imageId;
     ImageView imageView;
+    TextView backButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +31,12 @@ public class ViewImageActivity extends AppCompatActivity {
             return insets;
         });
         imageView = findViewById(R.id.image_view);
+        backButton = findViewById(R.id.back_button_view_full);
+        backButton.setOnClickListener(v -> {
+            getOnBackPressedDispatcher().onBackPressed();
+        });
         imageId = getIntent().getIntExtra("image_id", -1);
-        if(imageId!=-1) {
+        if (imageId != -1) {
             imageView.setImageBitmap(ImageUtils.byteToBitmap(DatabaseHandler.getImageById(this, imageId)));
         }
     }
