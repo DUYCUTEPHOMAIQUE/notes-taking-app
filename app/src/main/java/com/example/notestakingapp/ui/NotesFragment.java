@@ -226,7 +226,6 @@ public class NotesFragment extends Fragment {
             Integer key = entry.getKey();
             ArrayList<Component> value = entry.getValue();
             List<Object> temp = new ArrayList<>();
-
             for (Component i : value) {
                 switch (i.getType()) {
                     case Item.TYPE_EDIT_TEXT:

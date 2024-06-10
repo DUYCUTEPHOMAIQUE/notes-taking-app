@@ -1,6 +1,7 @@
 package com.example.notestakingapp.ui;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,6 +16,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.notestakingapp.R;
@@ -33,7 +36,7 @@ public class DrawingActivity extends AppCompatActivity {
     private int noteId;
     SharedViewModel sharedViewModelDraw;
     TextView backButton;
-    ImageView imageChooseColor, saveButton;
+    ImageView imageChooseColor, saveButton, eraserImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,24 @@ public class DrawingActivity extends AppCompatActivity {
         imageChooseColor.setOnClickListener(v-> {
             onClickChooseColor(v);
         });
+        eraserImage.setOnClickListener(v-> {
+            setColorWhite();
+        });
+        sharedViewModelDraw.getColor().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer integer) {
+                if(integer == -1) {
+                    eraserImage.setColorFilter(getColor(R.color.colorAccent));
+                } else {
+                    eraserImage.setColorFilter(Color.BLACK);
+                }
+            }
+        });
+    }
+
+    private void setColorWhite() {
+        dv.changeColor(Color.WHITE);
+        sharedViewModelDraw.setColor(Color.WHITE);
     }
 
     @Override
@@ -73,6 +94,7 @@ public class DrawingActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.image_save);
         backButton = findViewById(R.id.back_button);
         imageChooseColor = findViewById(R.id.image_choose_color);
+        eraserImage = findViewById(R.id.image_eraser);
     }
     public void onClickChooseColor(View v) {
         openColorPickerDialogue();
@@ -89,6 +111,7 @@ public class DrawingActivity extends AppCompatActivity {
                     public void onOk(AmbilWarnaDialog dialog, int color) {
                         dv.mDefaultColor = color;
                         dv.changeColor(dv.mDefaultColor);
+                        sharedViewModelDraw.setColor(dv.mDefaultColor);
                     }
                 });
         colorPickerDialogue.show();
@@ -101,7 +124,7 @@ public class DrawingActivity extends AppCompatActivity {
         }
         Bitmap bitmap = dv.getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         int imageId = (int) DatabaseHandler.insertImage(this, noteId, byteArray);
         sharedViewModelDraw.setTest(true);

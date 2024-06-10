@@ -191,4 +191,13 @@ public class SharedViewModel extends ViewModel {
     public void setInputFocus(boolean inputFocus) {
         isInputFocus.setValue(inputFocus);
     }
+    public MutableLiveData<Integer> color = new MutableLiveData<>();
+
+    public MutableLiveData<Integer> getColor() {
+        return color;
+    }
+
+    public void setColor(int t) {
+        color.setValue(t);
+    }
 }

@@ -29,14 +29,23 @@
 			app:drawableTint="@color/color_state_accent"
 			tools:ignore="RelativeOverlap"/>
 		<ImageView
+			android:id="@+id/image_eraser"
+			android:layout_width="@dimen/_24sdp"
+			android:layout_height="@dimen/_24sdp"
+			android:layout_marginEnd="@dimen/_12sdp"
+			android:layout_toStartOf="@id/image_choose_color"
+			android:layout_centerVertical="true"
+			android:src="@drawable/eraser_icon"
+			app:tint="@color/colorBlack"
+			tools:ignore="ContentDescription"/>
+		<ImageView
 			android:id="@+id/image_choose_color"
 			android:layout_width="@dimen/_24sdp"
 			android:layout_height="@dimen/_24sdp"
-			android:layout_marginEnd="@dimen/_6sdp"
+			android:layout_marginEnd="@dimen/_16sdp"
 			android:layout_toStartOf="@id/image_save"
 			android:layout_centerVertical="true"
 			android:src="@drawable/pen_icon"
-			app:tint="@color/colorBlack"
 			tools:ignore="ContentDescription"/>
 		<ImageView
 			android:id="@+id/image_save"
