@@ -38,8 +38,10 @@ import com.example.notestakingapp.utils.ImageUtils;
 import com.example.notestakingapp.utils.NoteDetailsComponent;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -273,7 +275,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                     imageView.setVisibility(View.GONE);
                 }
                 //Set date time
-                textDateTime.setText(CurrentTime.convertTimeFromMiliSecond(note.getCreateAt()));
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                String dateOK = sdf.format(new Date(note.getCreateAt()));
+                String currentDate = sdf.format(new Date());
+                if (dateOK.substring(0, 10).equals(currentDate.substring(0, 10))) {
+                    textDateTime.setText("Today " + dateOK.substring(11, 16));
+                } else if(dateOK.substring(0, 4).equals(currentDate.substring(0, 4))){
+                    textDateTime.setText(dateOK.substring(5, 10));
+                } else {
+                    textDateTime.setText(dateOK);
+                }
                 //setColor
                 if (note.getColor() != null) {
                     cardView.setCardBackgroundColor(Color.parseColor(note.getColor()));

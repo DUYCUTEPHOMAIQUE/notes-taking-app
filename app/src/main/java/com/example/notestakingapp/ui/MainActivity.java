@@ -1,6 +1,7 @@
 package com.example.notestakingapp.ui;
 
 import com.example.notestakingapp.authentication.SettingsActivity;
+import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.NoteComponent.Note;
@@ -365,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
             List<TextSegment> textSegmentList = new ArrayList<>();
             List<Image> imageList = new ArrayList<>();
             List<Audio> audioList = new ArrayList<>();
+//            Tag tag = new Tag(DatabaseHandler.getTagIdByNoteId(this, note.getNoteId()),  DatabaseHandler.getTagNameByTagId(this, DatabaseHandler.getTagIdByNoteId(this, note.getNoteId())));
 
             for (Object i : temp) {
                 if (i instanceof TextSegment) {

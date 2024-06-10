@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.adapter.NotesAdapter;
@@ -247,9 +248,10 @@ public class NotesFragment extends Fragment {
             List<TextSegment> textSegmentList = new ArrayList<>();
             List<Image> imageList = new ArrayList<>();
             List<Audio> audioList = new ArrayList<>();
-
             List<Object> value = entry.getValue();
             note = databaseHandler.getNoteById(getActivity(), entry.getKey());
+            assert note != null;
+//            Tag tag = new Tag(DatabaseHandler.getTagIdByNoteId(getActivity(), note.getNoteId()),  DatabaseHandler.getTagNameByTagId(getActivity(), DatabaseHandler.getTagIdByNoteId(getActivity(), note.getNoteId())));
             for (Object i : value) {
                 if (i instanceof TextSegment) {
                     textSegmentList.add((TextSegment) i);
