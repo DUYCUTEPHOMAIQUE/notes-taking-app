@@ -73,7 +73,6 @@ public class SharedViewModel extends ViewModel {
     }
 
     public void notifyDataChanged() {
-        Log.d("duyngu", "flag");
         dataChanged.setValue(true);
     }
 
@@ -147,6 +146,14 @@ public class SharedViewModel extends ViewModel {
 
 
     private final MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(true);
+    private final MutableLiveData<Boolean> tagChanged = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getTagChanged() {
+        return tagChanged;
+    }
+    public void setTagChanged() {
+        tagChanged.setValue(true);
+    }
 
     public MutableLiveData<Boolean> isPlaying() {
         return isPlaying;
@@ -191,5 +198,33 @@ public class SharedViewModel extends ViewModel {
 
     public void setInputFocus(boolean inputFocus) {
         isInputFocus.setValue(inputFocus);
+    }
+    public MutableLiveData<Integer> color = new MutableLiveData<>();
+
+    public MutableLiveData<Integer> getColor() {
+        return color;
+    }
+
+    public void setColor(int t) {
+        color.setValue(t);
+    }
+    public MutableLiveData<String> language = new MutableLiveData<>();
+
+    public MutableLiveData<String> getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String t) {
+        language.setValue(t);
+    }
+
+    public MutableLiveData<String> stateNotification = new MutableLiveData<>();
+
+    public MutableLiveData<String> getStateNotification() {
+        return stateNotification;
+    }
+
+    public void setStateNotification(String t) {
+        stateNotification.setValue(t);
     }
 }

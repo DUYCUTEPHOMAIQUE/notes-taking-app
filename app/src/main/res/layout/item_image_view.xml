@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="@dimen/_4sdp"
     android:layout_marginStart="@dimen/_6sdp"
     android:layout_marginEnd="@dimen/_6sdp"
     android:padding="8dp"
+    android:background="@drawable/border_image_rounded"
     android:orientation="vertical"
-    android:maxHeight="@dimen/_500sdp">
+    android:maxHeight="@dimen/_500sdp"
+    android:minHeight="@dimen/_100sdp">
     <com.makeramen.roundedimageview.RoundedImageView
         android:id="@+id/image_view_details"
         android:layout_width="match_parent"
@@ -17,4 +19,17 @@
         app:riv_corner_radius="8dp"
         android:scaleType="centerCrop"
         android:maxHeight="@dimen/_500sdp"/>
-</LinearLayout>
+    <ImageView
+        android:layout_marginTop="@dimen/_4sdp"
+        android:id="@+id/image_trash_image"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_alignEnd="@+id/image_view_details"
+        android:layout_alignTop="@+id/image_view_details"
+        android:layout_centerVertical="true"
+        app:tint="@color/colorAccent"
+        android:src="@drawable/trash_audio"
+        android:background="@drawable/bg_trash_text"
+        android:layout_marginEnd="@dimen/_4sdp"
+        tools:ignore="ContentDescription" />
+</RelativeLayout>

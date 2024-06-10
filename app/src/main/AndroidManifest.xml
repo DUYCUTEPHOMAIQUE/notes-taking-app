@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -24,41 +25,49 @@
         android:theme="@style/Base.Theme.NotesTakingApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.OpenScreenActivity"
+            android:theme="@style/Theme.OpenScreen"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.ViewImageActivity"
+            android:exported="false" />
+        <activity
             android:name=".authentication.SettingsActivity"
             android:exported="true" />
         <activity
             android:name=".authentication.SignInActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".authentication.SignUpActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".authentication.ChangePasswordActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".ui.DrawingActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:parentActivityName=".ui.NoteEditActivity"/>
+            android:parentActivityName=".ui.NoteEditActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.NoteEditActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.AIRPLANE_MODE"/>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <receiver android:name=".notification.AlarmReceiver"
-            android:exported="true">
-        </receiver>
+            android:screenOrientation="portrait"/>
+
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:exported="true" />
     </application>
 
 </manifest>

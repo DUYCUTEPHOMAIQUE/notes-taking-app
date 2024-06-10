@@ -9,12 +9,14 @@ import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -28,6 +30,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.shared.SharedViewModel;
+import com.example.notestakingapp.ui.NoteEditActivity;
 import com.example.notestakingapp.utils.CurrentTime;
 import com.example.notestakingapp.utils.TextUtils;
 
@@ -70,6 +73,15 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private static AudioListener audioListener;
+    private static ImageListener imageListener;
+
+    public ImageListener getImageListener() {
+        return imageListener;
+    }
+
+    public void setImageListener(ImageListener imageListener) {
+        NoteDetailsAdapter.imageListener = imageListener;
+    }
 
     public AudioListener getAudioListener() {
         return audioListener;
@@ -185,10 +197,23 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     static class EditTextViewHolder extends RecyclerView.ViewHolder {
         EditText editText;
+        ImageView trashText;
 
         public EditTextViewHolder(@NonNull View itemView) {
             super(itemView);
             editText = itemView.findViewById(R.id.edit_text_details);
+            trashText = itemView.findViewById(R.id.image_trash_text);
+
+            trashText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int adapterPosition = getAdapterPosition();
+                    Log.d("TrashDuy", "Click" + adapterPosition);
+                    if (editTextChangedListener != null  && adapterPosition != RecyclerView.NO_POSITION) {
+                        editTextChangedListener.onTrashClick(adapterPosition);
+                    }
+                }
+            });
             // lang nghe su kien nhap van ban trong edittext
             editText.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -197,12 +222,10 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (editTextChangedListener != null) {
+                    if (editTextChangedListener != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
                         //check position ép kiểu sai
-                        if (getAdapterPosition() != RecyclerView.NO_POSITION) {
                             // Sử dụng listener để thông báo văn bản đã thay đổi
                             editTextChangedListener.onTextChanged(getAdapterPosition(), s.toString());
-                        }
                         //gui su kien cho activity va truyen van ban moi
                     }
                 }
@@ -248,10 +271,26 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     static class ImageViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        ImageView trashImage;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image_view_details);
+            trashImage = itemView.findViewById(R.id.image_trash_image);
+            //trash click
+            trashImage.setOnClickListener(v -> {
+                int adapterPosition = getAdapterPosition();
+                if(imageListener!=null && adapterPosition!=RecyclerView.NO_POSITION) {
+                    imageListener.onTrashClick(adapterPosition);
+                }
+            });
+            //image click
+            imageView.setOnClickListener(v-> {
+                int adapterPosition = getAdapterPosition();
+                if(imageListener!=null && adapterPosition!=RecyclerView.NO_POSITION) {
+                    imageListener.onImageClick(adapterPosition);
+                }
+            });
         }
     }
 
@@ -328,6 +367,7 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public interface OnEditTextChangedListener {
         void onTextChanged(int position, String text);
+        void onTrashClick(int position);
     }
 
     public interface EditTextTitleListener {
@@ -336,6 +376,12 @@ public class NoteDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public interface AudioListener {
         void onPlayBtnClick(int position);
+
+        void onTrashClick(int position);
+    }
+
+    public interface ImageListener {
+        void onImageClick(int position);
 
         void onTrashClick(int position);
     }

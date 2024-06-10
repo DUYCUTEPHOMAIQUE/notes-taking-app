@@ -7,16 +7,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.database.NoteComponent.Audio;
 import com.example.notestakingapp.database.NoteComponent.Component;
 import com.example.notestakingapp.database.NoteComponent.Image;
 import com.example.notestakingapp.database.NoteComponent.Note;
+import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.database.NoteComponent.TextSegment;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
+import com.example.notestakingapp.firebase.FirebaseAuthHandler;
+import com.example.notestakingapp.shared.Item;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +29,7 @@ public class DatabaseHandler {
     public static final String TAG_NAME_DEFAULT = "Default";
 
     //NOTE columns
-
+    public static final String COLUMN_USER_ID = "USER_ID";
     public static final String COLUMN_NOTE_TITLE = "NOTE_TITLE";
 
     public static final String COLUMN_NOTE_ID = "NOTE_ID";
@@ -94,6 +97,7 @@ public class DatabaseHandler {
         ct.put(COLUMN_NOTE_TITLE, title);
         ct.put(COLUMN_NOTE_CREATEAT, System.currentTimeMillis());
         ct.put(COLUMN_NOTE_COLOR, color);
+        ct.put(COLUMN_USER_ID, FirebaseAuthHandler.getUserId());
 
         return db.insert(NOTE_TABLE, null, ct);
     }
@@ -144,6 +148,7 @@ public class DatabaseHandler {
         //xoa du lieu trong bang audio
         db.delete(AUDIO_TABLE, COLUMN_NOTE_ID + " = ?", new String[]{Integer.toString(noteId)});
 
+        deleteTag(context, noteId);
         //xoa du lieu trong bang note_tag
         db.delete(NOTE_TAG_TABLE, COLUMN_NOTE_ID + " = ?", new String[]{Integer.toString(noteId)});
 
@@ -719,56 +724,125 @@ public class DatabaseHandler {
 
         ContentValues ct = new ContentValues();
 
-        ct.put(COLUMN_TAG_NAME, tagName.trim().toLowerCase());
+        ct.put(COLUMN_TAG_NAME, tagName.trim());
 
         return db.insert(TAG_TABLE, null, ct);
     }
 
     //todo: public void deleteTag(Context context,int tagId)
-    //Xóa 1 tag . Thông tin lưu trong bảng Note_Tag cũng bị xóa
-    public void deleteTag(Context context, int tagId) {
+    //Xóa 1 hàng trong bảng TAG và 1 hàng trong bảng NOTE-TAG
+    public void deleteTag(Context context, int noteId) {
+        Log.d("tagdd", "OKnote"+noteId);
+
+        int tagId = getTagIdByNoteId(context, noteId);
+
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
-
-        db.delete(NOTE_TAG_TABLE, COLUMN_TAG_ID + " = ?", new String[]{Integer.toString(tagId)});
+        Log.d("tagdd", "OK"+tagId);
         db.delete(TAG_TABLE, COLUMN_TAG_ID + " = ?", new String[]{Integer.toString(tagId)});
+        db.delete(NOTE_TAG_TABLE, COLUMN_TAG_ID + " = ?", new String[]{Integer.toString(tagId)});
     }
     //ToDo public int getTagByTagName(Context context, String tagName)
 
-//    public int getTagByTagName(Context context, String tagName){
-//        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-//        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
-//
-//        Cursor cursor = db.query(TAG_TABLE,new String[]{COLUMN_TAG_ID, COLUMN_TAG_NAME}, COLUMN_TAG_NAME+" = ?", new String[]{tagName.trim()},
-//                null, null, null);
-//        if (cursor.moveToFirst()){
-//            return cursor.getInt(0);
-//        }
-//        else return -1;
-//    }
+    public static List<Tag> getAllTags(Context context) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+
+        List<Tag> tags = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(TAG_TABLE,
+                    new String[]{COLUMN_TAG_ID, COLUMN_TAG_NAME},
+                    null, null, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int tagId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TAG_ID));
+                    String tagName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TAG_NAME));
+                    tags.add(new Tag(tagId, tagName));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return tags;
+    }
 
 
-    //--------------------------------------------------------TODO---------------------------------------
+    public int getTagIdByTagName(Context context, String tagName) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+        Cursor cursor = db.query(TAG_TABLE, new String[]{COLUMN_TAG_ID, COLUMN_TAG_NAME}, COLUMN_TAG_NAME + " = ?", new String[]{tagName.trim()},
+                null, null, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        } else return -1;
+    }
+
+    @SuppressLint("Range")
+    public static String getTagNameByTagId(Context context, int tagId) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+        Cursor cursor = db.query(TAG_TABLE, new String[]{COLUMN_TAG_ID, COLUMN_TAG_NAME}, COLUMN_TAG_ID + " = ?", new String[]{Integer.toString(tagId)},
+                null, null, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getString(cursor.getColumnIndex(COLUMN_TAG_NAME));
+        } else return null;
+    }
+
+    @SuppressLint("Range")
+    public static int getTagIdByNoteId(Context context, int noteId) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
+
+        Cursor cursor = db.query(NOTE_TAG_TABLE, new String[]{COLUMN_TAG_ID, COLUMN_NOTE_ID}, COLUMN_NOTE_ID + " = ? ", new String[]{Integer.toString(noteId)}, null, null, null);
+
+        if (cursor.moveToFirst()) {
+            Log.d("tagDD", "###="+cursor.getInt(cursor.getColumnIndex(COLUMN_TAG_ID)));
+            return cursor.getInt(cursor.getColumnIndex(COLUMN_TAG_ID));
+        } else {
+            return -1;
+        }
+    }
+
+    public static void insertTag(Context context, int noteId, String tagName) {
+        int tagId = (int) createNewTag(context, tagName.trim());
+        setTagForNote(context, noteId, tagId);
+    }
+
+    public static void updateTag(Context context, int noteId, String newTag) {
+
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+        int tagId = getTagIdByNoteId(context, noteId);
+        Log.d("duong", Integer.toString(tagId));
+
+        ContentValues cv = new ContentValues();
+
+        cv.put(COLUMN_TAG_NAME, newTag);
+
+        try {
+            db.update(TAG_TABLE, cv, COLUMN_TAG_ID + " = ?", new String[]{Integer.toString(tagId)});
+        } catch (Exception e) {
+
+        }
+    }
+
+
+    //Todo--------------------------------------------------------TODO---------------------------------------
     public static void deleteAllTodo(Context context) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
         db.execSQL("DELETE FROM " + TODO_TABLE);
     }
-
-    //todo: public long insertTodo(Context context, int todoId, @Nullable String content,@NonNull String createAt,@Nullable String duration )
-//	public static long insertTodo(Context context, String content, long duration, boolean isCompleted) {
-//		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-//		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
-//
-//		ContentValues ct = new ContentValues();
-//
-//		ct.put(COLUMN_TODO_CONTENT, content);
-//		ct.put(COLUMN_TODO_CREATEAT , System.currentTimeMillis());
-//		ct.put(COLUMN_TODO_DURATION, duration);
-//		ct.put(COLUMN_TODO_COMPLETE, isCompleted);
-//
-//		return db.insert(TODO_TABLE, null, ct);
-//	}
 
     public static long insertTodo(Context context, String content, Long duration) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -780,23 +854,26 @@ public class DatabaseHandler {
         ct.put(COLUMN_TODO_CREATEAT, System.currentTimeMillis());
         ct.put(COLUMN_TODO_DURATION, duration);
         ct.put(COLUMN_TODO_COMPLETE, false);
+        ct.put(COLUMN_USER_ID, FirebaseAuthHandler.getUserId());
 
         return db.insert(TODO_TABLE, null, ct);
     }
 
-	public static long insertTodo(Context context, String content, Long duration, boolean complete) {
-		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+    public static long insertTodo(Context context, String content, Long duration, boolean complete) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
-		ContentValues ct = new ContentValues();
+        ContentValues ct = new ContentValues();
 
-		ct.put(COLUMN_TODO_CONTENT, content);
-		ct.put(COLUMN_TODO_CREATEAT, System.currentTimeMillis());
-		ct.put(COLUMN_TODO_DURATION, duration);
-		ct.put(COLUMN_TODO_COMPLETE, complete);
+        ct.put(COLUMN_TODO_CONTENT, content);
+        ct.put(COLUMN_TODO_CREATEAT, System.currentTimeMillis());
+        ct.put(COLUMN_TODO_DURATION, duration);
+        ct.put(COLUMN_TODO_COMPLETE, complete);
+        ct.put(COLUMN_USER_ID, FirebaseAuthHandler.getUserId());
 
-		return db.insert(TODO_TABLE, null, ct);
-	}
+        return db.insert(TODO_TABLE, null, ct);
+    }
+
     public static ToDo getToDoById(Context context, int todoId) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
@@ -816,6 +893,7 @@ public class DatabaseHandler {
             return null;
         }
     }
+
     //todo: public int updateTodo(Context context, int todoId,@Nullable String content,@NonNull String createAt,@Nullable String duration)
     public int updateTodo(Context context, int todoId, Long duration) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -942,7 +1020,7 @@ public class DatabaseHandler {
     }
 
 
-    //----------------------------------------------------- NOTE_TAG --------------------------------------
+    //Todo----------------------------------------------------- NOTE_TAG --------------------------------------
     //todo: public static void deleteAllNoteTag(Context context)
     public static void deleteAllNoteTag(Context context) {
         SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -968,17 +1046,17 @@ public class DatabaseHandler {
     //ToDo public void deleteTagForNote(Context context, int noteId, int tagId)
 
     // Xóa 1 bản ghi trong bảng Note_Tag.
-    public void removeTagForNote(Context context, int noteId, int tagId) {
-        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+//	public void removeTagForNote(Context context, int noteId, int tagId) {
+//		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+//		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+//
+//		db.delete(NOTE_TAG_TABLE,
+//				NOTE_TAG_TABLE + " = ? AND " + COLUMN_TAG_ID + " = ?",
+//				new String[]{Integer.toString(noteId), Integer.toString(tagId)});
+//	}
 
-        db.delete(NOTE_TAG_TABLE,
-                NOTE_TAG_TABLE + " = ? AND " + COLUMN_TAG_ID + " = ?",
-                new String[]{Integer.toString(noteId), Integer.toString(tagId)});
-    }
 
-
-    //----------------------------------------------------- COMPONENT------------------------------------
+    //Todo----------------------------------------------------- COMPONENT------------------------------------
 
     //todo: Thêm 1 bản ghi vào bảng component (Dùng phụ trợ cho hàm khác)
     //todo: public static long insertComponent(Context context, int noteId, int componentId, int type)
@@ -1137,15 +1215,27 @@ public class DatabaseHandler {
         db.execSQL("DELETE FROM SQLITE_SEQUENCE");
     }
 
-    public static void deleteAllData (Context context){
-        deleteAllNote(context);
-        deleteAllImage(context);
-        deleteAllTextSegment(context);
-        deleteAllAudio(context);
-        deleteAllNoteTag(context);
-        deleteAllTag(context);
-        deleteAllTodo(context);
-        deleteAllComponent(context);
+    public static void deleteAllFirebaseData(Context context) {
+        deleteAllFirebaseNote(context);
+//		deleteAllImage(context);
+//		deleteAllTextSegment(context);
+//		deleteAllAudio(context);
+//		deleteAllNoteTag(context);
+//		deleteAllTag(context);
+        deleteAllFirebaseTodo(context);
+//		deleteAllComponent(context);
+    }
+
+    public static void deleteAllFirebaseNote(Context context) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+        db.delete(NOTE_TABLE, COLUMN_USER_ID + " != ?", new String[]{FirebaseAuthHandler.LOCAL_USER});
+    }
+
+    public static void deleteAllFirebaseTodo(Context context) {
+        SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+        db.delete(TODO_TABLE, COLUMN_USER_ID + " != ?", new String[]{FirebaseAuthHandler.LOCAL_USER});
     }
 
 
@@ -1160,4 +1250,5 @@ public class DatabaseHandler {
         SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
         db.execSQL("DELETE FROM " + COMPONENT_TABLE);
     }
+
 }

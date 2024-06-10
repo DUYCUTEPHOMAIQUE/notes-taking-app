@@ -9,7 +9,7 @@
     app:cardBackgroundColor="@color/colorNoteDefault"
     app:cardCornerRadius="@dimen/_12sdp"
     app:contentPadding="@dimen/_6sdp"
-    app:cardElevation="@dimen/_2sdp">
+    app:cardElevation="0dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

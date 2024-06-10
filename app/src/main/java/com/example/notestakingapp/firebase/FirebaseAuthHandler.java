@@ -20,8 +20,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -32,15 +30,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.File;
 import java.util.Objects;
 
 
 public class FirebaseAuthHandler {
-    public static final String TAG = "EmailPassword";
-    private FirebaseAuth mAuth;
+	public static final String TAG = "EmailPassword";
+	private final FirebaseAuth mAuth;
 
-    public static String userId;
+	public static String userId;
 
     private GoogleSignInClient mGoogleSignInClient;
     public static final int RC_SIGN_IN = 9001;
@@ -96,20 +93,15 @@ public class FirebaseAuthHandler {
     }
     public void signOut(Context context) {
         String userId = FirebaseAuthHandler.getUserId();
-        if (userId != null) {
-            FirebaseHandler.syncToFirebase(context);
-            File dbFile = context.getDatabasePath("note.db");
-            if (dbFile.exists()) {
-
-                Log.d(TAG, "Local database file deleted");
-            }
+        if (userId != LOCAL_USER) {
+			FirebaseHandler.syncToFirebase(context);
             SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.clear();
             editor.apply();
 
-            mAuth.signOut();
-            mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+			mAuth.signOut();
+			mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     Toast.makeText(context, "Signed Out", Toast.LENGTH_SHORT).show();
@@ -117,13 +109,13 @@ public class FirebaseAuthHandler {
                     updateUI(null, context);
                 }
             });
-        } else {
-            Toast.makeText(context, "No user signed in", Toast.LENGTH_SHORT).show();
-            Log.w(TAG, "signOut:failure - no user");
-        }
-    }
+		} else {
+			Toast.makeText(context, "No user signed in", Toast.LENGTH_SHORT).show();
+			Log.w(TAG, "signOut:failure - no user");
+		}
+	}
 
-    private void configureGoogleSignIn(Context context) {
+	private void configureGoogleSignIn(Context context) {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(context.getString(R.string.default_web_client_id))
             .requestEmail()
@@ -202,56 +194,59 @@ public class FirebaseAuthHandler {
             Toast.makeText(context, "User not signed in", Toast.LENGTH_SHORT).show();
         }
     }
-    public static String getUserId() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            userId = user.getUid();
-        } else {
-            userId = null;
-        }
-        return userId;
-    }
-    public void updateUI(FirebaseUser user, Context context) {
-        if (user != null) {
-            SharedPreferences preferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putString("user_id", user.getUid());
-            editor.putString("user_email", user.getEmail());
-            editor.apply();
-            Toast.makeText(context, "Welcome, " + user.getEmail(), Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(intent);
-        } else {
-            Toast.makeText(context, "User not signed in", Toast.LENGTH_SHORT).show();
-        }
-    }
+    public static final String LOCAL_USER = "LOCAL_USER";
+	public static String getUserId() {
+		FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+		if (user != null) {
+			userId = user.getUid();
+		} else {
+			userId = LOCAL_USER;
+		}
+		return userId;
+	}
 
-    public void reload(Context context) {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "reload:success");
-                        updateUI(user, context);
-                    } else {
-                        Log.e(TAG, "reload:failure", task.getException());
-                        Toast.makeText(context, "Failed to reload user.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-        }
-    }
-    public String getUserEmail() {
-        FirebaseUser firebaseUser = mAuth.getCurrentUser();
-        if (firebaseUser != null) {
-            return firebaseUser.getEmail();
-        }
-        return null;
-    }
-} 
+	public void updateUI(FirebaseUser user, Context context) {
+		if (user != null) {
+			SharedPreferences preferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = preferences.edit();
+			editor.putString("user_id", user.getUid());
+			editor.putString("user_email", user.getEmail());
+			editor.apply();
+			Toast.makeText(context, "Welcome, " + user.getEmail(), Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(context, MainActivity.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			context.startActivity(intent);
+		} else {
+			Toast.makeText(context, "User not signed in", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	public void reload(Context context) {
+		FirebaseUser user = mAuth.getCurrentUser();
+		if (user != null) {
+			user.reload().addOnCompleteListener(new OnCompleteListener<Void>() {
+				@Override
+				public void onComplete(@NonNull Task<Void> task) {
+					if (task.isSuccessful()) {
+						Log.d(TAG, "reload:success");
+						updateUI(user, context);
+					} else {
+						Log.e(TAG, "reload:failure", task.getException());
+						Toast.makeText(context, "Failed to reload user.", Toast.LENGTH_SHORT).show();
+					}
+				}
+			});
+		}
+	}
+
+	public String getUserEmail() {
+		FirebaseUser firebaseUser = mAuth.getCurrentUser();
+		if (firebaseUser != null) {
+			return firebaseUser.getEmail();
+		}
+		return null;
+	}
+}
 
 
 

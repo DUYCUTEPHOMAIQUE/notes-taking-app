@@ -2,17 +2,33 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.NotesTakingApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
         <item name="colorPrimary">#FFA4A4</item>
         <item name="colorPrimaryDark">@color/colorPrimaryBaseDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorAccent</item>
         <item name="android:fontFamily">@font/medium</item>
+        <item name="android:popupMenuStyle">@style/PopupMenuBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="DialogAnimation">
+    <style name="PopupMenuBackground" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_popup_menu</item>
+    </style>
+
+    <style name="Theme.NotesTakingApp" parent="Base.Theme.NotesTakingApp" />
+    <style name="Theme.OpenScreen" parent="Base.Theme.NotesTakingApp">
+        <item name="android:statusBarColor">@color/colorWhite</item>
+
+    </style>
+
+    <style name="DiaLogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+
+    <style name="DiaLogAnimationFromTop">
+        <item name="android:windowEnterAnimation">@anim/slide_from_top_in</item>
+        <item name="android:windowExitAnimation">@anim/slide_from_top_out</item>
     </style>
 
     <style name="TimePickerAnimation">
@@ -24,7 +40,8 @@
         <!-- just override the colors used in the default style -->
         <item name="colorPrimary">#FFA4A4</item>
         <item name="colorOnPrimary">@color/colorBlack</item>
-        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent
+        </item>
     </style>
 
     <style name="ShapeAppearance.App.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
@@ -39,4 +56,5 @@
         <item name="colorOnPrimaryContainer">@color/colorWhite</item>
         <item name="colorPrimaryContainer">@color/colorBlack</item>
     </style>
+
 </resources>

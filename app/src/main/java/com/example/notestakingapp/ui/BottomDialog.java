@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -44,6 +45,7 @@ import com.example.notestakingapp.notification.AlarmScheduler;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
+import com.example.notestakingapp.utils.WaitFunc;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -84,7 +86,7 @@ public class BottomDialog {
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         LinearLayout linearLayoutXButton = dialog.findViewById(R.id.layout_x_button);
         RelativeLayout relativeLayoutFinishedNote = dialog.findViewById(R.id.layout_mark_as_finished);
@@ -97,6 +99,15 @@ public class BottomDialog {
         final ImageView colorNoteVariant4 = dialog.findViewById(R.id.color_note_4);
         final ImageView colorNoteVariant5 = dialog.findViewById(R.id.color_note_5);
         RelativeLayout relativeLayoutSetRemind = dialog.findViewById(R.id.tool_set_remind);
+        RelativeLayout tagLayout = dialog.findViewById(R.id.tag_layout);
+        TextView tagName = dialog.findViewById(R.id.tag_name_tool);
+        tagLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                showTagDiaLog(context, _noteId);
+            }
+        });
 
         relativeLayoutSetRemind.setOnClickListener(new View.OnClickListener() {
             final int[] yearPicker = {-1};
@@ -283,6 +294,64 @@ public class BottomDialog {
 
     }
 
+    private static void showTagDiaLog(Context context, int noteId) {
+        int color = ContextCompat.getColor(context, R.color.colorTextHint);
+        int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
+        final String[] content = {""};
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.layout_tag_insert);
+        EditText editText = dialog.findViewById(R.id.edittext_tag);
+        TextView textViewDone = dialog.findViewById(R.id.textview_done_tag);
+        if (DatabaseHandler.getTagNameByTagId(context, DatabaseHandler.getTagIdByNoteId(context, noteId)) != null && !DatabaseHandler.getTagNameByTagId(context, DatabaseHandler.getTagIdByNoteId(context, noteId)).isEmpty()) {
+            editText.setText(DatabaseHandler.getTagNameByTagId(context, DatabaseHandler.getTagIdByNoteId(context, noteId)));
+        }
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (editText.getText().toString().isEmpty()) {
+                    textViewDone.setTextColor(color);
+                } else {
+                    content[0] = s.toString();
+                    textViewDone.setTextColor(colorAccent);
+                    textViewDone.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (DatabaseHandler.getTagIdByNoteId(context, noteId) != -1) {
+                                //todo: update tag
+                                DatabaseHandler.updateTag(context, noteId, content[0]);
+                                Toast.makeText(context, "tag=" + content[0], Toast.LENGTH_SHORT).show();
+                                NotesFragment.sharedViewModel.setTagChanged();
+                                dialog.dismiss();
+                            } else {
+                                //todo: add tag
+                                DatabaseHandler.insertTag(context, noteId, content[0]);
+                                NotesFragment.sharedViewModel.setTagChanged();
+                                Toast.makeText(context, "tag=" + content[0], Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
     public static void showConfirmDeleteNote(Context context) {
         final Dialog dialog = new Dialog(context);
         SharedViewModel sharedViewModel = new SharedViewModel();
@@ -328,6 +397,8 @@ public class BottomDialog {
                     if (listNoteIdChecked != null && !listNoteIdChecked.isEmpty()) {
                         for (int i : listNoteIdChecked) {
                             databaseHandler.deleteNote(context, i);
+                            NotesFragment.sharedViewModel.notifyDataChanged();
+                            NotesFragment.sharedViewModel.setTagChanged();
                             if (finalSharedViewModel != null) {
                                 finalSharedViewModel.setItemLongPressed(false);
                                 finalSharedViewModel.triggerClearUiEvent();
@@ -367,7 +438,7 @@ public class BottomDialog {
     }
 
     //test
-    public static void showAwaitDiaLog(Context context) {
+    public static void showAwaitDiaLog(Context context, final DrawingActivity activity) {
         final Dialog dialog = new Dialog(context);
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -376,13 +447,24 @@ public class BottomDialog {
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimationFromTop;
+        dialog.getWindow().setGravity(Gravity.TOP);
         dialog.show();
+        try {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dialog.dismiss();
+                }
+            }, 1500);
+
+        } catch (Exception e) {
+            Log.e("loi", e.toString());
+        }
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-
+                activity.finish();
             }
         });
     }
@@ -506,10 +588,9 @@ public class BottomDialog {
 
                                 }
                                 dialog.dismiss();
-
-                                Toast.makeText(context, "add task test", Toast.LENGTH_SHORT).show();
                             }
-                            sharedViewModel.setIsTodoChange(true);
+                            TodoFragment.sharedViewModel.notifyDataChanged();
+
                         }
                     });
                 }
@@ -537,7 +618,7 @@ public class BottomDialog {
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
         WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
         layoutParams.gravity = Gravity.BOTTOM;
         layoutParams.y = dpToPx(context, 20); // Chuyển đổi dp thành px

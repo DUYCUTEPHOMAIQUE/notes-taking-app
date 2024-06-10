@@ -1,6 +1,7 @@
 package com.example.notestakingapp.ui;
 
 import com.example.notestakingapp.authentication.SettingsActivity;
+import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.NoteComponent.Note;
@@ -58,6 +59,7 @@ import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
 
+import com.example.notestakingapp.utils.LanguageUtils;
 import com.example.notestakingapp.utils.NoteDetailsComponent;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -66,6 +68,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -90,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -112,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
         // drawingIntent.putExtra("imageId", 0);
 	    // startActivity(drawingIntent);
 
+        //khoi tao khi vao app chon ngon ngu
+
+        //db
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
 
         db = noteTakingDatabaseHelper.getReadableDatabase();
@@ -121,9 +128,7 @@ public class MainActivity extends AppCompatActivity {
         // Kiểm tra và tạo kênh thông báo
         createNotificationChannel();
 
-        // databaseHandler.insertNote(this, "duong", "1223443", "red", null);
-
-        // khoi chay ui
+        //  khoi chay ui
         initUi();
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         //test
@@ -133,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 updateNotes();
             }
         });
-        //anim popup hehehe T_T
         animButton(imageViewAdd);
 
         //xu li click button
@@ -169,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         mBottomNavigationView.getMenu().findItem(R.id.home_main).setChecked(true);
-                        inputSearch.setHint("Search Notes...");
+                        inputSearch.setHint(getString(R.string.search_notes));
                         inputSearch.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -184,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case 1:
                         mBottomNavigationView.getMenu().findItem(R.id.todo_main).setChecked(true);
-                        inputSearch.setHint("Search To do...");
+                        inputSearch.setHint(getString(R.string.search_todo));
                         inputSearch.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -380,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
             List<TextSegment> textSegmentList = new ArrayList<>();
             List<Image> imageList = new ArrayList<>();
             List<Audio> audioList = new ArrayList<>();
-
+            Tag tag = new Tag(DatabaseHandler.getTagIdByNoteId(this, note.getNoteId()),  DatabaseHandler.getTagNameByTagId(this, DatabaseHandler.getTagIdByNoteId(this, note.getNoteId())));
             for (Object i : temp) {
                 if (i instanceof TextSegment) {
                     textSegmentList.add((TextSegment) i);
@@ -391,11 +395,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             //todo: tag dang la null
-            noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, null));
+            noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, tag));
         }
         return noteDetailsComponentList;
     }
-    private void createNotificationChannel() {
+    public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     getString(R.string.app_name),
@@ -406,7 +410,6 @@ public class MainActivity extends AppCompatActivity {
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             if (notificationManager != null) {
-                Log.d("notiDuy", "createChannel");
                 notificationManager.createNotificationChannel(channel);
             }
         }

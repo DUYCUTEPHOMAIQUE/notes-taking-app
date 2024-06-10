@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.NoteComponent.Note;
 import com.example.notestakingapp.database.NoteComponent.ToDo;
 import com.example.notestakingapp.notification.AlarmReceiver;
@@ -32,7 +33,14 @@ public class AlarmScheduler {
         Intent intent = new Intent(context, AlarmReceiver.class);
 
         assert task != null;
-        intent.putExtra("TASK_CONTENT", (task instanceof ToDo) ? ((ToDo)task).getContent() : ((Note)task).getTitle());
+        String defaultValue = context.getString(R.string.you_hava_work_to_do);
+        String notiString = "";
+        if(task instanceof ToDo) {
+            notiString = ((ToDo)task).getContent().isEmpty() ? defaultValue: ((ToDo)task).getContent();
+        } else {
+            notiString = ((Note)task).getTitle().isEmpty() ? defaultValue: ((Note)task).getTitle();
+        }
+        intent.putExtra("TASK_CONTENT", notiString);
         intent.putExtra("NOTIFICATION_ID", Id);
         intent.putExtra("CHECK", check);
 

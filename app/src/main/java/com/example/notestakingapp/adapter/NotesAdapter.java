@@ -1,6 +1,8 @@
 package com.example.notestakingapp.adapter;
 
 
+import static android.provider.Settings.System.getString;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -38,8 +40,10 @@ import com.example.notestakingapp.utils.ImageUtils;
 import com.example.notestakingapp.utils.NoteDetailsComponent;
 import com.makeramen.roundedimageview.RoundedImageView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -47,8 +51,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private List<NoteDetailsComponent> noteDetailsComponentList;
     private Context mContext;
 
-    public NotesAdapter(Context context) {
+    public NotesAdapter(Context context, String txt) {
         this.mContext = context;
+        this.allString = txt;
     }
 
     private List<NoteDetailsComponent> oldList;
@@ -57,25 +62,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private boolean isChecked = false;
     public static boolean showCheckboxes = false;
 
-    public boolean isChecked() {
-        return isChecked;
-    }
-
-    public void setChecked(boolean checked) {
-        isChecked = checked;
-    }
-
-    public boolean isLongClick() {
-        return isLongClick;
-    }
-
-    public void setLongClick(boolean longClick) {
-        isLongClick = longClick;
-    }
 
     public static boolean isLongClick = false;
     public static List<Integer> listNoteIdChecked;
     public static int numberNoteChecked;
+    private String allString;
 
     public void setNoteListener(NoteListener noteListener) {
         this.noteListener = noteListener;
@@ -114,28 +105,46 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             protected FilterResults performFiltering(CharSequence constraint) {
                 String query = constraint.toString().trim();
                 List<NoteDetailsComponent> list = new ArrayList<>();
-                if (query == null || query.isEmpty()) {
-                    list = oldList;
-                } else {
-
-                    for (NoteDetailsComponent i : oldList) {
-                        if (i.getNote().getTitle().toLowerCase().contains(query.toLowerCase())) {
-                            list.add(i);
-                        }else {
-                            String allText = "";
-                            List<TextSegment> mListTextSegment = DatabaseHandler.getTextSegmentByNoteId(mContext, i.getNote().getNoteId());
-                            List<String> temp = new ArrayList<>();
-                            if (!mListTextSegment.isEmpty()) {
-                                for (TextSegment textSegment : mListTextSegment) {
-                                    allText += " " + textSegment.getText().toLowerCase().trim();
-                                }
-                            }
-                            if (allText.toLowerCase().contains(query.toLowerCase())) {
+                Log.d("filterDuy", String.valueOf(query.length()));
+                if (query.isEmpty() ||!(query.charAt(0) == '#')) {
+                    Log.d("DuyOKE", "content");
+                    Log.d("DuyOKE", "content");
+                    if (query.equals(" ")) {
+                        list.addAll(oldList);
+                    } else {
+                        for (NoteDetailsComponent i : oldList) {
+                            if (i.getNote().getTitle().toLowerCase().contains(query.toLowerCase())) {
                                 list.add(i);
+                            } else {
+                                String allText = "";
+                                List<TextSegment> mListTextSegment = DatabaseHandler.getTextSegmentByNoteId(mContext, i.getNote().getNoteId());
+                                List<String> temp = new ArrayList<>();
+                                if (mListTextSegment != null && !mListTextSegment.isEmpty()) {
+                                    for (TextSegment textSegment : mListTextSegment) {
+                                        allText += " " + textSegment.getText().toLowerCase().trim();
+                                    }
+                                }
+                                if (allText.toLowerCase().contains(query.toLowerCase())) {
+                                    list.add(i);
+                                }
                             }
                         }
                     }
+                } else {
+                    Log.d("duyOKE", "bbb");
+                    Log.d("filterDuy", "tag=" + query.getClass());
+                    if (!query.equals("#All".toLowerCase()) && !query.equals("#Tất cả".toLowerCase())) {
+                        for (NoteDetailsComponent i : oldList) {
+                            if (i.getTag().getTagName().equals(query.substring(1))) {
+                                list.add(i);
+                            }
+                        }
+                    } else {
+                        list.addAll(oldList);
+                    }
                 }
+                //tim theo textsegment || title
+
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = list;
                 return filterResults;
@@ -208,7 +217,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     @Override
     public int getItemCount() {
-        return noteDetailsComponentList.size();
+        if (noteDetailsComponentList != null)
+            return noteDetailsComponentList.size();
+        return 0;
     }
 
 
@@ -272,7 +283,16 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                     imageView.setVisibility(View.GONE);
                 }
                 //Set date time
-                textDateTime.setText(CurrentTime.convertTimeFromMiliSecond(note.getCreateAt()));
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+                String dateOK = sdf.format(new Date(note.getCreateAt()));
+                String currentDate = sdf.format(new Date());
+                if (dateOK.substring(0, 10).equals(currentDate.substring(0, 10))) {
+                    textDateTime.setText("Today " + dateOK.substring(11, 16));
+                } else if (dateOK.substring(0, 4).equals(currentDate.substring(0, 4))) {
+                    textDateTime.setText(dateOK.substring(5, 10));
+                } else {
+                    textDateTime.setText(dateOK);
+                }
                 //setColor
                 if (note.getColor() != null) {
                     cardView.setCardBackgroundColor(Color.parseColor(note.getColor()));

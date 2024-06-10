@@ -74,6 +74,7 @@ public class DrawingView extends View {
 		height = h;
 		mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
 		mCanvas = new Canvas(mBitmap);
+		mCanvas.drawColor(Color.WHITE);
 	}
 
 	public void drawBitmap(Bitmap bitmap) {

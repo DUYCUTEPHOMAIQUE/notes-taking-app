@@ -212,6 +212,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/tag_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
@@ -232,6 +233,7 @@
             app:tint="@color/color_state_black"
             tools:ignore="ContentDescription"/>
         <TextView
+            android:id="@+id/text_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/icon_give_tag"
@@ -239,6 +241,20 @@
             android:text="@string/give_tag"
             android:textColor="@color/color_state_black"
             android:textSize="@dimen/_14sdp"/>
+        <TextView
+            android:id="@+id/tag_name_tool"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/medium"
+            android:textSize="@dimen/_14ssp"
+            android:layout_marginEnd="@dimen/_12sdp"
+            android:text="sample"
+            android:textColor="@color/colorDarkGray"
+            android:layout_alignParentEnd="true"
+            android:includeFontPadding="false"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"
+            />
     </RelativeLayout>
 
     <RelativeLayout
