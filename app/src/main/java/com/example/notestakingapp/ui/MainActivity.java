@@ -252,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        DuongTestingFunction();
     }
 
     private void DuongTestingFunction() {
