@@ -108,6 +108,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 Log.d("filterDuy", String.valueOf(query.length()));
                 if (query.isEmpty() ||!(query.charAt(0) == '#')) {
                     Log.d("DuyOKE", "content");
+                    Log.d("DuyOKE", "content");
                     if (query.equals(" ")) {
                         list.addAll(oldList);
                     } else {
