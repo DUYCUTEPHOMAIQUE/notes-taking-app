@@ -3,10 +3,10 @@
     <item
         android:id="@+id/home_main"
         android:icon="@drawable/home_filled"
-        android:title="Home"/>
+        android:title="@string/home"/>
 
     <item
         android:id="@+id/todo_main"
         android:icon="@drawable/clipboard_check_filled"
-        android:title="To do"/>
+        android:title="@string/to_do"/>
 </menu>

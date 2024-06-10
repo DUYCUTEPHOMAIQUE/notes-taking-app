@@ -18,6 +18,7 @@ import com.example.notestakingapp.R.id;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -55,6 +56,7 @@ import com.example.notestakingapp.database.DatabaseHandler;
 import com.example.notestakingapp.database.NoteTakingDatabaseHelper;
 import com.example.notestakingapp.shared.SharedViewModel;
 
+import com.example.notestakingapp.utils.LanguageUtils;
 import com.example.notestakingapp.utils.NoteDetailsComponent;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -63,6 +65,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -85,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -94,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        //khoi tao khi vao app chon ngon ngu
+
+        //db
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
 
         db = noteTakingDatabaseHelper.getReadableDatabase();

@@ -294,7 +294,7 @@ public class BottomDialog {
 
     }
 
-    private static void showTagDiaLog(Context context,@Nullable int noteId) {
+    private static void showTagDiaLog(Context context, int noteId) {
         int color = ContextCompat.getColor(context, R.color.colorTextHint);
         int colorAccent = ContextCompat.getColor(context, R.color.colorAccent);
         final String[] content = {""};
@@ -319,11 +319,15 @@ public class BottomDialog {
                     textViewDone.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if (noteId != -1) {
-                                //todo: update todo
+                            if (DatabaseHandler.getTagIdByNoteId(context, noteId) != -1) {
+                                //todo: update tag
+                                DatabaseHandler.updateTag(context, noteId, content[0]);
+                                Toast.makeText(context, "tag="+content[0], Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             } else {
-                                //todo: add toDo
+                                //todo: add tag
+                                DatabaseHandler.insertTag(context, noteId, content[0]);
+                                Toast.makeText(context, "tag="+content[0], Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         }

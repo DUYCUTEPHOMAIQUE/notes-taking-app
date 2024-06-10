@@ -753,7 +753,7 @@ public class DatabaseHandler {
 //    }
 
 	@SuppressLint("Range")
-	public int getTagIdByNoteId(Context context, int noteId){
+	public static int getTagIdByNoteId(Context context, int noteId){
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
         SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
@@ -766,12 +766,12 @@ public class DatabaseHandler {
 		}
 	}
 
-	public void insertTag(Context context, int noteId, String tagName){
+	public static void insertTag(Context context, int noteId, String tagName){
 		int tagId = (int) createNewTag(context, tagName.trim());
 		setTagForNote(context, noteId, tagId);
 	}
 
-	public void updateTag(Context context, int noteId, String newTag){
+	public static void updateTag(Context context, int noteId, String newTag){
 
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();

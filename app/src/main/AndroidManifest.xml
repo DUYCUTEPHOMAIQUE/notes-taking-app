@@ -25,6 +25,17 @@
         android:theme="@style/Theme.NotesTakingApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.OpenScreenActivity"
+            android:theme="@style/Theme.OpenScreen"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.ViewImageActivity"
             android:exported="false" />
         <activity
@@ -52,18 +63,11 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.AIRPLANE_MODE" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".notification.AlarmReceiver"
-            android:exported="true"></receiver>
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.example.notestakingapp.authentication;
 
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +11,10 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -19,6 +23,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +39,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.notestakingapp.firebase.FirebaseAuthHandler;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.ui.MainActivity;
+import com.example.notestakingapp.utils.LanguageUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -41,8 +47,10 @@ import java.util.Objects;
 import com.example.notestakingapp.R;
 
 public class SettingsActivity extends AppCompatActivity {
+    private static final String TYPE_VI = "vi";
+    private static final String TYPE_EN = "en";
     TextView backButton;
-    RelativeLayout profile, editProfileButton, signInButton, signUpButton, changePasswordButton, signOutButton;
+    RelativeLayout profile, editProfileButton, signInButton, signUpButton, changePasswordButton, signOutButton, languageButton;
     SwitchCompat darkModeSwitch, notificationsSwitch;
     private FirebaseAuthHandler authHandler;
     @Override
@@ -65,35 +73,21 @@ public class SettingsActivity extends AppCompatActivity {
         authHandler = new FirebaseAuthHandler(); // initialize FirebaseAuthHandler
 
         // methods for buttons
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        profile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        backButton.setOnClickListener(v -> finish());
+        profile.setOnClickListener(v -> {
 
-            }
         });
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        editProfileButton.setOnClickListener(v -> {
 
-            }
         });
-        darkModeSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        darkModeSwitch.setOnClickListener(v -> {
 
-            }
         });
-        notificationsSwitch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        notificationsSwitch.setOnClickListener(v -> {
 
-            }
+        });
+        languageButton.setOnClickListener(v-> {
+            languageHandle(v);
         });
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +116,41 @@ public class SettingsActivity extends AppCompatActivity {
                 showConfirmSignOut(SettingsActivity.this);
             }
         });
+    }
+
+    private void languageHandle(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        MenuInflater inflater = popupMenu.getMenuInflater();
+        inflater.inflate(R.menu.popup_language, popupMenu.getMenu());
+        popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(item -> onLanguageClick(item));
+    }
+    private boolean onLanguageClick(MenuItem item) {
+        Toast.makeText(this, getString(R.string.restart_app_to_apply), Toast.LENGTH_SHORT).show();
+        if(item.getItemId()==R.id.vi) {
+            Log.d("language", "type= "+TYPE_VI);
+            LanguageUtils.saveLanguage(SettingsActivity.this, TYPE_VI);
+            LanguageUtils.setLocale(SettingsActivity.this, TYPE_VI);
+//            restartApp(SettingsActivity.this);
+        } else if (item.getItemId() == R.id.en) {
+            Log.d("language", "type= "+TYPE_EN);
+            LanguageUtils.saveLanguage(SettingsActivity.this, TYPE_EN);
+            LanguageUtils.setLocale(SettingsActivity.this, TYPE_EN);
+//            restartApp(SettingsActivity.this);
+        }
+        return true;
+    }
+
+    private void restartApp(Context context) {
+        Intent intent = context.getPackageManager()
+                .getLaunchIntentForPackage(context.getPackageName());
+        if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        }
+        if (context instanceof Activity) {
+            ((Activity) context).finish();
+        }
     }
 
     public void showConfirmSignOut(Context context) {
@@ -188,5 +217,6 @@ public class SettingsActivity extends AppCompatActivity {
         signUpButton = findViewById(R.id.sign_up_button);
         changePasswordButton = findViewById(R.id.change_password_button);
         signOutButton = findViewById(R.id.sign_out_button);
+        languageButton = findViewById(R.id.language_button);
     }
 }
