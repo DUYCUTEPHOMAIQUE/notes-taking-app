@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -721,14 +722,16 @@ public class DatabaseHandler {
 
 		ContentValues ct = new ContentValues();
 
-		ct.put(COLUMN_TAG_NAME, tagName.trim().toLowerCase());
+		ct.put(COLUMN_TAG_NAME, tagName.trim());
 
 		return db.insert(TAG_TABLE, null, ct);
 	}
 
 	//todo: public void deleteTag(Context context,int tagId)
-	//Xóa 1 tag . Thông tin lưu trong bảng Note_Tag cũng bị xóa
-	public void deleteTag(Context context, int tagId) {
+	//Xóa 1 hàng trong bảng TAG và 1 hàng trong bảng NOTE-TAG
+	public void deleteTag(Context context, int noteId) {
+		int tagId = getTagIdByNoteId(context, noteId);
+
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
 
@@ -749,8 +752,46 @@ public class DatabaseHandler {
 //        else return -1;
 //    }
 
+	@SuppressLint("Range")
+	public int getTagIdByNoteId(Context context, int noteId){
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+        SQLiteDatabase db = noteTakingDatabaseHelper.getReadableDatabase();
 
-	//--------------------------------------------------------TODO---------------------------------------
+		Cursor cursor = db.query(NOTE_TAG_TABLE, new String[]{COLUMN_TAG_ID}, COLUMN_NOTE_ID + " = ? ", new String[]{Integer.toString(noteId)}, null, null, null);
+
+		if (cursor.moveToFirst()){
+			return cursor.getInt(cursor.getColumnIndex(COLUMN_TAG_ID));
+		} else {
+			return -1;
+		}
+	}
+
+	public void insertTag(Context context, int noteId, String tagName){
+		int tagId = (int) createNewTag(context, tagName.trim());
+		setTagForNote(context, noteId, tagId);
+	}
+
+	public void updateTag(Context context, int noteId, String newTag){
+
+		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+
+		int tagId = getTagIdByNoteId(context, noteId);
+		Log.d("duong", Integer.toString(tagId));
+
+		ContentValues cv = new ContentValues();
+
+		cv.put(COLUMN_TAG_NAME, newTag);
+
+		try {
+			db.update(TAG_TABLE, cv, COLUMN_TAG_ID + " = ?", new String[]{Integer.toString(tagId)});
+		} catch (Exception e){
+
+		}
+	}
+
+
+	//Todo--------------------------------------------------------TODO---------------------------------------
 	public static void deleteAllTodo(Context context) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
 		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
@@ -933,7 +974,7 @@ public class DatabaseHandler {
 	}
 
 
-	//----------------------------------------------------- NOTE_TAG --------------------------------------
+	//Todo----------------------------------------------------- NOTE_TAG --------------------------------------
 	//todo: public static void deleteAllNoteTag(Context context)
 	public static void deleteAllNoteTag(Context context) {
 		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
@@ -959,17 +1000,17 @@ public class DatabaseHandler {
 	//ToDo public void deleteTagForNote(Context context, int noteId, int tagId)
 
 	// Xóa 1 bản ghi trong bảng Note_Tag.
-	public void removeTagForNote(Context context, int noteId, int tagId) {
-		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
-		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+//	public void removeTagForNote(Context context, int noteId, int tagId) {
+//		SQLiteOpenHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(context);
+//		SQLiteDatabase db = noteTakingDatabaseHelper.getWritableDatabase();
+//
+//		db.delete(NOTE_TAG_TABLE,
+//				NOTE_TAG_TABLE + " = ? AND " + COLUMN_TAG_ID + " = ?",
+//				new String[]{Integer.toString(noteId), Integer.toString(tagId)});
+//	}
 
-		db.delete(NOTE_TAG_TABLE,
-				NOTE_TAG_TABLE + " = ? AND " + COLUMN_TAG_ID + " = ?",
-				new String[]{Integer.toString(noteId), Integer.toString(tagId)});
-	}
 
-
-	//----------------------------------------------------- COMPONENT------------------------------------
+	//Todo----------------------------------------------------- COMPONENT------------------------------------
 
 	//todo: Thêm 1 bản ghi vào bảng component (Dùng phụ trợ cho hàm khác)
 	//todo: public static long insertComponent(Context context, int noteId, int componentId, int type)
