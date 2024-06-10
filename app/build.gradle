@@ -55,5 +55,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.github.valkriaine:Bouncy:2.3'
 
+
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation 'com.google.android.gms:play-services-auth:19.2.0'
+
+
 }
 apply plugin: 'com.google.gms.google-services'
