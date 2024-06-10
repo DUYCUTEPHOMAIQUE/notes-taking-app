@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return noteDetailsComponentList;
     }
-    private void createNotificationChannel() {
+    public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
                     getString(R.string.app_name),
@@ -391,7 +391,6 @@ public class MainActivity extends AppCompatActivity {
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             if (notificationManager != null) {
-                Log.d("notiDuy", "createChannel");
                 notificationManager.createNotificationChannel(channel);
             }
         }

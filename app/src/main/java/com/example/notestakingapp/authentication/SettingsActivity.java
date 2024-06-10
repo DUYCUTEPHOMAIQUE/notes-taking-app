@@ -4,12 +4,15 @@ import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -21,6 +24,7 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -34,12 +38,15 @@ import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.notestakingapp.firebase.FirebaseAuthHandler;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.ui.MainActivity;
 import com.example.notestakingapp.utils.LanguageUtils;
+import com.example.notestakingapp.utils.NotificationUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Objects;
@@ -49,10 +56,14 @@ import com.example.notestakingapp.R;
 public class SettingsActivity extends AppCompatActivity {
     private static final String TYPE_VI = "vi";
     private static final String TYPE_EN = "en";
-    TextView backButton;
+    private static final String ENABLE_NOTI = "enable";
+    private static final String DISABLE_NOTI = "disable";
+    TextView backButton, pickLanguage;
     RelativeLayout profile, editProfileButton, signInButton, signUpButton, changePasswordButton, signOutButton, languageButton;
     SwitchCompat darkModeSwitch, notificationsSwitch;
+    public static SharedViewModel sharedViewModelSettings;
     private FirebaseAuthHandler authHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,13 +74,15 @@ public class SettingsActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        sharedViewModelSettings = new ViewModelProvider(this).get(SharedViewModel.class);
         SharedPreferences sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userEmail = sharedPref.getString("userEmail", "No Email");
         TextView textProfileName = findViewById(R.id.text_profile_name);
         textProfileName.setText(userEmail);
 
         initUI(); // initialize UI components
+        initPickLanguage();
+
         authHandler = new FirebaseAuthHandler(); // initialize FirebaseAuthHandler
 
         // methods for buttons
@@ -83,12 +96,18 @@ public class SettingsActivity extends AppCompatActivity {
         darkModeSwitch.setOnClickListener(v -> {
 
         });
-        notificationsSwitch.setOnClickListener(v -> {
-
+        notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                enableNotification(this);
+            } else {
+                disableNotification(this);
+            }
         });
-        languageButton.setOnClickListener(v-> {
+        languageButton.setOnClickListener(v -> {
             languageHandle(v);
         });
+        sharedViewModelSettings.getLanguage().observe(this, language -> pickLanguage.setText(language));
+        sharedViewModelSettings.getStateNotification().observe(this, state -> notificationsSwitch.setChecked(state != null && state.equals(ENABLE_NOTI)));
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,6 +137,56 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    private void disableNotification(Context context) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationUtils.saveNotificationState(context, DISABLE_NOTI);
+                notificationManager.deleteNotificationChannel(getString(R.string.app_name));
+            }
+        }
+    }
+
+    private void enableNotification(Context context) {
+        NotificationUtils.saveNotificationState(context, ENABLE_NOTI);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    getString(R.string.app_name),
+                    "Task Notifications",
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+            channel.setDescription("Channel for task notifications");
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
+    }
+
+    private void initPickLanguage() {
+        String defaultLang = LanguageUtils.getSavedLanguage(this);
+        if (defaultLang == null) {
+            pickLanguage.setText("");
+        } else {
+            if (defaultLang.equals(TYPE_VI)) {
+                pickLanguage.setText(getString(R.string.vietnamese));
+            } else if (defaultLang.equals(TYPE_EN)) {
+                pickLanguage.setText(getString(R.string.english));
+            }
+        }
+        String stateNotification = NotificationUtils.getNotificationState(this);
+        if (stateNotification == null) {
+            notificationsSwitch.setChecked(true);
+        } else {
+            if (stateNotification.equals(ENABLE_NOTI)) {
+                notificationsSwitch.setChecked(true);
+            } else if (stateNotification.equals(DISABLE_NOTI)) {
+                notificationsSwitch.setChecked(false);
+            }
+        }
+    }
+
     private void languageHandle(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         MenuInflater inflater = popupMenu.getMenuInflater();
@@ -125,17 +194,20 @@ public class SettingsActivity extends AppCompatActivity {
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(item -> onLanguageClick(item));
     }
+
     private boolean onLanguageClick(MenuItem item) {
         Toast.makeText(this, getString(R.string.restart_app_to_apply), Toast.LENGTH_SHORT).show();
-        if(item.getItemId()==R.id.vi) {
-            Log.d("language", "type= "+TYPE_VI);
+        if (item.getItemId() == R.id.vi) {
+            Log.d("language", "type= " + TYPE_VI);
             LanguageUtils.saveLanguage(SettingsActivity.this, TYPE_VI);
             LanguageUtils.setLocale(SettingsActivity.this, TYPE_VI);
+            sharedViewModelSettings.setLanguage(getString(R.string.vietnamese));
 //            restartApp(SettingsActivity.this);
         } else if (item.getItemId() == R.id.en) {
-            Log.d("language", "type= "+TYPE_EN);
+            Log.d("language", "type= " + TYPE_EN);
             LanguageUtils.saveLanguage(SettingsActivity.this, TYPE_EN);
             LanguageUtils.setLocale(SettingsActivity.this, TYPE_EN);
+            sharedViewModelSettings.setLanguage(getString(R.string.english));
 //            restartApp(SettingsActivity.this);
         }
         return true;
@@ -202,11 +274,12 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                if(context instanceof MainActivity && listNoteIdChecked != null)
+                if (context instanceof MainActivity && listNoteIdChecked != null)
                     listNoteIdChecked.clear();
             }
         });
     }
+
     public void initUI() {
         backButton = findViewById(R.id.back_button);
         profile = findViewById(R.id.profile);
@@ -218,5 +291,6 @@ public class SettingsActivity extends AppCompatActivity {
         changePasswordButton = findViewById(R.id.change_password_button);
         signOutButton = findViewById(R.id.sign_out_button);
         languageButton = findViewById(R.id.language_button);
+        pickLanguage = findViewById(R.id.pick_language);
     }
 }

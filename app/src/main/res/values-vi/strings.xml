@@ -61,9 +61,11 @@
     <string name="add_text">Thêm Văn bản</string>
     <string name="add_image">Thêm Hình ảnh</string>
     <string name="search_todo">Tìm kiếm nhiệm vụ…</string>
-    <string name="sample_study_work">Ví dụ: #study, #work, ...</string>
+    <string name="sample_study_work">Ví dụ: #study, #work,…</string>
     <string name="home">Ghi chú</string>
     <string name="english">English</string>
     <string name="vietnamese">Tiếng Việt</string>
     <string name="restart_app_to_apply">Khởi động lại ứng dụng để áp dụng</string>
+    <string name="you_hava_work_to_do">Bạn có nhiệm vụ phải làm</string>
+    <string name="set_time">Đặt nhắc nhở</string>
 </resources>

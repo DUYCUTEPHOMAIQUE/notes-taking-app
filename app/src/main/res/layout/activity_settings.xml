@@ -200,6 +200,7 @@
                 app:track="@drawable/switch_track"
                 android:clickable="true"
                 android:focusable="true"
+                android:checked="true"
                 tools:ignore="ContentDescription"/>
         </RelativeLayout>
 
@@ -227,6 +228,7 @@
                 app:tint="@color/color_state_black"
                 tools:ignore="ContentDescription"/>
             <TextView
+                android:id="@+id/text_language"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/icon_language"
@@ -235,11 +237,23 @@
                 android:textColor="@color/color_state_black"
                 android:textSize="@dimen/_16sdp"
                 tools:ignore="RelativeOverlap"/>
+            <TextView
+                android:id="@+id/pick_language"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/arrow_end"
+                android:text="@string/language"
+                android:textColor="@color/colorDarkGray"
+                android:textSize="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                tools:ignore="RelativeOverlap" />
             <ImageView
                 android:layout_width="@dimen/_18sdp"
                 android:layout_height="@dimen/_18sdp"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:id="@+id/arrow_end"
                 android:src="@drawable/round_arrow_next_ios_24"
                 app:tint="@color/color_state_black"
                 tools:ignore="ContentDescription"/>

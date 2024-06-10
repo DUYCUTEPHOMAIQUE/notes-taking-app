@@ -200,4 +200,23 @@ public class SharedViewModel extends ViewModel {
     public void setColor(int t) {
         color.setValue(t);
     }
+    public MutableLiveData<String> language = new MutableLiveData<>();
+
+    public MutableLiveData<String> getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(String t) {
+        language.setValue(t);
+    }
+
+    public MutableLiveData<String> stateNotification = new MutableLiveData<>();
+
+    public MutableLiveData<String> getStateNotification() {
+        return stateNotification;
+    }
+
+    public void setStateNotification(String t) {
+        stateNotification.setValue(t);
+    }
 }

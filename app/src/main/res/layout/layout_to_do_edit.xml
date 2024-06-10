@@ -38,7 +38,7 @@
             android:backgroundTint="@color/color_state_accent"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:text="Set time"
+            android:text="@string/set_time"
             android:textSize="@dimen/_12sdp"
             android:textColor="@color/color_state_black"
             app:drawableStartCompat="@drawable/clock"

@@ -42,6 +42,6 @@ public class OpenScreenActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }, 2000);
+        }, 1200);
     }
 }
