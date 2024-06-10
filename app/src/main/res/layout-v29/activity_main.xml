@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity"
-    android:background="@color/colorPrimaryBackground">
+    android:forceDarkAllowed="true">
     <RelativeLayout
         android:id="@+id/layout_title"
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:text="@string/my_notes"
-            android:textColor="@color/colorText"
+            android:textColor="@color/colorBlack"
             android:textSize="@dimen/title_size"
             android:fontFamily="@font/bold"
             tools:ignore="RelativeOverlap"/>

@@ -18,7 +18,9 @@ import com.example.notestakingapp.R.id;
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +44,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -82,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
     public static ActivityResultLauncher<Intent> noteEditLauncher;
     private SharedViewModel sharedViewModel;
     private LinearLayout layoutBackDelete, layoutDoDelete;
+    boolean isNightModeOn;
+    SharedPreferences sharedThemePreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +98,19 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-//	    Intent drawingIntent = new Intent(MainActivity.this, DrawingActivity.class);
-//	    drawingIntent.putExtra("imageId", 0);
-//	    startActivity(drawingIntent);
+
+        // set theme mode when initialize app
+        sharedThemePreferences = getSharedPreferences("Theme", Context.MODE_PRIVATE);
+        isNightModeOn = sharedThemePreferences.getBoolean("night", false);
+        if (isNightModeOn) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+	    // Intent drawingIntent = new Intent(MainActivity.this, DrawingActivity.class);
+        // drawingIntent.putExtra("imageId", 0);
+	    // startActivity(drawingIntent);
 
         NoteTakingDatabaseHelper noteTakingDatabaseHelper = new NoteTakingDatabaseHelper(getApplicationContext());
 
@@ -106,9 +121,9 @@ public class MainActivity extends AppCompatActivity {
         // Kiểm tra và tạo kênh thông báo
         createNotificationChannel();
 
-//        databaseHandler.insertNote(this, "duong", "1223443", "red", null);
+        // databaseHandler.insertNote(this, "duong", "1223443", "red", null);
 
-        //khoi chay ui
+        // khoi chay ui
         initUi();
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         //test
@@ -258,7 +273,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        DuongTestingFunction();
+    // DuongTestingFunction();
     }
 
     private void DuongTestingFunction() {

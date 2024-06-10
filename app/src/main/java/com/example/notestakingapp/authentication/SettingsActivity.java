@@ -14,17 +14,13 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -45,6 +41,9 @@ public class SettingsActivity extends AppCompatActivity {
     RelativeLayout profile, editProfileButton, signInButton, signUpButton, changePasswordButton, signOutButton;
     SwitchCompat darkModeSwitch, notificationsSwitch;
     private FirebaseAuthHandler authHandler;
+    boolean isNightModeOn;
+    SharedPreferences sharedThemePreferences;
+    SharedPreferences.Editor themeEditor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +55,8 @@ public class SettingsActivity extends AppCompatActivity {
             return insets;
         });
 
-        SharedPreferences sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        String userEmail = sharedPref.getString("userEmail", "No Email");
+        SharedPreferences sharedUserPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String userEmail = sharedUserPreferences.getString("userEmail", "No Email");
         TextView textProfileName = findViewById(R.id.text_profile_name);
         textProfileName.setText(userEmail);
 
@@ -83,10 +82,34 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+
+        sharedThemePreferences = getSharedPreferences("Theme", Context.MODE_PRIVATE);
+        isNightModeOn = sharedThemePreferences.getBoolean("night", false);
+        darkModeSwitch.setChecked(isNightModeOn);
+
+        if (isNightModeOn) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         darkModeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (isNightModeOn) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    themeEditor = sharedThemePreferences.edit();
+                    themeEditor.putBoolean("night", false);
+                    isNightModeOn = false;
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    themeEditor = sharedThemePreferences.edit();
+                    themeEditor.putBoolean("night", true);
+                    isNightModeOn = true;
+                }
+                themeEditor.apply();
+                darkModeSwitch.setChecked(isNightModeOn);
+                recreate();
             }
         });
         notificationsSwitch.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +160,7 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
         Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         RelativeLayout backButton = dialog.findViewById(R.id.sign_out_back_button);
         RelativeLayout confirmSignOutButton = dialog.findViewById(R.id.confirm_sign_out_button);

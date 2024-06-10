@@ -10,9 +10,7 @@
         <item name="android:fontFamily">@font/medium</item>
     </style>
 
-    <style name="Theme.NotesTakingApp" parent="Base.Theme.NotesTakingApp" />
-
-    <style name="DiaLogAnimation">
+    <style name="DialogAnimation">
         <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
         <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
@@ -41,5 +39,4 @@
         <item name="colorOnPrimaryContainer">@color/colorWhite</item>
         <item name="colorPrimaryContainer">@color/colorBlack</item>
     </style>
-
 </resources>
