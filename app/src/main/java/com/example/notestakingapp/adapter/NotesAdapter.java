@@ -1,6 +1,8 @@
 package com.example.notestakingapp.adapter;
 
 
+import static android.provider.Settings.System.getString;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -49,8 +51,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private List<NoteDetailsComponent> noteDetailsComponentList;
     private Context mContext;
 
-    public NotesAdapter(Context context) {
+    public NotesAdapter(Context context, String txt) {
         this.mContext = context;
+        this.allString = txt;
     }
 
     private List<NoteDetailsComponent> oldList;
@@ -78,6 +81,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     public static boolean isLongClick = false;
     public static List<Integer> listNoteIdChecked;
     public static int numberNoteChecked;
+    private String allString;
 
     public void setNoteListener(NoteListener noteListener) {
         this.noteListener = noteListener;
@@ -116,31 +120,48 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             protected FilterResults performFiltering(CharSequence constraint) {
                 String query = constraint.toString().trim();
                 List<NoteDetailsComponent> list = new ArrayList<>();
-                //tim theo textsegment || title
-                if (query == null || query.isEmpty()) {
-                    list = oldList;
-                } else {
-
-                    for (NoteDetailsComponent i : oldList) {
-                        if (i.getNote().getTitle().toLowerCase().contains(query.toLowerCase())) {
-                            list.add(i);
-                        }else {
-                            String allText = "";
-                            List<TextSegment> mListTextSegment = DatabaseHandler.getTextSegmentByNoteId(mContext, i.getNote().getNoteId());
-                            List<String> temp = new ArrayList<>();
-                            if (!mListTextSegment.isEmpty()) {
-                                for (TextSegment textSegment : mListTextSegment) {
-                                    allText += " " + textSegment.getText().toLowerCase().trim();
-                                }
-                            }
-                            if (allText.toLowerCase().contains(query.toLowerCase())) {
+                Log.d("filterDuy", query.substring(1));
+                if (query.startsWith("#")) {
+                    Log.d("filterDuy", "tag="+query.getClass());
+                    if (!query.equals("#All".toLowerCase()) && !query.equals("Tất cả".toLowerCase())) {
+                        for (NoteDetailsComponent i : oldList) {
+                            if (i.getTag().getTagName().equals(query.substring(1))) {
                                 list.add(i);
+                            }
+                        }
+                    } else {
+                        list.addAll(oldList);
+                    }
+                } else {
+                    if (query == null || query.isEmpty()) {
+                        list = oldList;
+                    } else {
+
+                        for (NoteDetailsComponent i : oldList) {
+                            if (i.getNote().getTitle().toLowerCase().contains(query.toLowerCase())) {
+                                list.add(i);
+                            } else {
+                                String allText = "";
+                                List<TextSegment> mListTextSegment = DatabaseHandler.getTextSegmentByNoteId(mContext, i.getNote().getNoteId());
+                                List<String> temp = new ArrayList<>();
+                                if (mListTextSegment != null && !mListTextSegment.isEmpty()) {
+                                    for (TextSegment textSegment : mListTextSegment) {
+                                        allText += " " + textSegment.getText().toLowerCase().trim();
+                                    }
+                                }
+                                if (allText.toLowerCase().contains(query.toLowerCase())) {
+                                    list.add(i);
+                                }
                             }
                         }
                     }
                 }
+                //tim theo textsegment || title
+
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = list;
+                Log.d("filterDuy", list.toString());
+                Log.d("filterDuy", oldList.toString());
                 return filterResults;
             }
 
@@ -211,7 +232,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     @Override
     public int getItemCount() {
-        return noteDetailsComponentList.size();
+        if(noteDetailsComponentList!=null)
+            return noteDetailsComponentList.size();
+        return 0;
     }
 
 
@@ -280,7 +303,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 String currentDate = sdf.format(new Date());
                 if (dateOK.substring(0, 10).equals(currentDate.substring(0, 10))) {
                     textDateTime.setText("Today " + dateOK.substring(11, 16));
-                } else if(dateOK.substring(0, 4).equals(currentDate.substring(0, 4))){
+                } else if (dateOK.substring(0, 4).equals(currentDate.substring(0, 4))) {
                     textDateTime.setText(dateOK.substring(5, 10));
                 } else {
                     textDateTime.setText(dateOK);

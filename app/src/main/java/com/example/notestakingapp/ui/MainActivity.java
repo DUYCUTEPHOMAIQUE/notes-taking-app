@@ -366,8 +366,7 @@ public class MainActivity extends AppCompatActivity {
             List<TextSegment> textSegmentList = new ArrayList<>();
             List<Image> imageList = new ArrayList<>();
             List<Audio> audioList = new ArrayList<>();
-//            Tag tag = new Tag(DatabaseHandler.getTagIdByNoteId(this, note.getNoteId()),  DatabaseHandler.getTagNameByTagId(this, DatabaseHandler.getTagIdByNoteId(this, note.getNoteId())));
-
+            Tag tag = new Tag(DatabaseHandler.getTagIdByNoteId(this, note.getNoteId()),  DatabaseHandler.getTagNameByTagId(this, DatabaseHandler.getTagIdByNoteId(this, note.getNoteId())));
             for (Object i : temp) {
                 if (i instanceof TextSegment) {
                     textSegmentList.add((TextSegment) i);
@@ -378,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             //todo: tag dang la null
-            noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, null));
+            noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, tag));
         }
         return noteDetailsComponentList;
     }

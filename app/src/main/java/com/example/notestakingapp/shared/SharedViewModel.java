@@ -146,6 +146,14 @@ public class SharedViewModel extends ViewModel {
 
 
     private final MutableLiveData<Boolean> isPlaying = new MutableLiveData<>(true);
+    private final MutableLiveData<Boolean> tagChanged = new MutableLiveData<>();
+
+    public MutableLiveData<Boolean> getTagChanged() {
+        return tagChanged;
+    }
+    public void setTagChanged() {
+        tagChanged.setValue(true);
+    }
 
     public MutableLiveData<Boolean> isPlaying() {
         return isPlaying;

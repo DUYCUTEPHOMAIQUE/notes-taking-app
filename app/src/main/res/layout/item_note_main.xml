@@ -46,12 +46,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_4sdp">
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="vertical">
             <TextView
                 android:id="@+id/text_date_time_main"
                 android:layout_width="match_parent"
@@ -63,16 +64,25 @@
                 android:fontFamily="@font/regular"
                 android:textColor="@color/colorTextDateTime"/>
             <TextView
+                android:layout_marginTop="@dimen/_2sdp"
                 android:id="@+id/text_tag_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
-                android:textSize="@dimen/_8sdp"
+                android:textSize="@dimen/_10sdp"
+                android:includeFontPadding="false"
                 android:fontFamily="@font/regular"
-                android:textColor="@color/colorTextDateTime"/>
+                android:text="tag"
+                android:background="@drawable/background_search"
+                android:paddingStart="@dimen/_4sdp"
+                android:paddingEnd="@dimen/_4sdp"
+                android:paddingBottom="@dimen/_2sdp"
+                android:paddingTop="@dimen/_2sdp"
+                android:textColor="@color/colorDarkGray"/>
             </LinearLayout>
             <CheckBox
+                android:layout_gravity="bottom  "
                 android:id="@+id/checkbox"
                 android:layout_width="@dimen/_20sdp"
                 android:layout_height="@dimen/_20sdp"

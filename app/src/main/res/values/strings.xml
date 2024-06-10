@@ -76,4 +76,5 @@
     <string name="restart_app_to_apply">Restart app to apply</string>
     <string name="you_hava_work_to_do">You have work to do</string>
     <string name="set_time">Set time</string>
+    <string name="all">All</string>
 </resources>

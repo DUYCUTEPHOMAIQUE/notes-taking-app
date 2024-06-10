@@ -509,6 +509,7 @@ public class NoteEditActivity extends AppCompatActivity {
             //todo: xoa note neu note do la empty cho nay xu li hoi ngu
             databaseHandler.deleteNote(this, noteId);
             NotesFragment.sharedViewModel.notifyDataChanged();
+            NotesFragment.sharedViewModel.setTagChanged();
             Log.d("update!!", String.valueOf(mItemList.get(1).getText()));
             return true;
         }

@@ -16,6 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.util.Log;
@@ -23,7 +25,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
+import com.example.notestakingapp.adapter.TagAdapter;
 import com.example.notestakingapp.database.NoteComponent.Tag;
 import com.example.notestakingapp.shared.Item;
 import com.example.notestakingapp.R;
@@ -42,9 +46,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,6 +70,7 @@ public class NotesFragment extends Fragment {
     private String mParam2;
     public BouncyRecyclerView recyclerView;
     public static NotesAdapter notesAdapter;
+    public static TagAdapter tagAdapter;
     private SQLiteDatabase db;
     private DatabaseHandler databaseHandler;
     private NoteTakingDatabaseHelper noteTakingDatabaseHelper;
@@ -72,6 +79,8 @@ public class NotesFragment extends Fragment {
     public static ActivityResultLauncher<Intent> noteEditLauncher;
     FloatingActionButton exitButton;
     LinearLayout linearLayoutNotesEmpty;
+    RecyclerView recyclerViewTag;
+    List<String> listTagName;
 
 
     public NotesFragment() {
@@ -140,9 +149,19 @@ public class NotesFragment extends Fragment {
         databaseHandler = new DatabaseHandler();
         recyclerView = view.findViewById(R.id.recycler_view_notes);
         linearLayoutNotesEmpty = view.findViewById(R.id.layout_notes_empty);
+        recyclerViewTag = view.findViewById(R.id.recycler_view_tag);
+         listTagName = new ArrayList<>();
+        initTagView();
+        tagAdapter.setTagListener(new TagAdapter.TagListener() {
+            @Override
+            public void onTagClick(int position, String tagName) {
+                String query = "#"+tagName.toLowerCase();
+                notesAdapter.getFilter().filter(query);
+            }
+        });
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        notesAdapter = new NotesAdapter(getActivity());
+        notesAdapter = new NotesAdapter(getActivity(), getString(R.string.all));
 
         notesAdapter.setNoteListener(new NotesAdapter.NoteListener() {
             @Override
@@ -170,6 +189,9 @@ public class NotesFragment extends Fragment {
                 notesAdapter.notifyDataSetChanged();
             }
         });
+        sharedViewModel.getTagChanged().observe(getViewLifecycleOwner(), isTagChanged -> {
+            updateTagView();
+        });
         sharedViewModel.getDataChanged().observe(getViewLifecycleOwner(), isDataChanged -> {
             try {
                 notesAdapter.notifyDataSetChanged();
@@ -192,6 +214,33 @@ public class NotesFragment extends Fragment {
                 updateView();
             }
         });
+    }
+
+    private void initTagView() {
+        List<Tag> tagList = DatabaseHandler.getAllTags(getActivity());
+        listTagName.add(getString(R.string.all));
+        Set<String> uniqueTags = new HashSet<>();
+        for (Tag i : tagList) {
+            uniqueTags.add(i.getTagName().trim());
+        }
+        listTagName.addAll(new ArrayList<>(uniqueTags));
+        Log.d("listTagDuy", listTagName.toString());
+        tagAdapter = new TagAdapter();
+        tagAdapter.setList(listTagName);
+        recyclerViewTag.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewTag.setAdapter(tagAdapter);
+    }
+    private void updateTagView() {
+        List<Tag> tagList = DatabaseHandler.getAllTags(getActivity());
+        Set<String> uniqueTags = new HashSet<>();
+        for (Tag i : tagList) {
+            uniqueTags.add(i.getTagName().trim());
+        }
+        List<String> temp = new ArrayList<>(uniqueTags);
+        listTagName.clear();
+        listTagName.add(getString(R.string.all));
+        listTagName.addAll(temp);
+        tagAdapter.notifyDataSetChanged();
     }
 
     public static void performSearch(String query) {
@@ -251,7 +300,7 @@ public class NotesFragment extends Fragment {
             List<Object> value = entry.getValue();
             note = databaseHandler.getNoteById(getActivity(), entry.getKey());
             assert note != null;
-//            Tag tag = new Tag(DatabaseHandler.getTagIdByNoteId(getActivity(), note.getNoteId()),  DatabaseHandler.getTagNameByTagId(getActivity(), DatabaseHandler.getTagIdByNoteId(getActivity(), note.getNoteId())));
+            Tag tag = new Tag(DatabaseHandler.getTagIdByNoteId(getActivity(), note.getNoteId()),  DatabaseHandler.getTagNameByTagId(getActivity(), DatabaseHandler.getTagIdByNoteId(getActivity(), note.getNoteId())));
             for (Object i : value) {
                 if (i instanceof TextSegment) {
                     textSegmentList.add((TextSegment) i);
@@ -263,7 +312,7 @@ public class NotesFragment extends Fragment {
                     //loi
                 }
             }
-            noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, null));
+            noteDetailsComponentList.add(new NoteDetailsComponent(note, textSegmentList, imageList, audioList, tag));
         }
         return noteDetailsComponentList;
     }

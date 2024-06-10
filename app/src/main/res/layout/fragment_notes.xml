@@ -1,60 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/notes_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimaryBackground"
     android:paddingStart="@dimen/_8sdp"
     android:paddingEnd="@dimen/_8sdp"
-    android:background="@color/colorPrimaryBackground"
     tools:context=".ui.NotesFragment">
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="0dp"
-        android:clipToPadding="false"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@android:color/transparent"
-        app:cardUseCompatPadding="false">
-        <com.factor.bouncy.BouncyRecyclerView
-            android:id="@+id/recycler_view_notes"
+        android:layout_height="match_parent">
+
+        <androidx.cardview.widget.CardView
+            android:layout_marginTop="@dimen/_8sdp"
+            android:id="@+id/layout_list_tag"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:translationZ="1dp"
-            android:padding="0dp"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
-            app:recyclerview_fling_animation_size="0.5"
-            app:recyclerview_overscroll_animation_size="0.5"
-            app:recyclerview_damping_ratio="DAMPING_RATIO_MEDIUM_BOUNCY"
-            app:recyclerview_stiffness="STIFFNESS_LOW"
-            app:allow_drag_reorder="true"
-            app:allow_item_swipe="false" />
-        <LinearLayout
-            android:id="@+id/layout_notes_empty"
+            android:padding="0dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:cardUseCompatPadding="false">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_tag"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_30sdp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_below="@+id/layout_list_tag"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_gravity="center"
-            android:gravity="center">
-            <ImageView
-                android:layout_width="@dimen/_100sdp"
-                android:layout_height="@dimen/_100sdp"
+            android:clipToPadding="false"
+            android:padding="0dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp"
+            app:cardUseCompatPadding="false">
+
+            <com.factor.bouncy.BouncyRecyclerView
+                android:id="@+id/recycler_view_notes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="0dp"
+                android:translationZ="1dp"
+                app:allow_drag_reorder="true"
+                app:allow_item_swipe="false"
+                app:recyclerview_damping_ratio="DAMPING_RATIO_MEDIUM_BOUNCY"
+                app:recyclerview_fling_animation_size="0.5"
+                app:recyclerview_overscroll_animation_size="0.5"
+                app:recyclerview_stiffness="STIFFNESS_LOW" />
+
+            <LinearLayout
+                android:id="@+id/layout_notes_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:src="@drawable/notes_empty"/>
-            <TextView
-                android:padding="@dimen/_4sdp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/_12ssp"
-                android:fontFamily="@font/bold"
-                android:textColor="@color/colorTextHint"
-                android:text="@string/there_are_no_notes_here"/>
-        </LinearLayout>
+                android:gravity="center"
+                android:orientation="vertical">
 
+                <ImageView
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/notes_empty" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/bold"
+                    android:padding="@dimen/_4sdp"
+                    android:text="@string/there_are_no_notes_here"
+                    android:textColor="@color/colorTextHint"
+                    android:textSize="@dimen/_12ssp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
 
-    </androidx.cardview.widget.CardView>
 </FrameLayout>

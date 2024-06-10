@@ -89,16 +89,21 @@
         android:id="@+id/layout_nav"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryBackground"
+        android:background="@drawable/bg_nav_bubble"
         android:clipToPadding="false"
         android:translationZ="100dp"
         app:itemIconSize="@dimen/_30sdp"
         app:itemIconTint="@drawable/item_selected_navigation"
         app:itemTextColor="@drawable/item_selected_navigation"
+        android:paddingTop="@dimen/_8sdp"
         app:labelVisibilityMode="unlabeled"
+        app:activeIndicatorLabelPadding="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginStart="@dimen/_12sdp"
         app:menu="@menu/navigation"/>
 
     <ImageView

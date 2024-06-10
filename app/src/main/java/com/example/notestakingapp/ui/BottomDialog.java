@@ -303,6 +303,9 @@ public class BottomDialog {
         dialog.setContentView(R.layout.layout_tag_insert);
         EditText editText = dialog.findViewById(R.id.edittext_tag);
         TextView textViewDone = dialog.findViewById(R.id.textview_done_tag);
+        if (DatabaseHandler.getTagNameByTagId(context, DatabaseHandler.getTagIdByNoteId(context, noteId)) != null && !DatabaseHandler.getTagNameByTagId(context, DatabaseHandler.getTagIdByNoteId(context, noteId)).isEmpty()) {
+            editText.setText(DatabaseHandler.getTagNameByTagId(context, DatabaseHandler.getTagIdByNoteId(context, noteId)));
+        }
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -322,12 +325,14 @@ public class BottomDialog {
                             if (DatabaseHandler.getTagIdByNoteId(context, noteId) != -1) {
                                 //todo: update tag
                                 DatabaseHandler.updateTag(context, noteId, content[0]);
-                                Toast.makeText(context, "tag="+content[0], Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, "tag=" + content[0], Toast.LENGTH_SHORT).show();
+                                NotesFragment.sharedViewModel.setTagChanged();
                                 dialog.dismiss();
                             } else {
                                 //todo: add tag
                                 DatabaseHandler.insertTag(context, noteId, content[0]);
-                                Toast.makeText(context, "tag="+content[0], Toast.LENGTH_SHORT).show();
+                                NotesFragment.sharedViewModel.setTagChanged();
+                                Toast.makeText(context, "tag=" + content[0], Toast.LENGTH_SHORT).show();
                                 dialog.dismiss();
                             }
                         }
@@ -393,6 +398,7 @@ public class BottomDialog {
                         for (int i : listNoteIdChecked) {
                             databaseHandler.deleteNote(context, i);
                             NotesFragment.sharedViewModel.notifyDataChanged();
+                            NotesFragment.sharedViewModel.setTagChanged();
                             if (finalSharedViewModel != null) {
                                 finalSharedViewModel.setItemLongPressed(false);
                                 finalSharedViewModel.triggerClearUiEvent();
