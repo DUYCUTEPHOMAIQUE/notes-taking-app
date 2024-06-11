@@ -11,5 +11,5 @@
     <color name="colorComponentBackground">#212121</color>
     <color name="colorSubComponent">@color/colorDarkGray</color>
     <color name="colorProfileBackground">#FFD60A</color>
-
+    <color name="colorOpenScreenBackground">@color/colorBackground</color>
 </resources>

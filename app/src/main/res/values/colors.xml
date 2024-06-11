@@ -11,6 +11,7 @@
     <color name="colorComponentBackground">@color/colorWhite</color>
     <color name="colorSubComponent">@color/colorTextHint</color>
     <color name="colorProfileBackground">#FFCC00</color>
+    <color name="colorOpenScreenBackground">@color/colorAudioBg</color>
 
     <!-- color note-->
     <color name="colorNoteDefault">#FFFFFF</color>
