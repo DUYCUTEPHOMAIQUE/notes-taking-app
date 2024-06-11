@@ -5,9 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryBackground"
-    tools:context=".ui.MainActivity">
-
+    tools:context=".ui.MainActivity"
+    android:background="@color/colorBackground">
     <RelativeLayout
         android:id="@+id/layout_title"
         android:layout_width="match_parent"
@@ -24,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             android:text="@string/my_notes"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/title_size"
             android:fontFamily="@font/bold"
             tools:ignore="RelativeOverlap"/>
@@ -51,12 +50,13 @@
         android:paddingStart="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
         android:gravity="center_vertical"
-        android:background="@drawable/background_search">
+        android:background="@drawable/background_search"
+        android:backgroundTint="@color/colorCardBackground">
         <ImageView
             android:layout_width="@dimen/_20sdp"
             android:layout_height="@dimen/_20sdp"
             android:src="@drawable/search_outline"
-            app:tint="@color/colorTextHint"
+            app:tint="@color/colorSubComponent"
             tools:ignore="ContentDescription"/>
         <EditText
             android:id="@+id/inputSearch"
@@ -68,8 +68,8 @@
             android:importantForAutofill="no"
             android:inputType="text"
             android:hint="@string/search_notes"
-            android:textColor="@color/colorBlack"
-            android:textColorHint="@color/colorTextHint"
+            android:textColor="@color/color_state_black"
+            android:textColorHint="@color/colorSubComponent"
             android:textSize="@dimen/_13ssp"/>
     </LinearLayout>
 
@@ -81,7 +81,7 @@
         app:layout_constraintBottom_toTopOf="@+id/layout_nav"
         app:layout_constraintTop_toBottomOf="@+id/layout_search"
         app:layout_constraintVertical_bias="0.0"
-        android:background="@color/colorPrimaryBackground"
+        android:background="@color/colorBackground"
         android:elevation="0dp"
         tools:layout_editor_absoluteX="0dp"/>
 
@@ -95,7 +95,6 @@
         app:itemIconSize="@dimen/_30sdp"
         app:itemIconTint="@drawable/item_selected_navigation"
         app:itemTextColor="@drawable/item_selected_navigation"
-        android:paddingTop="@dimen/_8sdp"
         app:labelVisibilityMode="unlabeled"
         app:activeIndicatorLabelPadding="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

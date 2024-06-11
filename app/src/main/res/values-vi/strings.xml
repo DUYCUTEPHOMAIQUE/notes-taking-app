@@ -8,7 +8,7 @@
     <string name="voice">Ghi âm</string>
     <string name="note_title">Tiêu đề</string>
     <string name="my_notes">Ghi chú của tôi</string>
-    <string name="search_notes">Tìm kiếm ghi chú...</string>
+    <string name="search_notes">Tìm kiếm ghi chú…</string>
     <string name="back">Trở lại</string>
     <string name="type_note_here">Hãy ghi gì đó…</string>
     <string name="change_background">Thay đổi màu nền</string>
@@ -46,7 +46,7 @@
     <string name="language">Ngôn ngữ</string>
     <string name="change_password">Đổi mật khẩu</string>
     <string name="sign_out">Đăng xuất</string>
-    <string name="sign_out_question">Bạn có chắc chắn muốn đăng xuất khỏi ứng dụng?</string>
+    <string name="sign_out_question">Bạn có chắc chắn muốn đăng xuất\n khỏi ứng dụng?</string>
     <string name="current_password">Mật khẩu hiện tại</string>
     <string name="enter_your_current_password">Nhập mật khẩu hiện tại của bạn</string>
     <string name="new_password">Mật khẩu mới</string>

@@ -6,6 +6,7 @@
     android:id="@+id/settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorBackground"
     tools:context=".authentication.SettingsActivity">
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +31,7 @@
             android:layout_marginStart="@dimen/_12sdp"
             android:layout_marginTop="@dimen/_16sdp"
             android:text="@string/settings"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorText"
             android:textSize="@dimen/title_size"
             android:fontFamily="@font/bold"/>
 
@@ -43,7 +44,7 @@
             android:layout_marginEnd="@dimen/_12sdp"
             android:paddingTop="@dimen/_6sdp"
             android:background="@drawable/background_tool_dialog"
-            android:backgroundTint="@color/colorNoteVariant2">
+            android:backgroundTint="@color/colorProfileBackground">
             <RelativeLayout
                 android:id="@+id/profile"
                 android:layout_width="match_parent"
@@ -57,6 +58,7 @@
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginBottom="@dimen/_6sdp"
                     android:src="@drawable/user_outline"
+                    app:tint="@color/colorBlack"
                     tools:ignore="ContentDescription"/>
                 <TextView
                     android:id="@+id/text_profile_name"
@@ -94,7 +96,7 @@
                 android:paddingBottom="@dimen/_6sdp"
                 android:gravity="center"
                 android:background="@drawable/background_tool_dialog"
-                android:backgroundTint="#FEF7DD"
+                android:backgroundTint="@color/colorNoteVariant2"
                 android:clickable="true"
                 android:focusable="true">
                 <ImageView
@@ -104,7 +106,7 @@
                     android:layout_marginEnd="@dimen/_6sdp"
                     android:layout_toStartOf="@id/text_edit_profile"
                     android:layout_centerVertical="true"
-                    app:tint="@color/color_state_black"
+                    app:tint="@color/colorBlack"
                     tools:ignore="ContentDescription"/>
                 <TextView
                     android:id="@+id/text_edit_profile"
@@ -112,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="@string/edit_profile"
-                    android:textColor="@color/color_state_black"
+                    android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_12sdp"
                     android:fontFamily="@font/bold"
                     tools:ignore="RelativeOverlap"/>
@@ -128,7 +130,7 @@
             android:paddingTop="@dimen/_6sdp"
             android:paddingBottom="@dimen/_6sdp"
             android:background="@drawable/background_tool_dialog"
-            android:backgroundTint="@color/colorLightGray">
+            android:backgroundTint="@color/colorCardBackground">
             <ImageView
                 android:id="@+id/icon_dark_mode"
                 android:layout_width="@dimen/icon_size"
@@ -137,7 +139,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:src="@drawable/dark_mode_outline"
-                app:tint="@color/color_state_black"
+                app:tint="@color/colorText"
                 tools:ignore="ContentDescription"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -145,7 +147,7 @@
                 android:layout_toEndOf="@id/icon_dark_mode"
                 android:layout_centerVertical="true"
                 android:text="@string/dark_mode"
-                android:textColor="@color/color_state_black"
+                android:textColor="@color/colorText"
                 android:textSize="@dimen/_16sdp"/>
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/dark_mode_switch"
@@ -170,7 +172,7 @@
             android:paddingTop="@dimen/_6sdp"
             android:paddingBottom="@dimen/_6sdp"
             android:background="@drawable/background_tool_dialog"
-            android:backgroundTint="@color/colorLightGray">
+            android:backgroundTint="@color/colorCardBackground">
             <ImageView
                 android:id="@+id/icon_notification"
                 android:layout_width="@dimen/icon_size"
@@ -179,7 +181,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:src="@drawable/notification_outline"
-                app:tint="@color/color_state_black"
+                app:tint="@color/colorText"
                 tools:ignore="ContentDescription"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -187,7 +189,7 @@
                 android:layout_toEndOf="@id/icon_notification"
                 android:layout_centerVertical="true"
                 android:text="@string/notifications"
-                android:textColor="@color/color_state_black"
+                android:textColor="@color/colorText"
                 android:textSize="@dimen/_16sdp"/>
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/notifications_switch"
@@ -214,7 +216,7 @@
             android:paddingTop="@dimen/_6sdp"
             android:paddingBottom="@dimen/_6sdp"
             android:background="@drawable/background_tool_dialog"
-            android:backgroundTint="@color/colorLightGray"
+            android:backgroundTint="@color/colorCardBackground"
             android:clickable="true"
             android:focusable="true">
             <ImageView
@@ -225,7 +227,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:src="@drawable/language_outline"
-                app:tint="@color/color_state_black"
+                app:tint="@color/colorText"
                 tools:ignore="ContentDescription"/>
             <TextView
                 android:id="@+id/text_language"
@@ -234,7 +236,7 @@
                 android:layout_toEndOf="@id/icon_language"
                 android:layout_centerVertical="true"
                 android:text="@string/language"
-                android:textColor="@color/color_state_black"
+                android:textColor="@color/colorText"
                 android:textSize="@dimen/_16sdp"
                 tools:ignore="RelativeOverlap"/>
             <TextView
@@ -269,7 +271,7 @@
             android:paddingTop="@dimen/_6sdp"
             android:paddingBottom="@dimen/_6sdp"
             android:background="@drawable/background_tool_dialog"
-            android:backgroundTint="@color/colorLightGray"
+            android:backgroundTint="@color/colorCardBackground"
             android:clickable="true"
             android:focusable="true">
             <ImageView
@@ -311,7 +313,7 @@
             android:paddingTop="@dimen/_6sdp"
             android:paddingBottom="@dimen/_6sdp"
             android:background="@drawable/background_tool_dialog"
-            android:backgroundTint="@color/colorLightGray"
+            android:backgroundTint="@color/colorCardBackground"
             android:clickable="true"
             android:focusable="true">
             <ImageView
@@ -353,7 +355,7 @@
             android:paddingTop="@dimen/_6sdp"
             android:paddingBottom="@dimen/_6sdp"
             android:background="@drawable/background_tool_dialog"
-            android:backgroundTint="@color/colorLightGray"
+            android:backgroundTint="@color/colorCardBackground"
             android:clickable="true"
             android:focusable="true">
             <ImageView
@@ -396,7 +398,7 @@
             android:paddingTop="@dimen/_6sdp"
             android:paddingBottom="@dimen/_6sdp"
             android:background="@drawable/background_tool_dialog"
-            android:backgroundTint="@color/colorNoteVariant5"
+            android:backgroundTint="@color/colorCardBackground"
             android:clickable="true"
             android:focusable="true">
             <ImageView

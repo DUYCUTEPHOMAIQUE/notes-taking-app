@@ -7,6 +7,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/confirm_sign_out"
     android:background="@drawable/background_tool_dialog"
+    android:backgroundTint="@color/colorCardBackground"
     android:layout_margin="@dimen/_8sdp"
     android:padding="@dimen/_12sdp"
     android:orientation="vertical">
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/sign_out"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/_20sdp"
         android:textStyle="normal"
         android:fontFamily="@font/bold"/>
@@ -27,7 +28,7 @@
         android:layout_gravity="center"
         android:gravity="center_horizontal"
         android:text="@string/sign_out_question"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorText"
         android:textSize="@dimen/_14sdp"
         android:fontFamily="@font/regular"/>
 
@@ -42,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/button_custom"
-            android:backgroundTint="@color/colorNoteVariant5"
+            android:backgroundTint="@color/colorSubCardBackground"
             android:padding="@dimen/_8sdp"
             android:clickable="true"
             android:focusable="true">
@@ -73,7 +74,7 @@
             android:layout_weight="1"
             android:layout_marginStart="@dimen/_12sdp"
             android:background="@drawable/button_custom"
-            android:backgroundTint="@color/colorLightGray"
+            android:backgroundTint="@color/colorSubCardBackground"
             android:padding="@dimen/_8sdp"
             android:clickable="true"
             android:focusable="true">

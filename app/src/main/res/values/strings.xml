@@ -61,6 +61,7 @@
     <string name="enter_your_new_password">Enter your new password</string>
     <string name="confirm_new_password">Confirm new password</string>
     <string name="reenter_your_new_password">Re-enter your new password</string>
+    <string name="default_web_client_id">683033972148-d8a8pqh693f242svcdbk1iluaertpo4n.apps.googleusercontent.com</string>
     <string name="there_are_no_notes_here">There are no notes here</string>
     <string name="there_are_no_tasks_there">There are no tasks there</string>
     <string name="text">Text</string>

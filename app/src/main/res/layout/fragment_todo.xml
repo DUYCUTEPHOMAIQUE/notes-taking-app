@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_marginStart="@dimen/_6sdp"
     android:layout_marginEnd="@dimen/_6sdp"
-    android:background="@color/colorPrimaryBackground"
+    android:background="@color/colorBackground"
     tools:context=".ui.TodoFragment">
     <LinearLayout
         android:id="@+id/layout_todo_empty"

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_6sdp"
-    app:cardBackgroundColor="@color/colorNoteDefault"
+    app:cardBackgroundColor="@color/colorCardBackground"
     app:cardCornerRadius="@dimen/_12sdp"
     app:contentPadding="@dimen/_6sdp"
     app:cardElevation="0dp">
@@ -25,9 +25,9 @@
             android:layout_toEndOf="@id/is_completed"
             android:text="todo content"
             android:maxLines="2"
-            android:textSize="@dimen/_16sdp"
+            android:textSize="@dimen/_14sdp"
             android:fontFamily="@font/bold"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/colorText"
             tools:ignore="HardcodedText"/>
         <TextView
             android:id="@+id/text_todo_date"
@@ -38,6 +38,7 @@
             android:layout_marginBottom="@dimen/_2sdp"
             android:text="24/05"
             android:textSize="@dimen/_12sdp"
+            android:textColor="@color/colorSubText"
             tools:ignore="HardcodedText"/>
         <TextView
             android:id="@+id/text_expired"

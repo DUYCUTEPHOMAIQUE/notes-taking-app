@@ -7,6 +7,7 @@
     android:padding="@dimen/_12sdp"
     android:orientation="vertical"
     android:background="@drawable/background_tool_dialog"
+    android:backgroundTint="@color/colorBackground"
     android:clipToPadding="false"
     android:gravity="center">
     <TextView
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:text="Waiting for image processing"
         android:textSize="@dimen/_14ssp"
-        android:textColor="@color/colorBlack"
+        android:textColor="@color/colorText"
         android:fontFamily="@font/bold"
         tools:ignore="HardcodedText"/>
 </LinearLayout>

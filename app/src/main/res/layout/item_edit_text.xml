@@ -7,7 +7,8 @@
     android:layout_marginTop="@dimen/_4sdp"
     android:layout_marginStart="@dimen/_12sdp"
     android:layout_marginEnd="@dimen/_12sdp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
     <EditText
         android:id="@+id/edit_text_details"
         android:layout_width="match_parent"
@@ -18,7 +19,7 @@
         android:hint="@string/type_note_here"
         android:fontFamily="@font/regular"
         android:textSize="@dimen/_14sdp"
-        android:textColorHint="@color/colorTextHint"
+        android:textColorHint="@color/colorSubText"
         android:importantForAutofill="no"
         tools:ignore="TextFields"/>
     <ImageView

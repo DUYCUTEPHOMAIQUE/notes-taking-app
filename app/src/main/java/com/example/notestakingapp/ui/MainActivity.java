@@ -21,6 +21,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -86,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
     public static ActivityResultLauncher<Intent> noteEditLauncher;
     private SharedViewModel sharedViewModel;
     private LinearLayout layoutBackDelete, layoutDoDelete;
+    boolean isNightModeOn;
+    SharedPreferences sharedThemePreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +103,19 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        // set theme mode when initialize app
+        sharedThemePreferences = getSharedPreferences("Theme", Context.MODE_PRIVATE);
+        isNightModeOn = sharedThemePreferences.getBoolean("night", false);
+        if (isNightModeOn) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+	    // Intent drawingIntent = new Intent(MainActivity.this, DrawingActivity.class);
+        // drawingIntent.putExtra("imageId", 0);
+	    // startActivity(drawingIntent);
+
         //khoi tao khi vao app chon ngon ngu
 
         //db
@@ -111,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         // Kiểm tra và tạo kênh thông báo
         createNotificationChannel();
 
-        //khoi chay ui
+        //  khoi chay ui
         initUi();
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         //test
@@ -260,6 +277,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    // DuongTestingFunction();
     }
 
     private void DuongTestingFunction() {

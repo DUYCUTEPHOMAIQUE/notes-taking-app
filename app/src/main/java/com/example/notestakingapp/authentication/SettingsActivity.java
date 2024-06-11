@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -63,6 +64,9 @@ public class SettingsActivity extends AppCompatActivity {
     SwitchCompat darkModeSwitch, notificationsSwitch;
     public static SharedViewModel sharedViewModelSettings;
     private FirebaseAuthHandler authHandler;
+    boolean isNightModeOn;
+    SharedPreferences sharedThemePreferences;
+    SharedPreferences.Editor themeEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +79,15 @@ public class SettingsActivity extends AppCompatActivity {
             return insets;
         });
         sharedViewModelSettings = new ViewModelProvider(this).get(SharedViewModel.class);
-        SharedPreferences sharedPref = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        String userEmail = sharedPref.getString("userEmail", "No Email");
+        SharedPreferences sharedUserPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String userEmail = sharedUserPreferences.getString("userEmail", "No Email");
         TextView textProfileName = findViewById(R.id.text_profile_name);
         textProfileName.setText(userEmail);
 
         initUI(); // initialize UI components
         initPickLanguage();
 
-        authHandler = new FirebaseAuthHandler(); // initialize FirebaseAuthHandler
+        authHandler = new FirebaseAuthHandler(this); // initialize FirebaseAuthHandler
 
         // methods for buttons
         backButton.setOnClickListener(v -> finish());
@@ -93,9 +97,36 @@ public class SettingsActivity extends AppCompatActivity {
         editProfileButton.setOnClickListener(v -> {
 
         });
-        darkModeSwitch.setOnClickListener(v -> {
+        sharedThemePreferences = getSharedPreferences("Theme", Context.MODE_PRIVATE);
+        isNightModeOn = sharedThemePreferences.getBoolean("night", false);
+        darkModeSwitch.setChecked(isNightModeOn);
 
+        if (isNightModeOn) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+        darkModeSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isNightModeOn) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    themeEditor = sharedThemePreferences.edit();
+                    themeEditor.putBoolean("night", false);
+                    isNightModeOn = false;
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    themeEditor = sharedThemePreferences.edit();
+                    themeEditor.putBoolean("night", true);
+                    isNightModeOn = true;
+                }
+                themeEditor.apply();
+                darkModeSwitch.setChecked(isNightModeOn);
+                recreate();
+            }
         });
+
         notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 enableNotification(this);
@@ -103,6 +134,7 @@ public class SettingsActivity extends AppCompatActivity {
                 disableNotification(this);
             }
         });
+
         languageButton.setOnClickListener(v -> {
             languageHandle(v);
         });

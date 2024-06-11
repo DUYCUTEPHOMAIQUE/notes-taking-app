@@ -7,7 +7,8 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/_12sdp"
     android:layout_marginEnd="@dimen/_12sdp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
     <EditText
         android:id="@+id/edit_text_title"
         android:layout_width="match_parent"
@@ -17,7 +18,7 @@
         android:hint="@string/note_title"
         android:fontFamily="@font/bold"
         android:textSize="@dimen/title_size"
-        android:textColorHint="@color/colorTextHint"
+        android:textColorHint="@color/colorSubText"
         android:importantForAutofill="no"
         tools:ignore="TextFields"/>
     <TextView
@@ -27,6 +28,6 @@
         android:layout_marginTop="@dimen/_4sdp"
         android:text="ngay thang nam"
         android:textSize="@dimen/_12sdp"
-        android:textColor="@color/colorDarkGray"
+        android:textColor="@color/colorSubText"
         tools:ignore="HardcodedText"/>
 </LinearLayout>
