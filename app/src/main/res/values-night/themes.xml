@@ -3,6 +3,14 @@
     <style name="Base.Theme.NotesTakingApp" parent="Theme.AppCompat.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="android:popupMenuStyle">@style/PopupMenuBackground</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
+    <style name="PopupMenuBackground" parent="Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_popup_menu</item>
+    </style>
+    <style name="Theme.OpenScreen" parent="Base.Theme.NotesTakingApp">
+        <item name="android:statusBarColor">@color/colorWhite</item>
 
+    </style>
 </resources>

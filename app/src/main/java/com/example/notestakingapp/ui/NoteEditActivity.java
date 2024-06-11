@@ -98,7 +98,7 @@ public class NoteEditActivity extends AppCompatActivity {
     //    private EditText titleEditText;
     String titleText = null;
     boolean isTheFirst = true;
-    String noteColor = "#FFFFFF";
+    String noteColor = String.valueOf(R.color.colorNoteDefault);
     private SharedFunc sharedFunc;
 
 
@@ -160,7 +160,7 @@ public class NoteEditActivity extends AppCompatActivity {
         //tao Item ui
 
         if (noteId == -1) {
-            noteId = (int) databaseHandler.insertNote(NoteEditActivity.this, "", "#FFFFFF");
+            noteId = (int) databaseHandler.insertNote(NoteEditActivity.this, "", noteColor);
             NotesFragment.sharedViewModel.notifyDataChanged();
             textSegmentId = (int) databaseHandler.insertTextSegment(NoteEditActivity.this, noteId, "");
             //ui
@@ -172,7 +172,9 @@ public class NoteEditActivity extends AppCompatActivity {
             RelativeLayout relativeLayout = findViewById(R.id.main);
             GradientDrawable gradientDrawable = new GradientDrawable();
             Log.d("duyColor", String.valueOf(relativeLayout));
-            gradientDrawable.setColor(Color.parseColor(noteColor));
+            int colorInt = ContextCompat.getColor(this, Integer.parseInt(note.getColor())); // Lấy mã màu từ resources
+            String temp = String.format("#%06X", (0xFFFFFF & colorInt));
+            gradientDrawable.setColor(Color.parseColor(temp));
             Log.d("duyColor111", String.valueOf(relativeLayout));
             relativeLayout.setBackground(gradientDrawable);
             ArrayList<Component> list = databaseHandler.getAllComponentByCreateAt(this, noteId, "ASC");
@@ -582,18 +584,20 @@ public class NoteEditActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public String setColorBackgroundNoteEdit(String color) {
-        noteColor = color;
+    public String setColorBackgroundNoteEdit(int colorId) {
+        noteColor = String.valueOf(colorId);
         RelativeLayout relativeLayout = findViewById(R.id.main);
-        if (color == "#FFFFFF") {
+        Log.d("color2222", String.valueOf(colorId));
+        int colorInt = ContextCompat.getColor(this, colorId); // Lấy mã màu từ resources
+        String temp = String.format("#%06X", (0xFFFFFF & colorInt));
+        if (temp == "#FFFFFF") {
         } else {
-            Log.d("color2222", color);
             //todo: add color vao db
             titleText = NoteDetailsAdapter.title;
-            databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, color);
+            databaseHandler.updateNote(NoteEditActivity.this, noteId, titleText, noteColor);
             GradientDrawable gradientDrawable = new GradientDrawable();
             Log.d("duyColor", String.valueOf(relativeLayout));
-            gradientDrawable.setColor(Color.parseColor(color));
+            gradientDrawable.setColor(Color.parseColor(temp));
             Log.d("duyColor111", String.valueOf(relativeLayout));
             relativeLayout.setBackground(gradientDrawable);
         }
