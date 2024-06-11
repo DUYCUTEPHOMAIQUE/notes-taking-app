@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+	android:background="@color/colorBackground"
     tools:context=".ui.MainActivity">
 
     <RelativeLayout
@@ -36,7 +37,7 @@
 			android:layout_toStartOf="@id/image_choose_color"
 			android:layout_centerVertical="true"
 			android:src="@drawable/eraser_icon"
-			app:tint="@color/colorBlack"
+			app:tint="@color/color_state_black"
 			tools:ignore="ContentDescription"/>
 		<ImageView
 			android:id="@+id/image_choose_color"
@@ -46,6 +47,7 @@
 			android:layout_toStartOf="@id/image_save"
 			android:layout_centerVertical="true"
 			android:src="@drawable/pen_icon"
+			app:tint="@color/color_state_black"
 			tools:ignore="ContentDescription"/>
 		<ImageView
 			android:id="@+id/image_save"
@@ -55,7 +57,7 @@
 			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
 			android:src="@drawable/round_done_24"
-			app:tint="@color/colorBlack"
+			app:tint="@color/color_state_black"
 			tools:ignore="ContentDescription"/>
 	</RelativeLayout>
 
@@ -64,5 +66,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		app:layout_constraintTop_toBottomOf="@+id/layout_back"
-		tools:layout_editor_absoluteX="-46dp"/>
+		tools:layout_editor_absoluteX="-46dp"
+		/>
 </LinearLayout>

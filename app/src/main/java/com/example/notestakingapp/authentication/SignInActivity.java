@@ -23,6 +23,7 @@ import java.util.Objects;
 
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.firebase.*;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class SignInActivity extends AppCompatActivity {
     EditText emailEditText, passwordEditText;
@@ -81,10 +82,11 @@ public class SignInActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // add google authentication method
+                authHandler.signInWithGoogle(SignInActivity.this);
             }
         });
     }

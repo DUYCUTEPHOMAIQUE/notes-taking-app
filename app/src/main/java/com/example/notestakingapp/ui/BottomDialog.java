@@ -45,7 +45,6 @@ import com.example.notestakingapp.notification.AlarmScheduler;
 import com.example.notestakingapp.shared.SharedViewModel;
 import com.example.notestakingapp.utils.HideKeyBoard;
 import com.example.notestakingapp.utils.TextUtils;
-import com.example.notestakingapp.utils.WaitFunc;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.timepicker.MaterialTimePicker;
@@ -81,7 +80,7 @@ public class BottomDialog {
         Log.d("duyColor", String.valueOf(mContext instanceof NoteEditActivity));
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.tool_dialog_layout);
+        dialog.setContentView(R.layout.layout_tool_dialog);
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -366,7 +365,7 @@ public class BottomDialog {
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         LinearLayout linearLayoutXButton = dialog.findViewById(R.id.layout_x_button);
         RelativeLayout relativeLayoutRestore = dialog.findViewById(R.id.layout_restore_note);

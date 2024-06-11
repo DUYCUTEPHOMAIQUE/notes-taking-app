@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_8sdp"
     android:background="@drawable/background_tool_dialog"
+    android:backgroundTint="@color/colorCardBackground"
     android:clipToPadding="false"
     android:orientation="vertical">
     <LinearLayout
@@ -31,7 +32,7 @@
         android:paddingTop="@dimen/_6sdp"
         android:paddingBottom="@dimen/_6sdp"
         android:background="@drawable/background_tool_dialog"
-        android:backgroundTint="@color/colorLightGray"
+        android:backgroundTint="@color/colorSubCardBackground"
         android:clickable="true"
         android:focusable="true">
         <ImageView
@@ -64,7 +65,7 @@
         android:paddingTop="@dimen/_6sdp"
         android:paddingBottom="@dimen/_6sdp"
         android:background="@drawable/background_tool_dialog"
-        android:backgroundTint="@color/colorNoteVariant5"
+        android:backgroundTint="@color/colorSubCardBackground"
         android:clickable="true"
         android:focusable="true">
         <ImageView

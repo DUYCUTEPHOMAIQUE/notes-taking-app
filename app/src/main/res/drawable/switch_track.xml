@@ -15,7 +15,7 @@
             <solid android:color="@color/colorSuccess"/>
             <corners android:radius="@dimen/_20sdp"/>
             <stroke android:width="@dimen/_1sdp"
-                android:color="@color/colorGray"/>
+                android:color="@color/colorSuccess"/>
             <size android:width="@dimen/_15sdp"
                 android:height="@dimen/_10sdp"/>
         </shape>

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_todo_edit"
+    android:backgroundTint="@color/colorCardBackground"
     android:layout_marginStart="@dimen/_8sdp"
     android:layout_marginEnd="@dimen/_8sdp"
     android:clipToPadding="false"
@@ -40,10 +41,10 @@
             android:gravity="center_vertical"
             android:text="@string/set_time"
             android:textSize="@dimen/_12sdp"
-            android:textColor="@color/color_state_black"
+            android:textColor="@color/colorBlack"
             app:drawableStartCompat="@drawable/clock"
             android:drawablePadding="@dimen/_4sdp"
-            app:drawableTint="@color/color_state_black"
+            app:drawableTint="@color/colorBlack"
             tools:ignore="HardcodedText"/>
         <TextView
             android:id="@+id/text_view_date_edit"

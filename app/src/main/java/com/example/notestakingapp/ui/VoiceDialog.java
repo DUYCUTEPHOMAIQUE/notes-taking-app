@@ -49,7 +49,7 @@ public class VoiceDialog {
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
 
         LinearLayout linearLayoutXButton = dialog.findViewById(R.id.layout_x_button);

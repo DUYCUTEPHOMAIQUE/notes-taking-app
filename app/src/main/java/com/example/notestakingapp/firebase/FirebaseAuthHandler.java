@@ -1,5 +1,6 @@
 package com.example.notestakingapp.firebase;
 
+import static android.provider.Settings.System.getString;
 import static com.example.notestakingapp.ui.NotesFragment.sharedViewModel;
 
 import android.app.Activity;
@@ -7,9 +8,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.database.DatabaseHandler;
@@ -36,13 +39,9 @@ import java.util.Objects;
 public class FirebaseAuthHandler {
 	public static final String TAG = "EmailPassword";
 	private final FirebaseAuth mAuth;
-
 	public static String userId;
-
     private GoogleSignInClient mGoogleSignInClient;
     public static final int RC_SIGN_IN = 9001;
-
-
 
     public FirebaseAuthHandler(Context context) {
         mAuth = FirebaseAuth.getInstance();
@@ -84,7 +83,7 @@ public class FirebaseAuthHandler {
 
                     } else {
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(context, "Sign In failed: " + task.getException().getMessage(),
+                        Toast.makeText(context, "Sign In failed: " + Objects.requireNonNull(task.getException()).getMessage(),
                                 Toast.LENGTH_LONG).show();
                         updateUI(null, context);
                     }
@@ -99,9 +98,8 @@ public class FirebaseAuthHandler {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.clear();
             editor.apply();
-
-			mAuth.signOut();
-			mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
+            mAuth.signOut();
+            mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     Toast.makeText(context, "Signed Out", Toast.LENGTH_SHORT).show();
@@ -128,6 +126,33 @@ public class FirebaseAuthHandler {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         activity.startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
+    /* public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    } */
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            Log.d("test1", "done");
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+            Log.d("test2", "done");
+        }
+    }
+
 
     public void handleGoogleSignInResult(Intent data, final Context context) {
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);

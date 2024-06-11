@@ -270,7 +270,7 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
         Objects.requireNonNull(dialog.getWindow()).setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DiaLogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
         RelativeLayout backButton = dialog.findViewById(R.id.sign_out_back_button);
         RelativeLayout confirmSignOutButton = dialog.findViewById(R.id.confirm_sign_out_button);

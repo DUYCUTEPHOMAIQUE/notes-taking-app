@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/colorPrimaryBackground" android:state_selected="true"/>
-    <item android:drawable="@color/colorPrimaryBackground"/>
+    <item android:drawable="@color/colorBackground" android:state_selected="true"/>
+    <item android:drawable="@color/colorBackground"/>
 </selector>

@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryBackground">#000000</color>
+    <color name="colorBackground">#000000</color>
     <color name="colorText">#FFFFFF</color>
+    <color name="colorSubText">#818181</color>
+    <color name="colorGrayMode">@color/colorDarkGray</color>
+    <color name="colorIconDefault">#FFFFFF</color>
+    <color name="colorIconPressed">@color/colorDarkGray</color>
+    <color name="colorCardBackground">#212121</color>
+    <color name="colorSubCardBackground">#323232</color>
+    <color name="colorComponentBackground">#212121</color>
+    <color name="colorSubComponent">@color/colorDarkGray</color>
+    <color name="colorProfileBackground">#FFD60A</color>
+
 </resources>

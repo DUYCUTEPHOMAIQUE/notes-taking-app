@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorBackground">#F7F7F7</color>
     <color name="colorText">#FF000000</color>
-    <color name="colorBlack">#FF000000</color>
-    <color name="colorWhite">#FFFFFFFF</color>
-    <color name="colorPrimaryBackground">#F7F7F7</color>
-    <color name="colorGray">#D2D2D2</color>
-    <color name="colorDarkGray">#827D89</color>
-    <color name="colorLightGray">#EAEAEA</color>
-    <color name="colorPrimaryBase">#6A3EA1</color>
-    <color name="colorPrimaryBaseDark">#3A2258</color>
-    <color name="colorAccent">#F8C715</color>
+    <color name="colorSubText">#818181</color>
+    <color name="colorGrayMode">@color/colorLightGray</color>
+    <color name="colorIconDefault">#000000</color>
+    <color name="colorIconPressed">@color/colorDarkGray</color>
+    <color name="colorCardBackground">@color/colorWhite</color>
+    <color name="colorSubCardBackground">@color/colorLightGray</color>
+    <color name="colorComponentBackground">@color/colorWhite</color>
+    <color name="colorSubComponent">@color/colorTextHint</color>
+    <color name="colorProfileBackground">#FFCC00</color>
 
     <!-- color note-->
     <color name="colorNoteDefault">#FFFFFF</color>
@@ -21,10 +22,18 @@
 
     <color name="colorError">#CE3A54</color>
     <color name="colorSuccess">#60D889</color>
-    <color name="colorSearchBackground">#EFEEF0</color>
     <color name="colorTextHint">#C8C5CB</color>
     <color name="colorTextDateTime">#575758</color>
     <color name="colorTextSegment">#232323</color>
     <color name="colorAudioBg">#FFF5D2</color>
+
+    <color name="colorBlack">#FF000000</color>
+    <color name="colorWhite">#FFFFFFFF</color>
+    <color name="colorGray">#D2D2D2</color>
+    <color name="colorDarkGray">#827D89</color>
+    <color name="colorLightGray">#EAEAEA</color>
+    <color name="colorPrimaryBase">#6A3EA1</color>
+    <color name="colorPrimaryBaseDark">#3A2258</color>
+    <color name="colorAccent">#F8C715</color>
 
 </resources>
