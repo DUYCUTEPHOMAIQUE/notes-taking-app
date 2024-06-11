@@ -8,9 +8,8 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_6sdp"
     android:background="@color/colorCardBackground"
-    android:backgroundTint="@color/colorCardBackground"
-    app:cardCornerRadius="@dimen/_12sdp"
-    app:cardElevation="0dp">
+    app:cardElevation="0dp"
+    app:cardCornerRadius="@dimen/_12sdp">
     <LinearLayout
         android:id="@+id/layout_note_main"
         android:layout_width="match_parent"

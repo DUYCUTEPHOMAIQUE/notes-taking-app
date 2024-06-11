@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorAudioBg"
+    android:background="@color/colorBgScreenOpen"
     tools:context=".ui.OpenScreenActivity">
     <ImageView
         android:id="@+id/logo"

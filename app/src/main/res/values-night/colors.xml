@@ -11,7 +11,8 @@
     <color name="colorComponentBackground">#212121</color>
     <color name="colorSubComponent">@color/colorDarkGray</color>
     <color name="colorProfileBackground">#FFD60A</color>
-    <color name="colorOpenScreenBackground">@color/colorBackground</color>
+    <color name="colorBgScreenOpen">#000000</color>
+    <color name="colorTextDateTime">#A3A3A3</color>
 
     <color name="colorNoteDefault">@color/colorCardBackground</color>
     <color name="colorNoteVariant1">#7F1D18</color>
@@ -19,4 +20,6 @@
     <color name="colorNoteVariant3">#7F6600</color>
     <color name="colorNoteVariant4">#1A632C</color>
     <color name="colorNoteVariant5">#003D7F</color>
+
+
 </resources>

@@ -97,6 +97,7 @@
         app:itemTextColor="@drawable/item_selected_navigation"
         app:labelVisibilityMode="unlabeled"
         app:activeIndicatorLabelPadding="0dp"
+        android:paddingTop="@dimen/_4sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

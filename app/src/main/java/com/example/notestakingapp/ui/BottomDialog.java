@@ -67,10 +67,10 @@ public class BottomDialog {
     public static boolean IS_TODO = false;
     private static Context mContext;
 
-    public static void setColor(String color) {
-
+    public static void setColor(int colorId) {
+        Log.d("duyTestColor", String.valueOf(colorId));
         if (mContext instanceof NoteEditActivity) {
-            ((NoteEditActivity) mContext).setColorBackgroundNoteEdit(color);
+            ((NoteEditActivity) mContext).setColorBackgroundNoteEdit(colorId);
         }
     }
 
@@ -189,80 +189,98 @@ public class BottomDialog {
         dialog.findViewById(R.id.view_default).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedNoteColor = "#FFFFFF";
+                int colorId = R.color.colorNoteDefault;
+                int colorInt = context.getResources().getColor(R.color.colorNoteDefault);
+                selectedNoteColor = String.format("#%06X", (0xFFFFFF & colorInt));
                 colorNoteDefault.setBackgroundResource(R.drawable.round_done_24);
                 colorNoteVariant1.setBackgroundResource(0);
                 colorNoteVariant2.setBackgroundResource(0);
                 colorNoteVariant3.setBackgroundResource(0);
                 colorNoteVariant4.setBackgroundResource(0);
                 colorNoteVariant5.setBackgroundResource(0);
-                setColor(selectedNoteColor);
+                setColor(colorId);
             }
         });
         dialog.findViewById(R.id.view_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedNoteColor = "#F7F6D4";
+                int colorId = R.color.colorNoteVariant1;
+                int colorInt = context.getResources().getColor(R.color.colorNoteVariant1);
+                Log.d("duyColor", String.valueOf(colorInt));
+                selectedNoteColor = String.format("#%06X", (0xFFFFFF & colorInt));
                 colorNoteDefault.setBackgroundResource(0);
                 colorNoteVariant1.setBackgroundResource(R.drawable.round_done_24);
                 colorNoteVariant2.setBackgroundResource(0);
                 colorNoteVariant3.setBackgroundResource(0);
                 colorNoteVariant4.setBackgroundResource(0);
                 colorNoteVariant5.setBackgroundResource(0);
-                setColor(selectedNoteColor);
+                setColor(colorId);
             }
         });
         dialog.findViewById(R.id.view_2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedNoteColor = "#FDEBAB";
+                int colorId = R.color.colorNoteVariant2;
+                int colorInt = context.getResources().getColor(R.color.colorNoteVariant2);
+                selectedNoteColor = String.format("#%06X", (0xFFFFFF & colorInt));
+                Log.d("duyColor", String.valueOf(colorInt));
+
                 colorNoteDefault.setBackgroundResource(0);
                 colorNoteVariant1.setBackgroundResource(0);
                 colorNoteVariant2.setBackgroundResource(R.drawable.round_done_24);
                 colorNoteVariant3.setBackgroundResource(0);
                 colorNoteVariant4.setBackgroundResource(0);
                 colorNoteVariant5.setBackgroundResource(0);
-                setColor(selectedNoteColor);
+                setColor(colorId);
 
             }
         });
         dialog.findViewById(R.id.view_3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedNoteColor = "#DAF6E4";
+                int colorId = R.color.colorNoteVariant3;
+                int colorInt = context.getResources().getColor(R.color.colorNoteVariant3);
+                selectedNoteColor = String.format("#%06X", (0xFFFFFF & colorInt));
+                Log.d("duyColor", String.valueOf(colorInt));
+
                 colorNoteDefault.setBackgroundResource(0);
                 colorNoteVariant1.setBackgroundResource(0);
                 colorNoteVariant2.setBackgroundResource(0);
                 colorNoteVariant3.setBackgroundResource(R.drawable.round_done_24);
                 colorNoteVariant4.setBackgroundResource(0);
                 colorNoteVariant5.setBackgroundResource(0);
-                setColor(selectedNoteColor);
+                setColor(colorId);
             }
         });
         dialog.findViewById(R.id.view_4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedNoteColor = "#EFE9F7";
+                int colorId = R.color.colorNoteVariant4;
+
+                int colorInt = context.getResources().getColor(R.color.colorNoteVariant4);
+                selectedNoteColor = String.format("#%06X", (0xFFFFFF & colorInt));
                 colorNoteDefault.setBackgroundResource(0);
                 colorNoteVariant1.setBackgroundResource(0);
                 colorNoteVariant2.setBackgroundResource(0);
                 colorNoteVariant3.setBackgroundResource(0);
                 colorNoteVariant4.setBackgroundResource(R.drawable.round_done_24);
                 colorNoteVariant5.setBackgroundResource(0);
-                setColor(selectedNoteColor);
+                setColor(colorId);
             }
         });
         dialog.findViewById(R.id.view_5).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedNoteColor = "#F7DEE3";
+                int colorId = R.color.colorNoteVariant5;
+                int colorInt = context.getResources().getColor(R.color.colorNoteVariant5);
+                selectedNoteColor = String.format("#%06X", (0xFFFFFF & colorInt));
                 colorNoteDefault.setBackgroundResource(0);
                 colorNoteVariant1.setBackgroundResource(0);
                 colorNoteVariant2.setBackgroundResource(0);
                 colorNoteVariant3.setBackgroundResource(0);
                 colorNoteVariant4.setBackgroundResource(0);
                 colorNoteVariant5.setBackgroundResource(R.drawable.round_done_24);
-                setColor(selectedNoteColor);
+                setColor(colorId);
 
             }
         });

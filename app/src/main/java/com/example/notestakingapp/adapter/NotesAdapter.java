@@ -25,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.notestakingapp.R;
@@ -49,7 +50,7 @@ import java.util.zip.Inflater;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> implements Filterable {
     private List<NoteDetailsComponent> noteDetailsComponentList;
-    private Context mContext;
+    private static Context mContext;
 
     public NotesAdapter(Context context, String txt) {
         this.mContext = context;
@@ -295,7 +296,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 }
                 //setColor
                 if (note.getColor() != null) {
-                    cardView.setCardBackgroundColor(Color.parseColor(note.getColor()));
+                    int colorInt = ContextCompat.getColor(mContext, Integer.parseInt(note.getColor())); // Lấy mã màu từ resources
+                    String noteColor = String.format("#%06X", (0xFFFFFF & colorInt));
+                    cardView.setCardBackgroundColor(Color.parseColor(noteColor));
                 }
 
                 if (currentPosition != -1) {
