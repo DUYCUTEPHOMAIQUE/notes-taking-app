@@ -15,11 +15,11 @@
 
     <!-- color note-->
     <color name="colorNoteDefault">#FFFFFF</color>
-    <color name="colorNoteVariant1">#F7F6D4</color>
-    <color name="colorNoteVariant2">#FDEBAB</color>
-    <color name="colorNoteVariant3">#DAF6E4</color>
-    <color name="colorNoteVariant4">#EFE9F7</color>
-    <color name="colorNoteVariant5">#F7DEE3</color>
+    <color name="colorNoteVariant1">#FF9D97</color>
+    <color name="colorNoteVariant2">#FFCA7F</color>
+    <color name="colorNoteVariant3">#FFE57F</color>
+    <color name="colorNoteVariant4">#99E3AC</color>
+    <color name="colorNoteVariant5">#7FBCFF</color>
 
     <color name="colorError">#CE3A54</color>
     <color name="colorSuccess">#60D889</color>
