@@ -64,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
     SwitchCompat darkModeSwitch, notificationsSwitch;
     public static SharedViewModel sharedViewModelSettings;
     private FirebaseAuthHandler authHandler;
-    boolean isNightModeOn;
+    public static boolean isNightModeOn;
     SharedPreferences sharedThemePreferences;
     SharedPreferences.Editor themeEditor;
 
