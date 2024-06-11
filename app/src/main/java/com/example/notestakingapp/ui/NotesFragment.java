@@ -161,6 +161,7 @@ public class NotesFragment extends Fragment {
         });
 
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerView.hasFixedSize();
         notesAdapter = new NotesAdapter(getActivity(), getString(R.string.all));
 
         notesAdapter.setNoteListener(new NotesAdapter.NoteListener() {

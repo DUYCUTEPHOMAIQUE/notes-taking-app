@@ -21,5 +21,7 @@
     <color name="colorNoteVariant4">#1A632C</color>
     <color name="colorNoteVariant5">#003D7F</color>
 
+    <color name="colorAddMain">#000000</color>
+
 
 </resources>
