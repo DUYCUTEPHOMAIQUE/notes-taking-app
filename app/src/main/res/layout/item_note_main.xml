@@ -7,13 +7,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/_6sdp"
-    app:cardCornerRadius="@dimen/_16sdp"
-    app:cardElevation="0dp">
+    android:background="@color/colorCardBackground"
+    android:backgroundTint="@color/colorCardBackground"
+    app:cardCornerRadius="@dimen/_12sdp">
     <LinearLayout
         android:id="@+id/layout_note_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_note_main"
         android:orientation="vertical">
         <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/image_main"
@@ -64,20 +64,22 @@
                 android:fontFamily="@font/regular"
                 android:textColor="@color/colorTextDateTime"/>
             <TextView
-                android:layout_marginTop="@dimen/_2sdp"
                 android:id="@+id/text_tag_main"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:layout_marginStart="@dimen/_10sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_4sdp"
                 android:textSize="@dimen/_10sdp"
                 android:includeFontPadding="false"
                 android:fontFamily="@font/regular"
                 android:text="tag"
                 android:background="@drawable/background_search"
+                android:backgroundTint="@color/colorSubCardBackground"
                 android:paddingStart="@dimen/_4sdp"
                 android:paddingEnd="@dimen/_4sdp"
-                android:paddingBottom="@dimen/_2sdp"
+                android:paddingBottom="@dimen/_4sdp"
                 android:paddingTop="@dimen/_2sdp"
                 android:textColor="@color/colorDarkGray"
                 tools:ignore="HardcodedText"/>
