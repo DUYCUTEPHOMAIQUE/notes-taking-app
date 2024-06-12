@@ -33,6 +33,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.util.Objects;
 
 public class FirebaseAuthHandler {
@@ -89,16 +90,28 @@ public class FirebaseAuthHandler {
                 }
             });
     }
+
     public void signOut(Context context) {
-        mAuth.signOut();
-        SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.clear();
-        editor.apply();
-        Toast.makeText(context, "Signed Out", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "signOut:success");
-        updateUI(null, context);
-	}
+        String userId = FirebaseAuthHandler.getUserId();
+        if (userId != null) {
+            FirebaseHandler.syncToFirebase(context);
+            File dbFile = context.getDatabasePath("note.db");
+            if (dbFile.exists()) {
+
+                Log.d(TAG, "Local database file deleted");
+            }
+            SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.clear();
+            editor.apply();
+
+            mAuth.signOut();
+
+        } else {
+            Toast.makeText(context, "No user signed in", Toast.LENGTH_SHORT).show();
+            Log.w(TAG, "signOut:failure - no user");
+        }
+    }
 
     public void changePassword(String oldPassword, final String newPassword, final Context context) {
         FirebaseUser user = mAuth.getCurrentUser();
