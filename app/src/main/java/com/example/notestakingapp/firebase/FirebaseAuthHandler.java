@@ -35,7 +35,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Objects;
 
-
 public class FirebaseAuthHandler {
 	public static final String TAG = "EmailPassword";
 	private final FirebaseAuth mAuth;
@@ -45,7 +44,6 @@ public class FirebaseAuthHandler {
 
     public FirebaseAuthHandler(Context context) {
         mAuth = FirebaseAuth.getInstance();
-        configureGoogleSignIn(context);
     }
 
     public void signUp(String email, String password, final Context context) {
@@ -74,10 +72,11 @@ public class FirebaseAuthHandler {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "signInWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
-                        SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        editor.putString("userEmail", email);
-                        editor.apply();
+                        SharedPreferences sharedUserPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editorUserPreferences = sharedUserPreferences.edit();
+                        editorUserPreferences.putBoolean("isSignedIn", true);
+                        editorUserPreferences.putString("userEmail", email);
+                        editorUserPreferences.apply();
                         updateUI(user, context);
                         FirebaseHandler.syncFromFirebase(context);
 
@@ -91,102 +90,15 @@ public class FirebaseAuthHandler {
             });
     }
     public void signOut(Context context) {
-        String userId = FirebaseAuthHandler.getUserId();
-        if (userId != LOCAL_USER) {
-			FirebaseHandler.syncToFirebase(context);
-            SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.clear();
-            editor.apply();
-            mAuth.signOut();
-            mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
-                @Override
-                public void onComplete(@NonNull Task<Void> task) {
-                    Toast.makeText(context, "Signed Out", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "signOut:success");
-                    updateUI(null, context);
-                }
-            });
-		} else {
-			Toast.makeText(context, "No user signed in", Toast.LENGTH_SHORT).show();
-			Log.w(TAG, "signOut:failure - no user");
-		}
+        mAuth.signOut();
+        SharedPreferences sharedPref = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
+        editor.apply();
+        Toast.makeText(context, "Signed Out", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "signOut:success");
+        updateUI(null, context);
 	}
-
-	private void configureGoogleSignIn(Context context) {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(context.getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
-    }
-
-    public void signInWithGoogle(Activity activity) {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        activity.startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    /* public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
-        }
-    } */
-
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, show authenticated UI.
-            Log.d("test1", "done");
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            Log.d("test2", "done");
-        }
-    }
-
-
-    public void handleGoogleSignInResult(Intent data, final Context context) {
-        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-        try {
-            GoogleSignInAccount account = task.getResult(ApiException.class);
-            if (account != null) {
-                firebaseAuthWithGoogle(account.getIdToken(), context);
-            }
-        } catch (ApiException e) {
-            Log.w(TAG, "Google sign in failed", e);
-            Toast.makeText(context, "Google sign in failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void firebaseAuthWithGoogle(String idToken, final Context context) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user, context);
-                        } else {
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(context, "Authentication Failed.", Toast.LENGTH_SHORT).show();
-                            updateUI(null, context);
-                        }
-                    }
-                });
-    }
-
-
 
     public void changePassword(String oldPassword, final String newPassword, final Context context) {
         FirebaseUser user = mAuth.getCurrentUser();

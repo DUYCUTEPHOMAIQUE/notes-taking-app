@@ -60,12 +60,11 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String ENABLE_NOTI = "enable";
     private static final String DISABLE_NOTI = "disable";
     TextView backButton, pickLanguage;
-    RelativeLayout profile, editProfileButton, signInButton, signUpButton, changePasswordButton, signOutButton, languageButton;
+    RelativeLayout signInButton, signUpButton, changePasswordButton, signOutButton, languageButton;
     SwitchCompat darkModeSwitch, notificationsSwitch;
     public static SharedViewModel sharedViewModelSettings;
     private FirebaseAuthHandler authHandler;
     public static boolean isNightModeOn;
-    SharedPreferences sharedThemePreferences;
     SharedPreferences.Editor themeEditor;
 
     @Override
@@ -79,6 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
             return insets;
         });
         sharedViewModelSettings = new ViewModelProvider(this).get(SharedViewModel.class);
+
         SharedPreferences sharedUserPreferences = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userEmail = sharedUserPreferences.getString("userEmail", "No Email");
         TextView textProfileName = findViewById(R.id.text_profile_name);
@@ -89,15 +89,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         authHandler = new FirebaseAuthHandler(this); // initialize FirebaseAuthHandler
 
-        // methods for buttons
         backButton.setOnClickListener(v -> finish());
-        profile.setOnClickListener(v -> {
 
-        });
-        editProfileButton.setOnClickListener(v -> {
-
-        });
-        sharedThemePreferences = getSharedPreferences("Theme", Context.MODE_PRIVATE);
+        SharedPreferences sharedThemePreferences = getSharedPreferences("Theme", Context.MODE_PRIVATE);
         isNightModeOn = sharedThemePreferences.getBoolean("night", false);
         darkModeSwitch.setChecked(isNightModeOn);
 
@@ -147,6 +141,13 @@ public class SettingsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        boolean isSignedIn = sharedUserPreferences.getBoolean("isSignedIn", false);
+        if (isSignedIn) {
+            signUpButton.setVisibility(View.GONE);
+            signInButton.setVisibility(View.GONE);
+        }
+
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -314,8 +315,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void initUI() {
         backButton = findViewById(R.id.back_button);
-        profile = findViewById(R.id.profile);
-        editProfileButton = findViewById(R.id.edit_profile_button);
         darkModeSwitch = findViewById(R.id.dark_mode_switch);
         notificationsSwitch = findViewById(R.id.notifications_switch);
         signInButton = findViewById(R.id.sign_in_button);

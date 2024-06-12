@@ -42,7 +42,8 @@
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginStart="@dimen/_12sdp"
             android:layout_marginEnd="@dimen/_12sdp"
-            android:paddingTop="@dimen/_6sdp"
+            android:paddingTop="@dimen/_2sdp"
+            android:paddingBottom="@dimen/_2sdp"
             android:background="@drawable/background_tool_dialog"
             android:backgroundTint="@color/colorProfileBackground">
             <RelativeLayout
@@ -66,58 +67,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_6sdp"
                     android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_centerVertical="true"
                     android:layout_toEndOf="@id/avatar"
                     android:text="Your Name"
                     android:textColor="@color/colorBlack"
                     android:textSize="@dimen/_20sdp"
                     android:fontFamily="@font/bold"
                     tools:ignore="HardcodedText"/>
-                <TextView
-                    android:id="@+id/subtext_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_6sdp"
-                    android:layout_marginBottom="@dimen/_6sdp"
-                    android:layout_toEndOf="@id/avatar"
-                    android:layout_below="@id/text_profile_name"
-                    android:text="@string/example_email"
-                    android:textStyle="normal"
-                    android:textColor="@color/colorDarkGray"
-                    android:textSize="@dimen/_10sdp"/>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/edit_profile_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_marginBottom="@dimen/_12sdp"
-                android:paddingTop="@dimen/_6sdp"
-                android:paddingBottom="@dimen/_6sdp"
-                android:gravity="center"
-                android:background="@drawable/background_tool_dialog"
-                android:backgroundTint="@color/colorNoteVariant2"
-                android:clickable="true"
-                android:focusable="true">
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/edit_outline"
-                    android:layout_marginEnd="@dimen/_6sdp"
-                    android:layout_toStartOf="@id/text_edit_profile"
-                    android:layout_centerVertical="true"
-                    app:tint="@color/colorBlack"
-                    tools:ignore="ContentDescription"/>
-                <TextView
-                    android:id="@+id/text_edit_profile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="@string/edit_profile"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="@dimen/_12sdp"
-                    android:fontFamily="@font/bold"
-                    tools:ignore="RelativeOverlap"/>
             </RelativeLayout>
         </LinearLayout>
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -23,11 +24,19 @@ import java.util.Objects;
 
 import com.example.notestakingapp.R;
 import com.example.notestakingapp.firebase.*;
+import com.example.notestakingapp.ui.MainActivity;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class SignInActivity extends AppCompatActivity {
     EditText emailEditText, passwordEditText;
-    TextView backButton, forgotPassButton, signInButton, signUpText, googleButton;
+    TextView backButton, forgotPassButton, signInButton, signUpText;
     private FirebaseAuthHandler authHandler;
 
     @Override
@@ -83,13 +92,8 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                authHandler.signInWithGoogle(SignInActivity.this);
-            }
-        });
     }
+
 
     private boolean validateInput(String email, String password) {
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
@@ -145,6 +149,5 @@ public class SignInActivity extends AppCompatActivity {
         forgotPassButton = findViewById(R.id.text_forgot_password);
         signInButton = findViewById(R.id.sign_in_button);
         signUpText = findViewById(R.id.sign_up_text);
-        googleButton = findViewById(R.id.google_button);
     }
 }

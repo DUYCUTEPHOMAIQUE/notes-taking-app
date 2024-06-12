@@ -127,22 +127,23 @@
         android:id="@+id/layout_delete_some_note"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_80sdp"
-        android:background="@drawable/bg_layout_delete_some_note"
+        android:layout_margin="@dimen/_8sdp"
+        android:background="@drawable/background_tool_dialog"
+        android:backgroundTint="@color/colorCardBackground"
         android:orientation="vertical"
         android:translationZ="101dp"
         android:elevation="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/regular"
+            android:paddingTop="@dimen/_4sdp"
             android:gravity="center"
             android:text="@string/select_to_delete"
             android:textSize="@dimen/_14ssp"
-            android:textColor="@color/colorBlack"
-            android:includeFontPadding="false"
+            android:textColor="@color/colorText"
             android:layout_marginTop="@dimen/_4sdp"
             android:layout_marginBottom="@dimen/_4sdp"/>
 
@@ -153,59 +154,59 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:baselineAligned="false">
-            <LinearLayout
-                android:layout_marginStart="@dimen/_12sdp"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:padding="@dimen/_6sdp"
-                android:background="@drawable/bg_btn_in_delete"
+                android:background="@drawable/background_tool_dialog"
+                android:backgroundTint="@color/colorSubCardBackground"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/x_icon_main_image"
                     android:layout_width="@dimen/_16sdp"
                     android:layout_height="@dimen/_16sdp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/x_icon"
-                    android:layout_gravity="center_vertical"
-                    app:tint="@color/colorBlack"/>
+                    app:tint="@color/colorText"/>
                 <TextView
                     android:includeFontPadding="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_toEndOf="@id/x_icon_main_image"
                     android:text="@string/back"
-                    android:textColor="@color/colorBlack"
-                    android:fontFamily="@font/regular"
-                    android:textSize="@dimen/_16ssp"
-                    android:layout_marginStart="@dimen/_12sdp"/>
-            </LinearLayout>
+                    android:textColor="@color/colorText"
+                    android:textSize="@dimen/_16sdp"/>
+            </RelativeLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/layout_do_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_12sdp"
                 android:gravity="center"
                 android:padding="@dimen/_6sdp"
-                android:background="@drawable/bg_btn_in_delete"
+                android:background="@drawable/background_tool_dialog"
+                android:backgroundTint="@color/colorSubCardBackground"
                 android:layout_weight="1">
                 <ImageView
                     android:id="@+id/delete_some_note"
                     android:layout_width="@dimen/_16sdp"
                     android:layout_height="@dimen/_16sdp"
+                    android:layout_centerVertical="true"
                     android:src="@drawable/trash"
-                    android:layout_gravity="center_vertical"
                     app:tint="@color/colorError"/>
                 <TextView
                     android:includeFontPadding="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:layout_toEndOf="@id/delete_some_note"
                     android:text="@string/delete"
                     android:textColor="@color/colorError"
-                    android:fontFamily="@font/regular"
-                    android:textSize="@dimen/_16ssp"
-                    android:layout_marginStart="@dimen/_12sdp"/>
-            </LinearLayout>
+                    android:textSize="@dimen/_16sdp"/>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
