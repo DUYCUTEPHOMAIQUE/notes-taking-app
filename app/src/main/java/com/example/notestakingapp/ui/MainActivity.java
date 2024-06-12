@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageTrashButton;
 
     private ViewPagerAdapter mViewPagerAdapter;
-    private BottomNavigationView mBottomNavigationView;
     private ViewPager2 mViewPager2;
     int currentPage;
 
@@ -91,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout layoutBackDelete, layoutDoDelete;
     boolean isNightModeOn;
     SharedPreferences sharedThemePreferences;
+    LinearLayout linearLayoutNav;
+    RelativeLayout layoutHome, layoutTask;
+    ImageView itemHome, itemTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +162,8 @@ public class MainActivity extends AppCompatActivity {
         //setup viewpage switch fragment
         mViewPagerAdapter = new ViewPagerAdapter(this);
         mViewPager2.setAdapter(mViewPagerAdapter);
-
+        mViewPager2.setCurrentItem(0);
+        itemHome.setSelected(true);
         //su kien fragment thay doi
         mViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -173,7 +176,9 @@ public class MainActivity extends AppCompatActivity {
                 super.onPageSelected(position);
                 switch (position) {
                     case 0:
-                        mBottomNavigationView.getMenu().findItem(R.id.home_main).setChecked(true);
+                        itemHome.setSelected(true);
+                        itemTask.setSelected(false);
+//                        mBottomNavigationView.getMenu().findItem(R.id.home_main).setChecked(true);
                         inputSearch.setHint(getString(R.string.search_notes));
                         inputSearch.addTextChangedListener(new TextWatcher() {
                             @Override
@@ -188,7 +193,9 @@ public class MainActivity extends AppCompatActivity {
                         });
                         break;
                     case 1:
-                        mBottomNavigationView.getMenu().findItem(R.id.todo_main).setChecked(true);
+                        itemHome.setSelected(false);
+                        itemTask.setSelected(true);
+//                        mBottomNavigationView.getMenu().findItem(R.id.todo_main).setChecked(true);
                         inputSearch.setHint(getString(R.string.search_todo));
                         inputSearch.addTextChangedListener(new TextWatcher() {
                             @Override
@@ -222,21 +229,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //su kien item in menu thay doi
-        mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                int itemId = menuItem.getItemId();
-                if (itemId == id.home_main) {
-                    mViewPager2.setCurrentItem(0);
-                } else if (itemId == id.todo_main) {
-                    mViewPager2.setCurrentItem(1);
-                } else {
-                    mViewPager2.setCurrentItem(0);
-                }
-                return true;
-            }
-        });
+        layoutHome.setOnClickListener(v->handleHomeClick());
+        layoutTask.setOnClickListener(v->handleTaskClick());
 
         sharedViewModel.getItemLongPressed().observe(this, new Observer<Boolean>() {
             @Override
@@ -246,11 +240,11 @@ public class MainActivity extends AppCompatActivity {
                         listNoteIdChecked.clear();
                     }
                     layoutDelete.setVisibility(View.VISIBLE);
-                    mBottomNavigationView.setVisibility(View.GONE);
+                    linearLayoutNav.setVisibility(View.GONE);
                     imageViewAdd.setVisibility(View.GONE);
                 } else {
                     layoutDelete.setVisibility(View.GONE);
-                    mBottomNavigationView.setVisibility(View.VISIBLE);
+                    linearLayoutNav.setVisibility(View.VISIBLE);
                     imageViewAdd.setVisibility(View.VISIBLE);
                 }
             }
@@ -281,6 +275,18 @@ public class MainActivity extends AppCompatActivity {
     // DuongTestingFunction();
     }
 
+    private void handleHomeClick() {
+        itemHome.setSelected(true);
+        itemTask.setSelected(false);
+        mViewPager2.setCurrentItem(0);
+    }
+
+    private void handleTaskClick() {
+        itemHome.setSelected(false);
+        itemTask.setSelected(true);
+        mViewPager2.setCurrentItem(1);
+    }
+
     private void DuongTestingFunction() {
         DatabaseHandler.deleteAllTodo(this);
     }
@@ -307,7 +313,6 @@ public class MainActivity extends AppCompatActivity {
     private void initUi() {
         imageViewAdd = findViewById(R.id.imageAddNoteMain);
         mViewPager2 = findViewById(R.id.view_pager2);
-        mBottomNavigationView = findViewById(R.id.layout_nav);
         inputSearch = findViewById(R.id.inputSearch);
         layoutDelete = findViewById(id.layout_delete_some_note);
         imageViewXButton = findViewById(id.x_icon_main_image);
@@ -315,6 +320,11 @@ public class MainActivity extends AppCompatActivity {
         imageSettings = findViewById(id.image_settings);
         layoutBackDelete = findViewById(id.layout_back_delete);
         layoutDoDelete = findViewById(id.layout_do_delete);
+        linearLayoutNav = findViewById(id.layout_nav_new);
+        layoutHome = findViewById(id.layoutHome);
+        layoutTask = findViewById(id.layoutTask);
+        itemHome = findViewById(id.itemHome);
+        itemTask = findViewById(id.itemTask);
     }
 
     private void animButton(ImageView imageView) {

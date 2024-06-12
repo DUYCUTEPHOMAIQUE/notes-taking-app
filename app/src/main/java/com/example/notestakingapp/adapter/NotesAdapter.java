@@ -287,11 +287,15 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                 String dateOK = sdf.format(new Date(note.getCreateAt()));
                 String currentDate = sdf.format(new Date());
                 if (dateOK.substring(0, 10).equals(currentDate.substring(0, 10))) {
-                    textDateTime.setText("Today " + dateOK.substring(11, 16));
-                } else if (dateOK.substring(0, 4).equals(currentDate.substring(0, 4))) {
-                    textDateTime.setText(dateOK.substring(5, 10));
+                    textDateTime.setText(mContext.getString(R.string.today)+" " + dateOK.substring(11, 16));
+                } else if(dateOK.substring(0, 4).equals(currentDate.substring(0, 4))
+                        && dateOK.substring(5, 7).equals(currentDate.substring(5, 7))
+                        && Integer.parseInt(dateOK.substring(8, 10)) == Integer.parseInt(currentDate.substring(8, 10)) -1 ) {
+                    textDateTime.setText(mContext.getString(R.string.today)+" " + dateOK.substring(11, 16));
+                } else if(dateOK.substring(0, 4).equals(currentDate.substring(0, 4))) {
+                    textDateTime.setText(dateOK.substring(5, 16));
                 } else {
-                    textDateTime.setText(dateOK);
+                    textDateTime.setText(dateOK.substring(0, 16));
                 }
                 //setColor
                 if (note.getColor() != null) {

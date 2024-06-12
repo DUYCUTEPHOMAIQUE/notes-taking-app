@@ -78,4 +78,6 @@
     <string name="you_hava_work_to_do">You have work to do</string>
     <string name="set_time">Set time</string>
     <string name="all">All</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
 </resources>

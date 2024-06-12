@@ -68,4 +68,7 @@
     <string name="restart_app_to_apply">Khởi động lại ứng dụng để áp dụng</string>
     <string name="you_hava_work_to_do">Bạn có nhiệm vụ phải làm</string>
     <string name="set_time">Đặt nhắc nhở</string>
+    <string name="all">Tất cả</string>
+    <string name="today">Hôm nay</string>
+    <string name="yesterday">Hôm qua</string>
 </resources>

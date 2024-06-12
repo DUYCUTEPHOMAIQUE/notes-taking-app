@@ -123,8 +123,8 @@ public class TodoFragment extends Fragment {
         layoutToDo = view.findViewById(R.id.layout_todo);
         textTask = view.findViewById(R.id.text_task);
         //
-        todoAdapter = new TodoAdapter();
-        completedTodoAdapter = new TodoAdapter();
+        todoAdapter = new TodoAdapter(getActivity());
+        completedTodoAdapter = new TodoAdapter(getActivity());
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         completedRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

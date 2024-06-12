@@ -3,6 +3,7 @@ package com.example.notestakingapp.adapter;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,10 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
     List<ToDo> listTodo;
     List<ToDo> oldList;
     TodoListener todoListener;
+    public static Context mContext;
+    public TodoAdapter(Context context) {
+        mContext = context;
+    }
 
     public void setTodoListener(TodoListener todoListener) {
         this.todoListener = todoListener;
@@ -133,12 +138,19 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.TodoViewHolder
                     String dateOK = sdf.format(new Date(todo.getDuration()));
                     String currentDate = sdf.format(new Date());
                     if (dateOK.substring(0, 10).equals(currentDate.substring(0, 10))) {
-                        todoDate.setText("Today " + dateOK.substring(11, 16));
+                        todoDate.setText(mContext.getString(R.string.today)+" " + dateOK.substring(11, 16));
+                    } else if(dateOK.substring(0, 4).equals(currentDate.substring(0, 4))
+                                && dateOK.substring(5, 7).equals(currentDate.substring(5, 7))
+                                && Integer.parseInt(dateOK.substring(8, 10)) == Integer.parseInt(currentDate.substring(8, 10)) -1 ) {
+                        todoDate.setText(mContext.getString(R.string.today)+" " + dateOK.substring(11, 16));
+                    } else if(dateOK.substring(0, 4).equals(currentDate.substring(0, 4))) {
+                        todoDate.setText(dateOK.substring(5, 16));
                     } else {
-                        todoDate.setText(dateOK.substring(0, 10));
+                        todoDate.setText(dateOK.substring(0, 16));
                     }
                 } else {
                     todoExpired.setVisibility(View.GONE);
+                    todoDate.setVisibility(View.GONE);
                 }
 
 

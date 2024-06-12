@@ -485,11 +485,11 @@ public class DatabaseHandler {
         Cursor cursor = db.rawQuery(query, new String[]{Integer.toString(noteId)});
 
         if (cursor.moveToFirst()) {
-            int textId = cursor.getInt(cursor.getColumnIndex(COLUMN_TEXT_ID));
-            String text = cursor.getString(cursor.getColumnIndex(COLUMN_TEXT));
-            long createdAt = cursor.getLong(cursor.getColumnIndex(COLUMN_AUDIO_CREATEAT));
             ArrayList<TextSegment> list = new ArrayList<TextSegment>();
             do {
+                int textId = cursor.getInt(cursor.getColumnIndex(COLUMN_TEXT_ID));
+                String text = cursor.getString(cursor.getColumnIndex(COLUMN_TEXT));
+                long createdAt = cursor.getLong(cursor.getColumnIndex(COLUMN_AUDIO_CREATEAT));
                 list.add(new TextSegment(
                         textId,
                         noteId,

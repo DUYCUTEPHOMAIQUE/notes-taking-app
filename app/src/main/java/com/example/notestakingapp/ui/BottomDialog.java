@@ -528,7 +528,11 @@ public class BottomDialog {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
                 String dateOK = sdf.format(new Date(todo.getDuration()));
                 textViewDate.setVisibility(View.VISIBLE);
-                textViewDate.setText(String.valueOf(dateOK.substring(0, 16)));
+                if (String.valueOf(dateOK.substring(0, 16)).equals("1970-01-01 07:00")) {
+                    textViewDate.setText("");
+                } else {
+                    textViewDate.setText(String.valueOf(dateOK.substring(5, 16)));
+                }
             } else {
                 textViewDate.setVisibility(View.GONE);
             }
