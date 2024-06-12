@@ -10,10 +10,10 @@
     <color name="colorSubCardBackground">@color/colorLightGray</color>
     <color name="colorComponentBackground">@color/colorWhite</color>
     <color name="colorSubComponent">@color/colorTextHint</color>
-    <color name="colorProfileBackground">#FFCC00</color>
+    <color name="colorProfileBackground">#FFD60A</color>
     <color name="colorOpenScreenBackground">@color/colorAudioBg</color>
 
-    <!-- color note-->
+    <!-- note colors -->
     <color name="colorNoteDefault">#FFFFFF</color>
     <color name="colorNoteVariant1">#FF9D97</color>
     <color name="colorNoteVariant2">#FFCA7F</color>

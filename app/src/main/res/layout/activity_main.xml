@@ -134,7 +134,7 @@
         android:translationZ="101dp"
         android:elevation="@dimen/_8sdp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="match_parent"
@@ -148,13 +148,13 @@
             android:layout_marginBottom="@dimen/_4sdp"/>
 
         <LinearLayout
-            android:id="@+id/layout_back_delete"
             android:layout_marginTop="@dimen/_8sdp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:baselineAligned="false">
             <RelativeLayout
+                android:id="@+id/layout_back_delete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

@@ -37,6 +37,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResult;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     public static ActivityResultLauncher<Intent> noteEditLauncher;
     private SharedViewModel sharedViewModel;
-    private LinearLayout layoutBackDelete, layoutDoDelete;
+    private RelativeLayout layoutBackDelete, layoutDoDelete;
     boolean isNightModeOn;
     SharedPreferences sharedThemePreferences;
 
