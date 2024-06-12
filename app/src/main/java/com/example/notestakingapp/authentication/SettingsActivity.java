@@ -1,6 +1,7 @@
 package com.example.notestakingapp.authentication;
 
 import static com.example.notestakingapp.adapter.NotesAdapter.listNoteIdChecked;
+import static com.example.notestakingapp.utils.LanguageUtils.KEY_LANGUAGE;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -50,6 +51,7 @@ import com.example.notestakingapp.utils.LanguageUtils;
 import com.example.notestakingapp.utils.NotificationUtils;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Locale;
 import java.util.Objects;
 
 import com.example.notestakingapp.R;
@@ -65,6 +67,8 @@ public class SettingsActivity extends AppCompatActivity {
     public static SharedViewModel sharedViewModelSettings;
     private FirebaseAuthHandler authHandler;
     public static boolean isNightModeOn;
+    public static String isLanguage;
+    SharedPreferences sharedThemePreferences;
     SharedPreferences.Editor themeEditor;
 
     @Override

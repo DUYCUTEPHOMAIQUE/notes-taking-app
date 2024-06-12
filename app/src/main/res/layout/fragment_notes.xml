@@ -15,12 +15,13 @@
         android:layout_height="match_parent">
 
         <androidx.cardview.widget.CardView
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_4sdp"
             android:id="@+id/layout_list_tag"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:padding="0dp"
+            app:contentPadding="0dp"
             app:cardBackgroundColor="@android:color/transparent"
             app:cardElevation="0dp"
             app:cardUseCompatPadding="false">
@@ -28,7 +29,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_tag"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_30sdp" />
+                android:layout_height="@dimen/_24sdp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -48,6 +49,7 @@
                 android:clipToPadding="false"
                 android:padding="0dp"
                 app:allow_drag_reorder="true"
+                android:layout_margin="0dp"
                 app:allow_item_swipe="false"
                 app:recyclerview_damping_ratio="DAMPING_RATIO_MEDIUM_BOUNCY"
                 app:recyclerview_fling_animation_size="0.5"

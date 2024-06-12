@@ -53,21 +53,21 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     private static Context mContext;
 
     public NotesAdapter(Context context, String txt) {
-        this.mContext = context;
+        mContext = context;
         this.allString = txt;
     }
 
     private List<NoteDetailsComponent> oldList;
     private NoteListener noteListener;
     private int currentPosition = -1;
-    private boolean isChecked = false;
+    private final boolean isChecked = false;
     public static boolean showCheckboxes = false;
 
 
     public static boolean isLongClick = false;
     public static List<Integer> listNoteIdChecked;
     public static int numberNoteChecked;
-    private String allString;
+    private final String allString;
 
     public void setNoteListener(NoteListener noteListener) {
         this.noteListener = noteListener;
@@ -101,14 +101,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     @Override
     public Filter getFilter() {
+        List<NoteDetailsComponent> list = new ArrayList<>();
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String query = constraint.toString().trim();
-                List<NoteDetailsComponent> list = new ArrayList<>();
                 Log.d("filterDuy", String.valueOf(query.length()));
-                if (query.isEmpty() ||!(query.charAt(0) == '#')) {
-                    Log.d("DuyOKE", "content");
+                if (query.isEmpty() || !(query.charAt(0) == '#')) {
                     Log.d("DuyOKE", "content");
                     if (query.equals(" ")) {
                         list.addAll(oldList);
@@ -132,20 +131,20 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                         }
                     }
                 } else {
-                    Log.d("duyOKE", "bbb");
+                    Log.d("duyOKE", "tagFilter");
                     Log.d("filterDuy", "tag=" + query.getClass());
                     if (!query.equals("#All".toLowerCase()) && !query.equals("#Tất cả".toLowerCase())) {
                         for (NoteDetailsComponent i : oldList) {
                             if (i.getTag().getTagName().equals(query.substring(1))) {
                                 list.add(i);
                             }
+                            Log.d("duyOKEEE", "list=" + list);
                         }
                     } else {
                         list.addAll(oldList);
                     }
                 }
                 //tim theo textsegment || title
-
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = list;
                 return filterResults;
@@ -153,7 +152,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                noteDetailsComponentList = (List<NoteDetailsComponent>) results.values;
+                noteDetailsComponentList = list;
                 notifyDataSetChanged();
             }
         };

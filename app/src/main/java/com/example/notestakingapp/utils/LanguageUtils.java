@@ -8,7 +8,7 @@ import android.os.Build;
 import java.util.Locale;
 
 public class LanguageUtils {
-    private static final String KEY_LANGUAGE = "key_language";
+    public static final String KEY_LANGUAGE = "key_language";
     public static void saveLanguage(Context context, String language) {
         SharedPreferences prefs = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
