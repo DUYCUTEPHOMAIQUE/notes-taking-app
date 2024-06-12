@@ -55,6 +55,11 @@ public class FirebaseAuthHandler {
                     if (task.isSuccessful()) {
                         Log.d(TAG, "createUserWithEmail:success");
                         FirebaseUser user = mAuth.getCurrentUser();
+                        SharedPreferences sharedUserPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editorUserPreferences = sharedUserPreferences.edit();
+                        editorUserPreferences.putBoolean("isSignedIn", true);
+                        editorUserPreferences.putString("userEmail", email);
+                        editorUserPreferences.apply();
                         updateUI(user, context);
                     } else {
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
