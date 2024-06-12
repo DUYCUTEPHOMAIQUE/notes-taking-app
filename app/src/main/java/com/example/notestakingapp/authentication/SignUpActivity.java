@@ -27,7 +27,7 @@ import com.example.notestakingapp.ui.MainActivity;
 
 public class SignUpActivity extends AppCompatActivity {
     EditText emailEditText, passwordEditText, reenteredPassword;
-    TextView backButton, signUpButton, signInText, googleButton;
+    TextView backButton, signUpButton, signInText;
     private FirebaseAuthHandler authHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
                     if (validateInput(email, password, rePassword)) {
                         signUp(email, password);
                         Toast.makeText(SignUpActivity.this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                        Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                         startActivity(intent);
                     }
                 } else {
@@ -77,12 +77,6 @@ public class SignUpActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);
                 startActivity(intent);
-            }
-        });
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
             }
         });
     }
@@ -150,6 +144,5 @@ public class SignUpActivity extends AppCompatActivity {
         reenteredPassword = findViewById(R.id.input_reentered_password);
         signUpButton = findViewById(R.id.sign_up_button);
         signInText = findViewById(R.id.sign_in_text);
-        googleButton = findViewById(R.id.google_button);
     }
 }

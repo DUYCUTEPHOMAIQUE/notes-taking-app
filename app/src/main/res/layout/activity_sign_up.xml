@@ -180,45 +180,4 @@
             android:clickable="true"
             android:focusable="true"/>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/text_or_sign_up_with"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:text="@string/or_sign_up_with"
-        android:textColor="@color/colorText"
-        android:textStyle="normal"
-        android:textSize="@dimen/_11sdp"/>
-
-    <TextView
-        android:id="@+id/google_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="@dimen/_12sdp"
-        android:layout_marginEnd="@dimen/_12sdp"
-        android:layout_marginTop="@dimen/_6sdp"
-        android:background="@drawable/button_custom"
-        android:backgroundTint="#FBE38A"
-        android:gravity="center"
-        android:paddingTop="@dimen/_8sdp"
-        android:paddingBottom="@dimen/_8sdp"
-        android:paddingStart="@dimen/_12sdp"
-        android:paddingEnd="@dimen/_12sdp"
-        android:text="@string/google"
-        android:textColor="@color/colorBlack"
-        android:textSize="@dimen/_12sdp"
-        android:fontFamily="@font/bold"
-        android:clickable="true"
-        android:focusable="true"
-        app:drawableStartCompat="@drawable/google_icon"
-        android:drawablePadding="@dimen/_8sdp"
-        android:elevation="@dimen/_4sdp"/>
-
-
 </LinearLayout>

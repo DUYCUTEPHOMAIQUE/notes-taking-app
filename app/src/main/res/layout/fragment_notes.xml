@@ -48,7 +48,6 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:padding="0dp"
-                android:translationZ="1dp"
                 app:allow_drag_reorder="true"
                 android:layout_margin="0dp"
                 app:allow_item_swipe="false"
