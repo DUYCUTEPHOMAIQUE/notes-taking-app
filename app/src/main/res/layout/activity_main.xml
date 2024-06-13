@@ -22,7 +22,7 @@
             android:layout_centerVertical="true"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:text="@string/my_notes"
+            android:text="@string/notes"
             android:textColor="@color/colorText"
             android:textSize="@dimen/title_size"
             android:fontFamily="@font/bold"

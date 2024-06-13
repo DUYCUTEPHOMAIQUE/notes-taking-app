@@ -135,7 +135,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
                     Log.d("filterDuy", "tag=" + query.getClass());
                     if (!query.equals("#All".toLowerCase()) && !query.equals("#Tất cả".toLowerCase())) {
                         for (NoteDetailsComponent i : oldList) {
-                            if (i.getTag().getTagName().equals(query.substring(1))) {
+                            if (i.getTag().getTagName().toLowerCase().equals(query.substring(1).toLowerCase())) {
                                 list.add(i);
                             }
                             Log.d("duyOKEEE", "list=" + list);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">NotesTakingApp</string>
+    <string name="app_name">Siêu Ghi Chú</string>
     <string name="to_do">Việc cần làm</string>
     <string name="notes">Ghi chú</string>
     <string name="scribble">Vẽ</string>
