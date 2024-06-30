@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/_4sdp"
+    android:layout_marginStart="@dimen/_12sdp"
+    android:layout_marginEnd="@dimen/_12sdp"
+    android:orientation="vertical"
+    android:background="@android:color/transparent">
+    <EditText
+        android:id="@+id/edit_text_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/_52sdp"
+        android:gravity="start|top"
+        android:background="@null"
+        android:hint="@string/type_note_here"
+        android:fontFamily="@font/regular"
+        android:textSize="@dimen/_14sdp"
+        android:textColorHint="@color/colorSubText"
+        android:importantForAutofill="no"
+        tools:ignore="TextFields"/>
+    <ImageView
+        android:id="@+id/image_trash_text"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_alignEnd="@+id/edit_text_details"
+        android:layout_alignTop="@+id/edit_text_details"
+        android:layout_centerVertical="true"
+        app:tint="@color/colorAccent"
+        android:src="@drawable/trash_audio"
+        android:background="@drawable/bg_trash_text"
+        android:layout_marginEnd="@dimen/_4sdp"
+        tools:ignore="ContentDescription" />
+</RelativeLayout>

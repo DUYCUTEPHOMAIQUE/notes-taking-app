@@ -2,6 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" /> <!-- try add required false -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -10,17 +22,55 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NotesTakingApp"
+        android:theme="@style/Base.Theme.NotesTakingApp"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".ui.OpenScreenActivity"
+            android:theme="@style/Theme.OpenScreen"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.AIRPLANE_MODE" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.ViewImageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".authentication.SettingsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".authentication.SignInActivity"
+            android:exported="true" />
+        <activity
+            android:name=".authentication.SignUpActivity"
+            android:exported="true" />
+        <activity
+            android:name=".authentication.ChangePasswordActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.DrawingActivity"
+            android:exported="true"
+            android:parentActivityName=".ui.NoteEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.NoteEditActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+
+        <receiver
+            android:name=".notification.AlarmReceiver"
+            android:exported="true" />
+        <meta-data
+            android:name="com.google.android.gms.wallet.api.enabled"
+            android:value="true" />
     </application>
 
 </manifest>

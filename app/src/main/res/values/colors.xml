@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="colorBackground">#F7F7F7</color>
+    <color name="colorText">#FF000000</color>
+    <color name="colorSubText">#818181</color>
+    <color name="colorGrayMode">@color/colorLightGray</color>
+    <color name="colorIconDefault">#000000</color>
+    <color name="colorIconPressed">@color/colorDarkGray</color>
+    <color name="colorCardBackground">@color/colorWhite</color>
+    <color name="colorSubCardBackground">@color/colorLightGray</color>
+    <color name="colorComponentBackground">@color/colorWhite</color>
+    <color name="colorSubComponent">@color/colorTextHint</color>
+    <color name="colorProfileBackground">#FFD60A</color>
+    <color name="colorOpenScreenBackground">@color/colorAudioBg</color>
+
+    <!-- note colors -->
+    <color name="colorNoteDefault">#FFFFFF</color>
+    <color name="colorNoteVariant1">#FF9D97</color>
+    <color name="colorNoteVariant2">#FFCA7F</color>
+    <color name="colorNoteVariant3">#FFE57F</color>
+    <color name="colorNoteVariant4">#99E3AC</color>
+    <color name="colorNoteVariant5">#7FBCFF</color>
+
+    <color name="colorError">#CE3A54</color>
+    <color name="colorSuccess">#60D889</color>
+    <color name="colorTextHint">#C8C5CB</color>
+    <color name="colorTextDateTime">#575758</color>
+    <color name="colorTextSegment">#232323</color>
+    <color name="colorAudioBg">#FFF5D2</color>
+    <color name="colorBgScreenOpen">#FFF5D2</color>
+
+
+    <color name="colorBlack">#FF000000</color>
+    <color name="colorWhite">#FFFFFFFF</color>
+    <color name="colorGray">#D2D2D2</color>
+    <color name="colorDarkGray">#827D89</color>
+    <color name="colorLightGray">#EAEAEA</color>
+    <color name="colorPrimaryBase">#6A3EA1</color>
+    <color name="colorPrimaryBaseDark">#3A2258</color>
+    <color name="colorAccent">#F8C715</color>
+
 </resources>
