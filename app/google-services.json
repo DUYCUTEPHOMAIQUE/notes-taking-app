@@ -1,0 +1,144 @@
+{
+  "project_info": {
+    "project_number": "683033972148",
+    "firebase_url": "https://androidtest-c883b-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "androidtest-c883b",
+    "storage_bucket": "androidtest-c883b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683033972148:android:7c09f617ecccbb8770f6e1",
+        "android_client_info": {
+          "package_name": "com.example.androidtest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683033972148:android:e9a70237d04fe95970f6e1",
+        "android_client_info": {
+          "package_name": "com.example.notestakingapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683033972148:android:f095c26389b2ba1e70f6e1",
+        "android_client_info": {
+          "package_name": "com.example.starbuzz"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683033972148:android:04b3a0648f96b1d570f6e1",
+        "android_client_info": {
+          "package_name": "com.hfad.drawingtest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683033972148:android:8ad0d7b65ae71f5670f6e1",
+        "android_client_info": {
+          "package_name": "com.hfad.firebasetest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683033972148:android:043e4ae932e7cddf70f6e1",
+        "android_client_info": {
+          "package_name": "com.hfad.getdbfiletest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683033972148:android:2d1fa7e234a4e4f970f6e1",
+        "android_client_info": {
+          "package_name": "com.hfad.notetaking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

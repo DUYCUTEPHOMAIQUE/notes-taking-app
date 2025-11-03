@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/add_text_popup"
+        android:icon="@drawable/text_icon"
+        android:iconTint="@color/colorIconDefault"
+        android:title="@string/add_text" />
+    <item
+        android:id="@+id/add_voice_popup"
+        android:icon="@drawable/voice_icon"
+        android:iconTint="@color/colorIconDefault"
+        android:title="@string/add_voice" />
+    <item
+        android:id="@+id/add_image_popup"
+        android:icon="@drawable/image_icon"
+        android:iconTint="@color/colorIconDefault"
+        android:title="@string/add_image" />
+    <item
+        android:id="@+id/add_camera_popup"
+        android:icon="@drawable/camera_icon"
+        android:iconTint="@color/colorIconDefault"
+        android:title="@string/camera" />
+    <item
+        android:id="@+id/add_draw_popup"
+        android:icon="@drawable/scribble_icon"
+        android:iconTint="@color/colorIconDefault"
+        android:title="@string/scribble" />
+</menu>

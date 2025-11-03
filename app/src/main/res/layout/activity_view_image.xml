@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    tools:context=".ui.ViewImageActivity">
+    <TextView
+        android:id="@+id/back_button_view_full"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_6sdp"
+        android:layout_marginStart="@dimen/back_button_margin_start"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/back"
+        android:textSize="@dimen/back_button_size"
+        android:textColor="@color/color_state_accent"
+        app:drawableStartCompat="@drawable/round_arrow_back_ios_24"
+        app:drawableTint="@color/color_state_accent"
+        tools:ignore="RelativeOverlap"/>
+    <ImageView
+        android:layout_alignTop="@+id/back_button_view_full"
+        android:id="@+id/image_view"
+        android:layout_marginTop="@dimen/_30sdp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/no_image_icon"
+        tools:ignore="MissingConstraints" />
+
+</RelativeLayout>

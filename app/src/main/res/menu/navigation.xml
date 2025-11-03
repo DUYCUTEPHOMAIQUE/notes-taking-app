@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home_main"
+        android:icon="@drawable/home_filled"
+        android:title="@string/home"/>
+
+    <item
+        android:id="@+id/todo_main"
+        android:icon="@drawable/clipboard_check_filled"
+        android:title="@string/to_do"/>
+</menu>
