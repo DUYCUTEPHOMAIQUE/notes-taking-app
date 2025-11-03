@@ -4,20 +4,20 @@ plugins {
 }
 
 android {
-    namespace 'com.example.notestakingapp'
+    namespace 'com.supernote.app'
     compileSdk 35
 
     signingConfigs {
         release {
+            keyAlias project.MYAPP_KEY_ALIAS
+            keyPassword project.MYAPP_KEY_PASSWORD
             storeFile file("my-release-key.keystore")
-            storePassword "mypass"
-            keyAlias "my-key-alias"
-            keyPassword "mypass"
+            storePassword project.MYAPP_KEYSTORE_PASSWORD
         }
     }
 
     defaultConfig {
-        applicationId "com.example.notestakingapp"
+        applicationId "com.supernote.app"
         minSdk 24
         targetSdk 35
         versionCode 1

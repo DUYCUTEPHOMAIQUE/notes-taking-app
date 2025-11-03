@@ -61,7 +61,7 @@
 			tools:ignore="ContentDescription"/>
 	</RelativeLayout>
 
-	<com.example.notestakingapp.ui.DrawingView
+	<com.supernote.app.ui.DrawingView
 		android:id="@+id/drawing_view"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

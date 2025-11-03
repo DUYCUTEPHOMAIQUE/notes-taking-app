@@ -8,47 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:683033972148:android:7c09f617ecccbb8770f6e1",
-        "android_client_info": {
-          "package_name": "com.example.androidtest"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:683033972148:android:e9a70237d04fe95970f6e1",
         "android_client_info": {
-          "package_name": "com.example.notestakingapp"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCm5x7tzL2wC7BPf0HKFCRW46iR8LxnWZo"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:683033972148:android:f095c26389b2ba1e70f6e1",
-        "android_client_info": {
-          "package_name": "com.example.starbuzz"
+          "package_name": "com.supernote.app"
         }
       },
       "oauth_client": [],
